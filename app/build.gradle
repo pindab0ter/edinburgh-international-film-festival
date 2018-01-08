@@ -1,8 +1,10 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion 26
@@ -13,6 +15,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        resValue 'string', 'edinburg_festival_city_api_key', keystoreProperties['EdinburgFestivalCityApiKey']
+        resValue 'string', 'edinburg_festival_city_secret_signing_key', keystoreProperties['EdinburgFestivalCitySecretSigningKey']
     }
     buildTypes {
         release {
