@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
-import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_film_list.*
 import kotlinx.android.synthetic.main.film_list_content.view.*
 
 import kotlinx.android.synthetic.main.film_list.*
+import nl.pindab0ter.edinburginternationalfilmfestival.data.FilmsFetcher
 
 /**
  * An activity representing a list of Pings. This activity
@@ -39,9 +39,8 @@ class FilmListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = title
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        fab.setOnClickListener {
+            FilmsFetcher(this).fetch()
         }
 
         if (film_detail_container != null) {
