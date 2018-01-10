@@ -1,9 +1,9 @@
-package nl.pindab0ter.edinburginternationalfilmfestival.data
+package nl.pindab0ter.edinburghinternationalfilmfestival.data
 
 import android.content.Context
 import android.util.Log
 import com.android.volley.toolbox.Volley
-import nl.pindab0ter.edinburginternationalfilmfestival.utilities.EdinburghFestivalCityUtilities
+import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.EdinburghFestivalCityUtilities
 
 class FilmsFetcher(private val context: Context) {
     private val requestQueue = Volley.newRequestQueue(context)

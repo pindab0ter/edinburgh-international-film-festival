@@ -1,4 +1,4 @@
-package nl.pindab0ter.edinburginternationalfilmfestival
+package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import org.junit.Test
 

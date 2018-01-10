@@ -1,11 +1,11 @@
-package nl.pindab0ter.edinburginternationalfilmfestival
+package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import nl.pindab0ter.edinburginternationalfilmfestival.dummy.DummyContent
+import nl.pindab0ter.edinburghinternationalfilmfestival.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_film_detail.*
 import kotlinx.android.synthetic.main.film_detail.view.*
 

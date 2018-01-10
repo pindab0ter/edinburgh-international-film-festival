@@ -1,4 +1,4 @@
-package nl.pindab0ter.edinburginternationalfilmfestival
+package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.content.Intent
 import android.os.Bundle

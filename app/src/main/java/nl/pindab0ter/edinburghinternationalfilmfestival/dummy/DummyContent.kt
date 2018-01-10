@@ -1,4 +1,4 @@
-package nl.pindab0ter.edinburginternationalfilmfestival.dummy
+package nl.pindab0ter.edinburghinternationalfilmfestival.dummy
 
 import java.util.ArrayList
 import java.util.HashMap

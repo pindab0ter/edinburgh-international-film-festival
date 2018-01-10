@@ -1,4 +1,4 @@
-package nl.pindab0ter.edinburginternationalfilmfestival
+package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("nl.pindab0ter.edinburginternationalfilmfestival", appContext.packageName)
+        assertEquals("nl.pindab0ter.edinburghinternationalfilmfestival", appContext.packageName)
     }
 }

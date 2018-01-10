@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Edinburg International Film Festival</string>
+    <string name="app_name">Edinburgh International Film Festival</string>
     <string name="title_film_detail">Film Detail</string>
     <string name="edinburgh_festival_city_base_url">https://api.edinburghfestivalcity.com</string>
     <string name="edinburgh_festival_city_base_path">events</string>

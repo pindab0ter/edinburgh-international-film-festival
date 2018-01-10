@@ -1,8 +1,8 @@
-package nl.pindab0ter.edinburginternationalfilmfestival.utilities
+package nl.pindab0ter.edinburghinternationalfilmfestival.utilities
 
 import android.content.Context
 import android.net.Uri
-import nl.pindab0ter.edinburginternationalfilmfestival.R
+import nl.pindab0ter.edinburghinternationalfilmfestival.R
 import java.net.URL
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec

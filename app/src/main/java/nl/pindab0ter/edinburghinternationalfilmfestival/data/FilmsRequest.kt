@@ -1,4 +1,4 @@
-package nl.pindab0ter.edinburginternationalfilmfestival.data
+package nl.pindab0ter.edinburghinternationalfilmfestival.data
 
 import android.util.Log
 import com.android.volley.NetworkResponse

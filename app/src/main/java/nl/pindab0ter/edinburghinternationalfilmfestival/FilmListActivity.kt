@@ -1,4 +1,4 @@
-package nl.pindab0ter.edinburginternationalfilmfestival
+package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,12 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-import nl.pindab0ter.edinburginternationalfilmfestival.dummy.DummyContent
+import nl.pindab0ter.edinburghinternationalfilmfestival.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_film_list.*
 import kotlinx.android.synthetic.main.film_list_content.view.*
 
 import kotlinx.android.synthetic.main.film_list.*
-import nl.pindab0ter.edinburginternationalfilmfestival.data.FilmsFetcher
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmsFetcher
 
 /**
  * An activity representing a list of Pings. This activity

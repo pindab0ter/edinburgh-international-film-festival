@@ -9,14 +9,14 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "nl.pindab0ter.edinburginternationalfilmfestival"
+        applicationId "nl.pindab0ter.edinburghinternationalfilmfestival"
         minSdkVersion 23
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        resValue 'string', 'edinburgh_festival_city_api_key_value', keystoreProperties['EdinburgFestivalCityApiKey']
-        resValue 'string', 'edinburgh_festival_city_secret_signing_key', keystoreProperties['EdinburgFestivalCitySecretSigningKey']
+        resValue 'string', 'edinburgh_festival_city_api_key_value', keystoreProperties['EdinburghFestivalCityApiKey']
+        resValue 'string', 'edinburgh_festival_city_secret_signing_key', keystoreProperties['EdinburghFestivalCitySecretSigningKey']
     }
     buildTypes {
         release {
