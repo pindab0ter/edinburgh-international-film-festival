@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Edinburgh International Film Festival</string>
     <string name="title_film_detail">Film Detail</string>
-    <string name="edinburgh_festival_city_base_url">https://api.edinburghfestivalcity.com</string>
-    <string name="edinburgh_festival_city_base_path">events</string>
-    <string name="edinburgh_festival_city_api_key_key">key</string>
-    <string name="edinburgh_festival_city_signing_key">signature</string>
-    <string name="edinburgh_festival_city_festival_key">festival</string>
-    <string name="edinburgh_festival_city_festival_value">film</string>
-    <string name="crypto_algorithm">HmacSHA1</string>
+    <string name="edinburgh_festival_city_base_url" translatable="false">https://api.edinburghfestivalcity.com</string>
+    <string name="edinburgh_festival_city_base_path" translatable="false">events</string>
+    <string name="edinburgh_festival_city_api_key_key" translatable="false">key</string>
+    <string name="edinburgh_festival_city_signing_key" translatable="false">signature</string>
+    <string name="edinburgh_festival_city_festival_key" translatable="false">festival</string>
+    <string name="edinburgh_festival_city_festival_value" translatable="false">film</string>
+    <string name="crypto_algorithm" translatable="false">HmacSHA1</string>
 </resources>
