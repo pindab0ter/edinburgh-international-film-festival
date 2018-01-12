@@ -11,10 +11,10 @@ class FilmsFetcher(private val context: Context) {
     fun fetch() {
         val url = EdinburghFestivalCityUtilities.buildUrl(context)
 
-        val stringRequest = FilmsRequest(url) { volleyError ->
+        val filmsRequest = FilmsRequest(url) { volleyError ->
             Log.e(logTag, "$volleyError")
         }
 
-        RequestQueueHolder.getInstance(context).add(stringRequest)
+        RequestQueueHolder.getInstance(context).add(filmsRequest)
     }
 }
