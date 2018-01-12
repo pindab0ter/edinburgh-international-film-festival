@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.activity_film_detail.*
 import kotlinx.android.synthetic.main.film_detail.view.*
 
 /**
- * A fragment representing a single Film detail screen.
+ * A fragment representing a single FilmEvent detail screen.
  * This fragment is either contained in a [FilmListActivity]
  * in two-pane mode (on tablets) or a [FilmDetailActivity]
  * on handsets.

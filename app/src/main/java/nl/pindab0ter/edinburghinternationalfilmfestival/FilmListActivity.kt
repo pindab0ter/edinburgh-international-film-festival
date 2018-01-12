@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_film_list.*
 import kotlinx.android.synthetic.main.film_list_content.view.*
 
 import kotlinx.android.synthetic.main.film_list.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmsFetcher
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsFetcher
 
 /**
  * An activity representing a list of Pings. This activity
@@ -40,7 +40,7 @@ class FilmListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = title
 
-        FilmsFetcher(this).fetch()
+        FilmEventsFetcher(this).fetch()
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)

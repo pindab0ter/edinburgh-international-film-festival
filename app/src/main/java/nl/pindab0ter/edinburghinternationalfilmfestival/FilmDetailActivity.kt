@@ -8,7 +8,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_film_detail.*
 
 /**
- * An activity representing a single Film detail screen. This
+ * An activity representing a single FilmEvent detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
  * in a [FilmListActivity].
