@@ -1,12 +1,7 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
-import java.lang.reflect.Type
-import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 
 class FilmEvent {
     val ageCategory: String? = null
@@ -179,35 +174,4 @@ class FilmEvent {
     }
 
     val venue: Venue? = null
-
-    class ImagesDeserializer : JsonDeserializer<Images> {
-        override fun deserialize(element: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Images = context.deserialize<Images>(
-                element.asJsonObject.entrySet().first().value,
-                ImagesSubclass::class.java
-        )
-    }
-
-    class VersionsDeserializer : JsonDeserializer<Array<Images.Version>> {
-        override fun deserialize(element: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Array<Images.Version> = element.asJsonObject.entrySet().map {
-            context.deserialize<Images.Version>(it.value, Images.Version::class.java)
-        }.toTypedArray()
-    }
-
-    class ConcessionDeserializer : JsonDeserializer<Performance.Concession> {
-        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Performance.Concession = try {
-            Performance.Concession.Available(json.asInt)
-        } catch (exception: NumberFormatException) {
-            Performance.Concession.Unavailable()
-        }
-    }
-
-    class DateDeserializer : JsonDeserializer<Date> {
-        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Date = try {
-            SimpleDateFormat("yyyy-MM-DD HH:mm:ss", Locale.getDefault()).parse(json.asString)
-        } catch (exception: Exception) {
-            Date(json.asLong * 1000)
-        } catch (exception: Exception) {
-            throw IllegalArgumentException("Could not parse $json as a Date")
-        }
-    }
 }

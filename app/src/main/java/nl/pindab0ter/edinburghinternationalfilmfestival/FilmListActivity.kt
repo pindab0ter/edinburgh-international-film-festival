@@ -40,7 +40,9 @@ class FilmListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = title
 
-        FilmEventsFetcher(this).fetch()
+        FilmEventsFetcher(this, { filmEvents ->
+            // TODO("Write FilmEventsAdapter")
+        }).fetch()
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
