@@ -80,18 +80,43 @@ class FilmEvent {
     open class Images {
 
         val hash: String? = null
-        val orientation: String? = null
-        val type: String? = null
 
-        class Version {
-            val type: String? = null
-            val mime: String? = null
-            val height: Int? = null
-            val width: Int? = null
-            val url: String? = null
+        enum class Orientation {
+            @SerializedName("landscape")
+            Landscape,
+            @SerializedName("portrait")
+            Portrait
         }
 
-        val versions: Array<Version>? = null
+        val orientation: Orientation? = null
+        val type: String? = null
+
+        class Versions {
+            class Version {
+                val type: String? = null
+                val mime: String? = null
+                val height: Int? = null
+                val width: Int? = null
+                val url: String? = null
+            }
+
+            @SerializedName("original")
+            val original: Version? = null
+            @SerializedName("square-75")
+            val square75: Version? = null
+            @SerializedName("square-150")
+            val square150: Version? = null
+            @SerializedName("thumb-100")
+            val thumb100: Version? = null
+            @SerializedName("medium-640")
+            val medium640: Version? = null
+            @SerializedName("small-320")
+            val small320: Version? = null
+            @SerializedName("large-1024")
+            val large1024: Version? = null
+        }
+
+        val versions: Versions? = null
     }
 
     // Subclass to prevent recursive deserialization
@@ -168,6 +193,7 @@ class FilmEvent {
             val lat: Double? = null
             val lon: Double? = null
         }
+
         val position: Position? = null
         val postCode: String? = null
         val webAddress: String? = null

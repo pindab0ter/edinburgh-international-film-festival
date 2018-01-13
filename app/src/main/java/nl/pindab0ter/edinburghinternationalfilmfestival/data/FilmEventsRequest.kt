@@ -24,7 +24,6 @@ class FilmEventsRequest(
     private val gson = GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .registerTypeAdapter(FilmEvent.Images::class.java, ImagesDeserializer())
-            .registerTypeAdapter(Array<FilmEvent.Images.Version>::class.java, VersionsDeserializer())
             .registerTypeAdapter(FilmEvent.Performance.Concession::class.java, ConcessionDeserializer())
             .registerTypeAdapter(Date::class.java, DateDeserializer())
             .create()
@@ -49,12 +48,6 @@ class FilmEventsRequest(
                 element.asJsonObject.entrySet().first().value,
                 FilmEvent.ImagesSubclass::class.java
         )
-    }
-
-    class VersionsDeserializer : JsonDeserializer<Array<FilmEvent.Images.Version>> {
-        override fun deserialize(element: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Array<FilmEvent.Images.Version> = element.asJsonObject.entrySet().map {
-            context.deserialize<FilmEvent.Images.Version>(it.value, FilmEvent.Images.Version::class.java)
-        }.toTypedArray()
     }
 
     class ConcessionDeserializer : JsonDeserializer<FilmEvent.Performance.Concession> {
