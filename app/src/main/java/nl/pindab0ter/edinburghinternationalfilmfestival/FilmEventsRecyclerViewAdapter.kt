@@ -1,21 +1,30 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.ImageRequest
 import kotlinx.android.synthetic.main.film_list_content.view.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_DESCRIPTION
 import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_TITLE
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.ListImageFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 
 class FilmEventsRecyclerViewAdapter(private val parentActivity: FilmListActivity, private val twoPane: Boolean) :
         RecyclerView.Adapter<FilmEventsRecyclerViewAdapter.ViewHolder>() {
 
+    private val logTag = FilmEventsRecyclerViewAdapter::class.simpleName
     private val onClickListener: View.OnClickListener
+    private val listImageFetcher: ListImageFetcher = ListImageFetcher(parentActivity)
+
     private var filmEvents: List<FilmEvent>? = null
 
     init {
@@ -50,8 +59,13 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: FilmListActivity
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         filmEvents?.get(position).let { filmEvent ->
-            holder.idView.text = "$position"
-            holder.contentView.text = filmEvent?.title
+            holder.titleView.text = filmEvent?.title
+
+            filmEvent?.let {
+                listImageFetcher.fetch(it, { bitmap: Bitmap ->
+                    holder.imageView.setImageBitmap(bitmap)
+                })
+            }
 
             with(holder.itemView) {
                 tag = filmEvent
@@ -69,8 +83,8 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: FilmListActivity
         return filmEvents?.count() ?: 0
     }
 
-    inner class ViewHolder(mView: View) : RecyclerView.ViewHolder(mView) {
-        val idView: TextView = mView.id_text
-        val contentView: TextView = mView.content
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val imageView: ImageView = view.film_list_image
+        val titleView: TextView = view.film_list_title
     }
 }

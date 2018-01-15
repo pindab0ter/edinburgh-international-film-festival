@@ -12,7 +12,7 @@ class FilmEventsFetcher(private val context: Context, private val listener: (fil
     fun fetch() {
         val url = EdinburghFestivalCityUtilities.buildUrl(context)
 
-        Log.v(logTag, "Sending request to $url")
+        Log.v(logTag, "Requesting Film Events with url: $url")
 
         val filmsRequest = FilmEventsRequest(url, listener) { volleyError ->
             Log.e(logTag, "$volleyError")

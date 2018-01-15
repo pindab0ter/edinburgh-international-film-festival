@@ -8,4 +8,5 @@
     <string name="edinburgh_festival_city_festival_key" translatable="false">festival</string>
     <string name="edinburgh_festival_city_festival_value" translatable="false">film</string>
     <string name="crypto_algorithm" translatable="false">HmacSHA1</string>
+    <string name="film_image_description">Film poster</string>
 </resources>

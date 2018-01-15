@@ -1,20 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/list_item_height"
     android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/id_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+    <ImageView
+        android:id="@+id/film_list_image"
+        android:layout_width="@dimen/list_item_image_size"
+        android:layout_height="@dimen/list_item_image_size"
+        android:contentDescription="@string/film_image_description"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_default="spread"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/film_list_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="spread"
+        app:srcCompat="@drawable/ic_broken_image_black_64dp" />
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/film_list_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
-</LinearLayout>
+        android:textAllCaps="false"
+        android:textAppearance="?attr/textAppearanceListItem"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/film_list_image"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Film title placeholder that is way too long so it has to wrap around" />
+</android.support.constraint.ConstraintLayout>
