@@ -6,6 +6,8 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_film_detail.*
+import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_DESCRIPTION
+import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_TITLE
 
 /**
  * An activity representing a single FilmEvent detail screen. This
@@ -42,8 +44,8 @@ class FilmDetailActivity : AppCompatActivity() {
             // using a fragment transaction.
             val fragment = FilmDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putString(FilmDetailFragment.ARG_ITEM_ID,
-                            intent.getStringExtra(FilmDetailFragment.ARG_ITEM_ID))
+                    putString(ARG_FILM_TITLE, intent.getStringExtra(ARG_FILM_TITLE))
+                    putString(ARG_FILM_DESCRIPTION, intent.getStringExtra(ARG_FILM_DESCRIPTION))
                 }
             }
 
@@ -53,18 +55,17 @@ class FilmDetailActivity : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) =
-            when (item.itemId) {
-                android.R.id.home -> {
-                    // This ID represents the Home or Up button. In the case of this
-                    // activity, the Up button is shown. For
-                    // more details, see the Navigation pattern on Android Design:
-                    //
-                    // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home -> {
+            // This ID represents the Home or Up button. In the case of this
+            // activity, the Up button is shown. For
+            // more details, see the Navigation pattern on Android Design:
+            //
+            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
 
-                    navigateUpTo(Intent(this, FilmListActivity::class.java))
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
-            }
+            navigateUpTo(Intent(this, FilmListActivity::class.java))
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
 }

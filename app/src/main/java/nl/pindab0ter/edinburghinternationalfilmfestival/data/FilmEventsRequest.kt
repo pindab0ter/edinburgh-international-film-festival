@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-// TODO: Differentiate between listener and errorListener
 class FilmEventsRequest(
         url: URL,
         private val listener: ((filmEvents: List<FilmEvent>) -> Unit),

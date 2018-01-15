@@ -1,18 +1,11 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 
-import nl.pindab0ter.edinburghinternationalfilmfestival.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_film_list.*
-import kotlinx.android.synthetic.main.film_list_content.view.*
 
 import kotlinx.android.synthetic.main.film_list.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsFetcher
@@ -31,7 +24,8 @@ class FilmListActivity : AppCompatActivity() {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private var mTwoPane: Boolean = false
+    private var twoPane: Boolean = false
+    private lateinit var adapter: FilmEventsRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +33,6 @@ class FilmListActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
         toolbar.title = title
-
-        FilmEventsFetcher(this, { filmEvents ->
-            // TODO("Write FilmEventsAdapter")
-        }).fetch()
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -54,69 +44,19 @@ class FilmListActivity : AppCompatActivity() {
             // large-screen layouts (res/values-w900dp).
             // If this view is present, then the
             // activity should be in two-pane mode.
-            mTwoPane = true
+            twoPane = true
         }
 
         setupRecyclerView(film_list)
+        fetchFilmEvents()
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane)
+        adapter = FilmEventsRecyclerViewAdapter(this, twoPane)
+        recyclerView.adapter = adapter
     }
 
-    class SimpleItemRecyclerViewAdapter(private val mParentActivity: FilmListActivity,
-                                        private val mValues: List<DummyContent.DummyItem>,
-                                        private val mTwoPane: Boolean) :
-            RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
-
-        private val mOnClickListener: View.OnClickListener
-
-        init {
-            mOnClickListener = View.OnClickListener { v ->
-                val item = v.tag as DummyContent.DummyItem
-                if (mTwoPane) {
-                    val fragment = FilmDetailFragment().apply {
-                        arguments = Bundle().apply {
-                            putString(FilmDetailFragment.ARG_ITEM_ID, item.id)
-                        }
-                    }
-                    mParentActivity.supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.film_detail_container, fragment)
-                            .commit()
-                } else {
-                    val intent = Intent(v.context, FilmDetailActivity::class.java).apply {
-                        putExtra(FilmDetailFragment.ARG_ITEM_ID, item.id)
-                    }
-                    v.context.startActivity(intent)
-                }
-            }
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.film_list_content, parent, false)
-            return ViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val item = mValues[position]
-            holder.mIdView.text = item.id
-            holder.mContentView.text = item.content
-
-            with(holder.itemView) {
-                tag = item
-                setOnClickListener(mOnClickListener)
-            }
-        }
-
-        override fun getItemCount(): Int {
-            return mValues.size
-        }
-
-        inner class ViewHolder(mView: View) : RecyclerView.ViewHolder(mView) {
-            val mIdView: TextView = mView.id_text
-            val mContentView: TextView = mView.content
-        }
-    }
+    private fun fetchFilmEvents() = FilmEventsFetcher(this, { filmEvents ->
+        adapter.swapFilmEvents(filmEvents)
+    }).fetch()
 }
