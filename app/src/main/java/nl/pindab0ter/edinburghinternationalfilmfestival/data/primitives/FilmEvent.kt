@@ -9,8 +9,8 @@ class FilmEvent {
     val artistType: String? = null
     val code: Int? = null
     val country: String? = null
-    val desciption: String? = null
-    val desciptionTeaser: String? = null
+    val description: String? = null
+    val descriptionTeaser: String? = null
     val festivalId: String? = null
     val fringeFirst: Boolean? = null
     val genre: String? = null
