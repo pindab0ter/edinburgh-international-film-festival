@@ -9,4 +9,9 @@
     <string name="edinburgh_festival_city_festival_value" translatable="false">film</string>
     <string name="crypto_algorithm" translatable="false">HmacSHA1</string>
     <string name="film_image_description">Film poster</string>
+    <string name="sort_alphabetically_ascending">Alphabetically (ascending)</string>
+    <string name="sort_alphabetically_descending">Alphabetically (descending)</string>
+    <string name="sort_first_performance_date_ascending">First performance (ascending)</string>
+    <string name="sort_first_performance_date_descending">First performance (descending)</string>
+    <string name="sort">Sort</string>
 </resources>

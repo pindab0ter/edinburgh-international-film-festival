@@ -4,10 +4,19 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
+import android.view.Menu
+import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_film_list.*
 
 import kotlinx.android.synthetic.main.film_list.*
+import nl.pindab0ter.edinburghinternationalfilmfestival.FilmEventsRecyclerViewAdapter.Companion.FIRST_PERFORMANCE_DATE_ASCENDING
+import nl.pindab0ter.edinburghinternationalfilmfestival.FilmEventsRecyclerViewAdapter.Companion.FIRST_PERFORMANCE_DATE_DESCENDING
+import nl.pindab0ter.edinburghinternationalfilmfestival.FilmEventsRecyclerViewAdapter.Companion.TITLE_ASCENDING
+import nl.pindab0ter.edinburghinternationalfilmfestival.FilmEventsRecyclerViewAdapter.Companion.TITLE_DESCENDING
+import nl.pindab0ter.edinburghinternationalfilmfestival.R.id.*
+import nl.pindab0ter.edinburghinternationalfilmfestival.R.layout.activity_film_list
+import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsFetcher
 
 /**
@@ -29,7 +38,7 @@ class FilmListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_film_list)
+        setContentView(activity_film_list)
 
         setSupportActionBar(toolbar)
         toolbar.title = title
@@ -49,6 +58,22 @@ class FilmListActivity : AppCompatActivity() {
 
         setupRecyclerView(film_list)
         fetchFilmEvents()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(sort_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            sort_title_ascending -> adapter.sortBy(TITLE_ASCENDING)
+            sort_title_descending -> adapter.sortBy(TITLE_DESCENDING)
+            sort_date_ascending -> adapter.sortBy(FIRST_PERFORMANCE_DATE_ASCENDING)
+            sort_date_descending -> adapter.sortBy(FIRST_PERFORMANCE_DATE_DESCENDING)
+            else -> return false
+        }
+        return true
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
