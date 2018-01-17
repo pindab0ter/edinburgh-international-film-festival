@@ -20,12 +20,14 @@ class FilmEventsRequest(
         private val listener: ((filmEvents: List<FilmEvent>) -> Unit),
         errorListener: ((error: VolleyError) -> Unit)
 ) : Request<List<FilmEvent>>(Request.Method.GET, url.toString(), errorListener) {
-    private val gson = GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .registerTypeAdapter(FilmEvent.Images::class.java, ImagesDeserializer())
-            .registerTypeAdapter(FilmEvent.Performance.Concession::class.java, ConcessionDeserializer())
-            .registerTypeAdapter(Date::class.java, DateDeserializer())
-            .create()
+    companion object {
+        val gson = GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .registerTypeAdapter(FilmEvent.Images::class.java, ImagesDeserializer())
+                .registerTypeAdapter(FilmEvent.Performance.Concession::class.java, ConcessionDeserializer())
+                .registerTypeAdapter(Date::class.java, DateDeserializer())
+                .create()
+    }
 
     override fun getHeaders(): MutableMap<String, String>? = mutableMapOf("Accept" to "application/json;ver=2.0")
 
