@@ -8,6 +8,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_film_detail.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_DESCRIPTION
 import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_IMAGE_URL
+import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_SHOWINGS
 import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_TITLE
 
 /**
@@ -48,6 +49,7 @@ class FilmDetailActivity : AppCompatActivity() {
                     putString(ARG_FILM_TITLE, intent.getStringExtra(ARG_FILM_TITLE))
                     putString(ARG_FILM_DESCRIPTION, intent.getStringExtra(ARG_FILM_DESCRIPTION))
                     putString(ARG_FILM_IMAGE_URL, intent.getStringExtra(FilmDetailFragment.ARG_FILM_IMAGE_URL))
+                    putStringArray(ARG_FILM_SHOWINGS, intent.getStringArrayExtra(FilmDetailFragment.ARG_FILM_SHOWINGS))
                 }
             }
 

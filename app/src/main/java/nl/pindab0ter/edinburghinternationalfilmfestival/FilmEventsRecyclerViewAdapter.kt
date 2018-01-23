@@ -12,9 +12,11 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.film_list_content.view.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_DESCRIPTION
 import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_IMAGE_URL
+import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_SHOWINGS
 import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_TITLE
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.ImageFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.DateFormatter
 import java.text.DateFormat
 
 class FilmEventsRecyclerViewAdapter(private val parentActivity: FilmListActivity, private val twoPane: Boolean) :
@@ -29,12 +31,15 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: FilmListActivity
         onClickListener = View.OnClickListener { v ->
             val filmEvent = v.tag as FilmEvent
             val filmImageUrl = "https:${filmEvent.images?.versions?.original?.url}"
+            val filmShowings = filmEvent.performances?.map { DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(it.start) }?.toTypedArray()
+
             if (twoPane) {
                 val fragment = FilmDetailFragment().apply {
                     arguments = Bundle().apply {
                         putString(ARG_FILM_TITLE, filmEvent.title)
                         putString(ARG_FILM_DESCRIPTION, filmEvent.description)
                         putString(ARG_FILM_IMAGE_URL, filmImageUrl)
+                        putStringArray(ARG_FILM_SHOWINGS, filmShowings)
                     }
                 }
                 parentActivity.supportFragmentManager
@@ -46,6 +51,7 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: FilmListActivity
                     putExtra(ARG_FILM_TITLE, filmEvent.title)
                     putExtra(ARG_FILM_DESCRIPTION, filmEvent.description)
                     putExtra(ARG_FILM_IMAGE_URL, filmImageUrl)
+                    putExtra(ARG_FILM_SHOWINGS, filmShowings)
                 }
                 v.context.startActivity(intent)
             }
