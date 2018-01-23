@@ -16,8 +16,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Compa
 import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_TITLE
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.ImageFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
-import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.DateFormatter
-import java.text.DateFormat
+import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatShowDate
 
 class FilmEventsRecyclerViewAdapter(private val parentActivity: FilmListActivity, private val twoPane: Boolean) :
         RecyclerView.Adapter<FilmEventsRecyclerViewAdapter.ViewHolder>() {
@@ -31,7 +30,7 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: FilmListActivity
         onClickListener = View.OnClickListener { v ->
             val filmEvent = v.tag as FilmEvent
             val filmImageUrl = "https:${filmEvent.images?.versions?.original?.url}"
-            val filmShowings = filmEvent.performances?.map { DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(it.start) }?.toTypedArray()
+            val filmShowings = filmEvent.performances?.map { formatShowDate(it.start) }?.toTypedArray()
 
             if (twoPane) {
                 val fragment = FilmDetailFragment().apply {
@@ -67,7 +66,7 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: FilmListActivity
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         filmEvents?.get(position).let { filmEvent ->
             holder.titleView.text = filmEvent?.title
-            holder.firstShowingView.text = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(filmEvent?.performances?.first()?.start)
+            holder.firstShowingView.text = formatShowDate(filmEvent?.performances?.first()?.start)
 
             filmEvent?.let {
                 imageFetcher.fetch("https:${filmEvent.images?.versions?.small320?.url}", { bitmap: Bitmap ->
