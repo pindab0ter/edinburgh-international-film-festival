@@ -21,7 +21,7 @@ class FilmEventsRequest(
         errorListener: ((error: VolleyError) -> Unit)
 ) : Request<List<FilmEvent>>(Request.Method.GET, url.toString(), errorListener) {
     companion object {
-        val gson = GsonBuilder()
+        val gson: Gson = GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .registerTypeAdapter(FilmEvent.Images::class.java, ImagesDeserializer())
                 .registerTypeAdapter(FilmEvent.Performance.Concession::class.java, ConcessionDeserializer())
