@@ -4,7 +4,7 @@
     <item
         android:id="@+id/sort"
         android:icon="@drawable/ic_sort"
-        android:title="@string/sort"
+        android:title="@string/sort_label"
         app:showAsAction="always">
         <menu>
             <item

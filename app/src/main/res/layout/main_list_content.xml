@@ -26,7 +26,7 @@
         android:layout_marginLeft="@dimen/text_margin"
         android:layout_marginRight="@dimen/text_margin"
         android:textAllCaps="false"
-        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:textAppearance="?textAppearanceListItem"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@id/film_first_showing"
         app:layout_constraintLeft_toRightOf="@id/film_list_image"

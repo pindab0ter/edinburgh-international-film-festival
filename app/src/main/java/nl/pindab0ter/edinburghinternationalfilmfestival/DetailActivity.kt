@@ -5,23 +5,23 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_film_detail.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_DESCRIPTION
-import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_IMAGE_URL
-import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_SHOWINGS
-import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_TITLE
+import kotlinx.android.synthetic.main.activity_detail.*
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_DESCRIPTION
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_IMAGE_URL
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_SHOWINGS
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_TITLE
 
 /**
  * An activity representing a single FilmEvent detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a [FilmListActivity].
+ * in a [ListActivity].
  */
-class FilmDetailActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_film_detail)
+        setContentView(R.layout.activity_detail)
         setSupportActionBar(detail_toolbar)
 
         fab.setOnClickListener { view ->
@@ -44,17 +44,17 @@ class FilmDetailActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            val fragment = FilmDetailFragment().apply {
+            val fragment = DetailFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_FILM_TITLE, intent.getStringExtra(ARG_FILM_TITLE))
-                    putString(ARG_FILM_DESCRIPTION, intent.getStringExtra(ARG_FILM_DESCRIPTION))
-                    putString(ARG_FILM_IMAGE_URL, intent.getStringExtra(FilmDetailFragment.ARG_FILM_IMAGE_URL))
-                    putStringArray(ARG_FILM_SHOWINGS, intent.getStringArrayExtra(FilmDetailFragment.ARG_FILM_SHOWINGS))
+                    putString(ARG_TITLE, intent.getStringExtra(ARG_TITLE))
+                    putString(ARG_DESCRIPTION, intent.getStringExtra(ARG_DESCRIPTION))
+                    putString(ARG_IMAGE_URL, intent.getStringExtra(DetailFragment.ARG_IMAGE_URL))
+                    putStringArray(ARG_SHOWINGS, intent.getStringArrayExtra(DetailFragment.ARG_SHOWINGS))
                 }
             }
 
             supportFragmentManager.beginTransaction()
-                    .add(R.id.film_detail_container, fragment)
+                    .add(R.id.detail_container, fragment)
                     .commit()
         }
     }
@@ -67,7 +67,7 @@ class FilmDetailActivity : AppCompatActivity() {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
 
-            navigateUpTo(Intent(this, FilmListActivity::class.java))
+            navigateUpTo(Intent(this, ListActivity::class.java))
             true
         }
         else -> super.onOptionsItemSelected(item)

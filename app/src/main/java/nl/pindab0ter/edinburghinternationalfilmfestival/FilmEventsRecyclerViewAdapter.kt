@@ -9,16 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import kotlinx.android.synthetic.main.film_list_content.view.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_DESCRIPTION
-import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_IMAGE_URL
-import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_SHOWINGS
-import nl.pindab0ter.edinburghinternationalfilmfestival.FilmDetailFragment.Companion.ARG_FILM_TITLE
+import kotlinx.android.synthetic.main.main_list_content.view.*
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_DESCRIPTION
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_IMAGE_URL
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_SHOWINGS
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_TITLE
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.ImageFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatShowDate
 
-class FilmEventsRecyclerViewAdapter(private val parentActivity: FilmListActivity, private val twoPane: Boolean) :
+class FilmEventsRecyclerViewAdapter(private val parentActivity: ListActivity, private val twoPane: Boolean) :
         RecyclerView.Adapter<FilmEventsRecyclerViewAdapter.ViewHolder>() {
 
     private val onClickListener: View.OnClickListener
@@ -29,28 +29,28 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: FilmListActivity
     init {
         onClickListener = View.OnClickListener { v ->
             val filmEvent = v.tag as FilmEvent
-            val filmImageUrl = "https:${filmEvent.images?.versions?.original?.url}"
-            val filmShowings = filmEvent.performances?.map { formatShowDate(it.start) }?.toTypedArray()
+            val imageUrl = "https:${filmEvent.images?.versions?.original?.url}"
+            val showings = filmEvent.performances?.map { formatShowDate(it.start) }?.toTypedArray()
 
             if (twoPane) {
-                val fragment = FilmDetailFragment().apply {
+                val fragment = DetailFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG_FILM_TITLE, filmEvent.title)
-                        putString(ARG_FILM_DESCRIPTION, filmEvent.description)
-                        putString(ARG_FILM_IMAGE_URL, filmImageUrl)
-                        putStringArray(ARG_FILM_SHOWINGS, filmShowings)
+                        putString(ARG_TITLE, filmEvent.title)
+                        putString(ARG_DESCRIPTION, filmEvent.description)
+                        putString(ARG_IMAGE_URL, imageUrl)
+                        putStringArray(ARG_SHOWINGS, showings)
                     }
                 }
                 parentActivity.supportFragmentManager
                         .beginTransaction()
-                        .replace(R.id.film_detail_container, fragment)
+                        .replace(R.id.detail_container, fragment)
                         .commit()
             } else {
-                val intent = Intent(v.context, FilmDetailActivity::class.java).apply {
-                    putExtra(ARG_FILM_TITLE, filmEvent.title)
-                    putExtra(ARG_FILM_DESCRIPTION, filmEvent.description)
-                    putExtra(ARG_FILM_IMAGE_URL, filmImageUrl)
-                    putExtra(ARG_FILM_SHOWINGS, filmShowings)
+                val intent = Intent(v.context, DetailActivity::class.java).apply {
+                    putExtra(ARG_TITLE, filmEvent.title)
+                    putExtra(ARG_DESCRIPTION, filmEvent.description)
+                    putExtra(ARG_IMAGE_URL, imageUrl)
+                    putExtra(ARG_SHOWINGS, showings)
                 }
                 v.context.startActivity(intent)
             }
@@ -58,8 +58,7 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: FilmListActivity
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.film_list_content, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.main_list_content, parent, false)
         return ViewHolder(view)
     }
 

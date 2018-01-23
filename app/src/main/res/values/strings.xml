@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Edinburgh International Film Festival</string>
-    <string name="title_film_detail">Film Detail</string>
     <string name="edinburgh_festival_city_base_url" translatable="false">https://api.edinburghfestivalcity.com</string>
     <string name="edinburgh_festival_city_base_path" translatable="false">events</string>
     <string name="edinburgh_festival_city_api_key_key" translatable="false">key</string>
@@ -13,6 +12,6 @@
     <string name="sort_alphabetically_descending">Alphabetically (descending)</string>
     <string name="sort_first_performance_date_ascending">First performance (ascending)</string>
     <string name="sort_first_performance_date_descending">First performance (descending)</string>
-    <string name="sort">Sort</string>
+    <string name="sort_label">Sort</string>
     <string name="description_label">Description</string>
 </resources>

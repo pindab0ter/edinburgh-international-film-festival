@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="nl.pindab0ter.edinburghinternationalfilmfestival.FilmListActivity"
-    tools:listitem="@layout/film_list_content" />
+    tools:context="nl.pindab0ter.edinburghinternationalfilmfestival.ListActivity"
+    tools:listitem="@layout/main_list_content" />
