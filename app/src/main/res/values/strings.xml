@@ -6,6 +6,8 @@
     <string name="edinburgh_festival_city_signing_key" translatable="false">signature</string>
     <string name="edinburgh_festival_city_festival_key" translatable="false">festival</string>
     <string name="edinburgh_festival_city_festival_value" translatable="false">film</string>
+    <string name="edinburgh_festival_city_year_key">year</string>
+    <string name="edinburgh_festival_city_year_value">2016</string>
     <string name="crypto_algorithm" translatable="false">HmacSHA1</string>
     <string name="film_image_description">Film poster</string>
     <string name="sort_alphabetically_ascending">Alphabetically (ascending)</string>

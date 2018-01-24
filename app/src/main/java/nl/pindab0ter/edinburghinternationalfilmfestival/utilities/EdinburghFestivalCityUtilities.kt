@@ -13,6 +13,8 @@ object EdinburghFestivalCityUtilities {
         val basePath = getString(R.string.edinburgh_festival_city_base_path)
         val festivalKey = getString(R.string.edinburgh_festival_city_festival_key)
         val festivalValue = getString(R.string.edinburgh_festival_city_festival_value)
+        val yearKey = getString(R.string.edinburgh_festival_city_year_key)
+        val yearValue = getString(R.string.edinburgh_festival_city_year_value)
         val apiKeyKey = getString(R.string.edinburgh_festival_city_api_key_key)
         val apiKeyValue = getString(R.string.edinburgh_festival_city_api_key_value)
         val signatureKey = getString(R.string.edinburgh_festival_city_signing_key)
@@ -20,6 +22,7 @@ object EdinburghFestivalCityUtilities {
         val unsignedUri = Uri.parse(baseUrl).buildUpon()
                 .appendPath(basePath)
                 .appendQueryParameter(festivalKey, festivalValue)
+                .appendQueryParameter(yearKey, yearValue)
                 .appendQueryParameter(apiKeyKey, apiKeyValue)
                 .build()
 
