@@ -18,7 +18,7 @@ class FilmEvent {
     @SerializedName("genre_tags")
     private val genreTagsSource: String? = null
     val genreTags: Array<String>?
-        get() = genreTagsSource?.split(",")?.toTypedArray()
+        get() = genreTagsSource?.split(",")?.map { it.trim() }?.toTypedArray()
 
     val latitude: Double? = null
     val longitude: Double? = null

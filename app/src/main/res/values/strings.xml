@@ -15,5 +15,7 @@
     <string name="sort_first_performance_date_ascending">First performance (ascending)</string>
     <string name="sort_first_performance_date_descending">First performance (descending)</string>
     <string name="sort_label">Sort</string>
+    <string name="filter_label">Filter</string>
     <string name="description_label">Description</string>
+    <string name="failed_to_load_genres">Failed to load genres</string>
 </resources>

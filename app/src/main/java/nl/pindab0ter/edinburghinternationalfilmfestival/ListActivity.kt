@@ -5,9 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-
 import kotlinx.android.synthetic.main.activity_master.*
-
 import kotlinx.android.synthetic.main.film_list.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.FilmEventsRecyclerViewAdapter.Companion.FIRST_PERFORMANCE_DATE_ASCENDING
 import nl.pindab0ter.edinburghinternationalfilmfestival.FilmEventsRecyclerViewAdapter.Companion.FIRST_PERFORMANCE_DATE_DESCENDING
@@ -15,7 +13,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.FilmEventsRecyclerViewAd
 import nl.pindab0ter.edinburghinternationalfilmfestival.FilmEventsRecyclerViewAdapter.Companion.TITLE_DESCENDING
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.id.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.layout.activity_master
-import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.*
+import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsFetcher
 
 /**
@@ -35,6 +33,7 @@ class ListActivity : AppCompatActivity() {
     private val twoPane: Boolean
         get() = detail_container != null
     private lateinit var adapter: FilmEventsRecyclerViewAdapter
+    private var genres: List<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +47,17 @@ class ListActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(sort_menu, menu)
+        menuInflater.inflate(menu_list_activity, menu)
+
+        if (genres == null) return true
+
+        menu?.findItem(R.id.filter)?.subMenu?.apply {
+            clear()
+            genres!!.forEachIndexed { index, genre ->
+                add(Menu.NONE, index, Menu.NONE, genre)
+            }
+        }
+
         return true
     }
 
@@ -70,5 +79,7 @@ class ListActivity : AppCompatActivity() {
 
     private fun fetchFilmEvents() = FilmEventsFetcher(this, { filmEvents ->
         adapter.swapFilmEvents(filmEvents)
+        genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
+        invalidateOptionsMenu()
     }).fetch()
 }
