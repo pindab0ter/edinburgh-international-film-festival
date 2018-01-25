@@ -7,11 +7,6 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_master.*
 import kotlinx.android.synthetic.main.film_list.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.FilmEventsRecyclerViewAdapter.Companion.FIRST_PERFORMANCE_DATE_ASCENDING
-import nl.pindab0ter.edinburghinternationalfilmfestival.FilmEventsRecyclerViewAdapter.Companion.FIRST_PERFORMANCE_DATE_DESCENDING
-import nl.pindab0ter.edinburghinternationalfilmfestival.FilmEventsRecyclerViewAdapter.Companion.TITLE_ASCENDING
-import nl.pindab0ter.edinburghinternationalfilmfestival.FilmEventsRecyclerViewAdapter.Companion.TITLE_DESCENDING
-import nl.pindab0ter.edinburghinternationalfilmfestival.R.id.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.layout.activity_master
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsFetcher
@@ -51,25 +46,32 @@ class ListActivity : AppCompatActivity() {
 
         if (genres == null) return true
 
+        menu?.findItem(R.id.filter_placeholder)?.isVisible = false
+        menu?.findItem(R.id.filter_none)?.isVisible = true
+
         menu?.findItem(R.id.filter)?.subMenu?.apply {
-            clear()
             genres!!.forEachIndexed { index, genre ->
-                add(Menu.NONE, index, Menu.NONE, genre)
+                add(R.id.filter_group, index, index, genre)
             }
+            setGroupCheckable(R.id.filter_group, true, true)
         }
 
-        return true
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            sort_title_ascending -> adapter.sortBy(TITLE_ASCENDING)
-            sort_title_descending -> adapter.sortBy(TITLE_DESCENDING)
-            sort_date_ascending -> adapter.sortBy(FIRST_PERFORMANCE_DATE_ASCENDING)
-            sort_date_descending -> adapter.sortBy(FIRST_PERFORMANCE_DATE_DESCENDING)
-            else -> return false
+        when (item?.groupId) {
+            R.id.sort_group -> {
+                adapter.sortBy(item.itemId)
+                item.isChecked = true
+            }
+            R.id.filter_group -> {
+                if (item.itemId == R.id.filter_placeholder) return false
+                adapter.filterBy(item.title)
+                item.isChecked = true
+            }
         }
-        return true
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {

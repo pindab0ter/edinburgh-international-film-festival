@@ -24,7 +24,11 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: ListActivity, pr
     private val onClickListener: View.OnClickListener
     private val imageFetcher: ImageFetcher = ImageFetcher(parentActivity)
 
+    private var unfilteredFilmEvents: List<FilmEvent>? = null
     private var filmEvents: List<FilmEvent>? = null
+
+    private var sortedBy: Int? = null
+    private var filteredByGenre: CharSequence? = null
 
     init {
         onClickListener = View.OnClickListener { v ->
@@ -80,21 +84,39 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: ListActivity, pr
         }
     }
 
-    fun sortBy(criterion: String) {
+    fun sortBy(itemId: Int?) {
+        if (itemId == null) return
+
         //@formatter:off
-        filmEvents = filmEvents?.run { when (criterion) {
-            TITLE_ASCENDING                   -> sortedBy { it.title }
-            TITLE_DESCENDING                  -> sortedByDescending { it.title }
-            FIRST_PERFORMANCE_DATE_ASCENDING  -> sortedBy { it.performances?.first()?.start }
-            FIRST_PERFORMANCE_DATE_DESCENDING -> sortedByDescending { it.performances?.first()?.start }
-            else -> throw RuntimeException()
+        filmEvents = filmEvents?.run { when (itemId) {
+            R.id.sort_title_ascending   -> sortedBy { it.title }
+            R.id.sort_title_descending  -> sortedByDescending { it.title }
+            R.id.sort_date_ascending    -> sortedBy { it.performances?.first()?.start }
+            R.id.sort_date_descending   -> sortedByDescending { it.performances?.first()?.start }
+            else -> throw RuntimeException("Cannot sort on itemId $itemId")
         }}
         //@formatter:on
+
+        sortedBy = itemId
+        notifyDataSetChanged()
+    }
+
+    fun filterBy(genre: CharSequence?) {
+        if (genre == filteredByGenre) return
+
+        val predicate: (FilmEvent) -> Boolean = { it.genreTags?.contains(genre) ?: false }
+
+        filmEvents = if (genre == parentActivity.getString(R.string.filter_none)) unfilteredFilmEvents
+        else unfilteredFilmEvents?.filter(predicate)
+        filteredByGenre = genre
+
+        sortBy(sortedBy)
         notifyDataSetChanged()
     }
 
     fun swapFilmEvents(filmEvents: List<FilmEvent>) {
-        this.filmEvents = filmEvents
+        this.unfilteredFilmEvents = filmEvents
+        this.filmEvents = unfilteredFilmEvents
         notifyDataSetChanged()
     }
 
@@ -106,12 +128,5 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: ListActivity, pr
         val imageView: ImageView = view.film_list_image
         val titleView: TextView = view.film_list_title
         val firstShowingView: TextView = view.film_first_showing
-    }
-
-    companion object {
-        const val TITLE_ASCENDING = "title_ascending"
-        const val TITLE_DESCENDING = "title_descending"
-        const val FIRST_PERFORMANCE_DATE_ASCENDING = "first_performance_date_ascending"
-        const val FIRST_PERFORMANCE_DATE_DESCENDING = "first_performance_date_descending"
     }
 }

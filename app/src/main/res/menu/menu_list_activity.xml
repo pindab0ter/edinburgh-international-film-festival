@@ -9,29 +9,44 @@
         android:title="@string/filter_label"
         app:showAsAction="always">
         <menu>
-            <item
-                android:id="@+id/filter_placeholder"
-                android:title="@string/failed_to_load_genres" />
+            <group
+                android:id="@+id/filter_group"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/filter_placeholder"
+                    android:visible="true"
+                    android:orderInCategory="0"
+                    android:checkable="false"
+                    android:title="@string/failed_to_load_genres" />
+                <item
+                    android:id="@+id/filter_none"
+                    android:visible="false"
+                    android:checked="true"
+                    android:title="@string/filter_none"/>
+            </group>
         </menu>
     </item>
     <item
-        android:id="@+id/sort"
         android:icon="@drawable/ic_sort"
         android:title="@string/sort_label"
         app:showAsAction="always">
         <menu>
-            <item
-                android:id="@+id/sort_title_ascending"
-                android:title="@string/sort_alphabetically_ascending" />
-            <item
-                android:id="@+id/sort_title_descending"
-                android:title="@string/sort_alphabetically_descending" />
-            <item
-                android:id="@+id/sort_date_ascending"
-                android:title="@string/sort_first_performance_date_ascending" />
-            <item
-                android:id="@+id/sort_date_descending"
-                android:title="@string/sort_first_performance_date_descending" />
+            <group
+                android:id="@+id/sort_group"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/sort_title_ascending"
+                    android:title="@string/sort_alphabetically_ascending" />
+                <item
+                    android:id="@+id/sort_title_descending"
+                    android:title="@string/sort_alphabetically_descending" />
+                <item
+                    android:id="@+id/sort_date_ascending"
+                    android:title="@string/sort_first_performance_date_ascending" />
+                <item
+                    android:id="@+id/sort_date_descending"
+                    android:title="@string/sort_first_performance_date_descending" />
+            </group>
         </menu>
     </item>
 </menu>
