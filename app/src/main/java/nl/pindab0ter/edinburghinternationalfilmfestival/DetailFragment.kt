@@ -34,10 +34,10 @@ class DetailFragment : Fragment() {
     }
 
     private fun parseKey(key: String) = when (key) {
-        ARG_TITLE -> title = arguments!!.getString(ARG_TITLE)
-        ARG_DESCRIPTION -> description = arguments!!.getString(ARG_DESCRIPTION)
-        ARG_SHOWINGS -> showings = arguments!!.getStringArray(ARG_SHOWINGS)
-        ARG_IMAGE_URL -> imageUrl = arguments!!.getString(ARG_IMAGE_URL)
+        DETAIL_TITLE -> title = arguments!!.getString(DETAIL_TITLE)
+        DETAIL_DESCRIPTION -> description = arguments!!.getString(DETAIL_DESCRIPTION)
+        DETAIL_SHOWINGS -> showings = arguments!!.getStringArray(DETAIL_SHOWINGS)
+        DETAIL_IMAGE_URL -> imageUrl = arguments!!.getString(DETAIL_IMAGE_URL)
         else -> Unit
     }
 
@@ -64,9 +64,9 @@ class DetailFragment : Fragment() {
     }
 
     companion object {
-        const val ARG_TITLE = "title"
-        const val ARG_DESCRIPTION = "description"
-        const val ARG_SHOWINGS = "showings"
-        const val ARG_IMAGE_URL = "image_url"
+        const val DETAIL_TITLE = "detail_title"
+        const val DETAIL_DESCRIPTION = "detail_description"
+        const val DETAIL_SHOWINGS = "detail_showings"
+        const val DETAIL_IMAGE_URL = "detail_image_url"
     }
 }

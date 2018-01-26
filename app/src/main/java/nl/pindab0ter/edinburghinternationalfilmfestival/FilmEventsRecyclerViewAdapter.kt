@@ -10,10 +10,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.main_list_item.view.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_DESCRIPTION
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_IMAGE_URL
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_SHOWINGS
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_TITLE
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_DESCRIPTION
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_IMAGE_URL
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_SHOWINGS
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_TITLE
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.ImageFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatShowDate
@@ -39,10 +39,10 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: ListActivity, pr
             if (twoPane) {
                 val fragment = DetailFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG_TITLE, filmEvent.title)
-                        putString(ARG_DESCRIPTION, filmEvent.description)
-                        putString(ARG_IMAGE_URL, imageUrl)
-                        putStringArray(ARG_SHOWINGS, showings)
+                        putString(DETAIL_TITLE, filmEvent.title)
+                        putString(DETAIL_DESCRIPTION, filmEvent.description)
+                        putString(DETAIL_IMAGE_URL, imageUrl)
+                        putStringArray(DETAIL_SHOWINGS, showings)
                     }
                 }
                 parentActivity.supportFragmentManager
@@ -51,10 +51,10 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: ListActivity, pr
                         .commit()
             } else {
                 val intent = Intent(v.context, DetailActivity::class.java).apply {
-                    putExtra(ARG_TITLE, filmEvent.title)
-                    putExtra(ARG_DESCRIPTION, filmEvent.description)
-                    putExtra(ARG_IMAGE_URL, imageUrl)
-                    putExtra(ARG_SHOWINGS, showings)
+                    putExtra(DETAIL_TITLE, filmEvent.title)
+                    putExtra(DETAIL_DESCRIPTION, filmEvent.description)
+                    putExtra(DETAIL_IMAGE_URL, imageUrl)
+                    putExtra(DETAIL_SHOWINGS, showings)
                 }
                 v.context.startActivity(intent)
             }

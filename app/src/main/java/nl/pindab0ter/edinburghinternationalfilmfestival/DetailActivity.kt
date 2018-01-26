@@ -6,10 +6,12 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_detail.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_DESCRIPTION
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_IMAGE_URL
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_SHOWINGS
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_TITLE
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_DESCRIPTION
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_IMAGE_URL
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_SHOWINGS
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_TITLE
+import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_TAG
+import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_TITLE
 
 /**
  * An activity representing a single FilmEvent detail screen. This
@@ -46,10 +48,10 @@ class DetailActivity : AppCompatActivity() {
             // using a fragment transaction.
             val fragment = DetailFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_TITLE, intent.getStringExtra(ARG_TITLE))
-                    putString(ARG_DESCRIPTION, intent.getStringExtra(ARG_DESCRIPTION))
-                    putString(ARG_IMAGE_URL, intent.getStringExtra(DetailFragment.ARG_IMAGE_URL))
-                    putStringArray(ARG_SHOWINGS, intent.getStringArrayExtra(DetailFragment.ARG_SHOWINGS))
+                    putString(DETAIL_TITLE, intent.getStringExtra(DETAIL_TITLE))
+                    putString(DETAIL_DESCRIPTION, intent.getStringExtra(DETAIL_DESCRIPTION))
+                    putString(DETAIL_IMAGE_URL, intent.getStringExtra(DetailFragment.DETAIL_IMAGE_URL))
+                    putStringArray(DETAIL_SHOWINGS, intent.getStringArrayExtra(DetailFragment.DETAIL_SHOWINGS))
                 }
             }
 
