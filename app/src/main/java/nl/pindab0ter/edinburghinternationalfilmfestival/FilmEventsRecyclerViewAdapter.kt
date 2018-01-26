@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import kotlinx.android.synthetic.main.main_list_content.view.*
+import kotlinx.android.synthetic.main.main_list_item.view.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_DESCRIPTION
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_IMAGE_URL
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.ARG_SHOWINGS
@@ -62,7 +62,7 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: ListActivity, pr
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.main_list_content, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.main_list_item, parent, false)
         return ViewHolder(view)
     }
 

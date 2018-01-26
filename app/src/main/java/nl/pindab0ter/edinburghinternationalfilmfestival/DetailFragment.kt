@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.detail.view.*
+import kotlinx.android.synthetic.main.fragment_detail.view.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.ImageFetcher
 
 /**
@@ -44,7 +44,7 @@ class DetailFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         activity?.toolbar_layout?.title = title
 
-        val rootView = inflater.inflate(R.layout.detail, container, false) as LinearLayout
+        val rootView = inflater.inflate(R.layout.fragment_detail, container, false) as LinearLayout
 
         ImageFetcher(context!!).fetch(imageUrl) { bitmap: Bitmap ->
             activity?.toolbar_layout?.background = BitmapDrawable(resources, bitmap)
