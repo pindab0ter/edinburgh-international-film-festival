@@ -7,7 +7,7 @@
     <string name="edinburgh_festival_city_festival_key" translatable="false">festival</string>
     <string name="edinburgh_festival_city_festival_value" translatable="false">film</string>
     <string name="edinburgh_festival_city_year_key">year</string>
-    <string name="edinburgh_festival_city_year_value">2016</string>
+    <string name="edinburgh_festival_city_year_value">2015</string>
     <string name="crypto_algorithm" translatable="false">HmacSHA1</string>
     <string name="film_image_description">Film poster</string>
     <string name="sort_alphabetically_ascending">Alphabetically (ascending)</string>
@@ -19,4 +19,9 @@
     <string name="filter_none">No filter</string>
     <string name="description_label">Description</string>
     <string name="failed_to_load_genres">Failed to load genres</string>
+    <string name="rate_and_share_title">Rate and share</string>
+    <string name="share">Share</string>
+    <string name="cancel">Cancel</string>
+    <string name="rate_and_share_message">Your rating for %1$s:</string>
+    <string name="this_event">this event</string>
 </resources>

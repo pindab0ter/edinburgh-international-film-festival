@@ -2,7 +2,6 @@ package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -26,9 +25,10 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
         setSupportActionBar(detail_toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        fab.setOnClickListener {
+            RatingDialogFragment().apply {
+                arguments = Bundle().apply { putString(DIALOG_TITLE, intent.getStringExtra(DETAIL_TITLE)) }
+            }.show(fragmentManager, DIALOG_TAG)
         }
 
         // Show the Up button in the action bar.
