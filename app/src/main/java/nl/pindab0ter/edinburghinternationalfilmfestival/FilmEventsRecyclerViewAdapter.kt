@@ -14,6 +14,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_IMAGE_URL
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_SHOWINGS
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_TITLE
+import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_WEBSITE
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.ImageFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatShowDate
@@ -42,6 +43,7 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: ListActivity, pr
                         putString(DETAIL_TITLE, filmEvent.title)
                         putString(DETAIL_DESCRIPTION, filmEvent.description)
                         putString(DETAIL_IMAGE_URL, imageUrl)
+                        putString(DIALOG_WEBSITE, filmEvent.website)
                         putStringArray(DETAIL_SHOWINGS, showings)
                     }
                 }
@@ -54,6 +56,7 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: ListActivity, pr
                     putExtra(DETAIL_TITLE, filmEvent.title)
                     putExtra(DETAIL_DESCRIPTION, filmEvent.description)
                     putExtra(DETAIL_IMAGE_URL, imageUrl)
+                    putExtra(DIALOG_WEBSITE, filmEvent.website)
                     putExtra(DETAIL_SHOWINGS, showings)
                 }
                 v.context.startActivity(intent)

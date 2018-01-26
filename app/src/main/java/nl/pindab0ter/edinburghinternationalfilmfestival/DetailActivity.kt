@@ -11,6 +11,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_TITLE
 import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_TAG
 import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_TITLE
+import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_WEBSITE
 
 /**
  * An activity representing a single FilmEvent detail screen. This
@@ -27,7 +28,10 @@ class DetailActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             RatingDialogFragment().apply {
-                arguments = Bundle().apply { putString(DIALOG_TITLE, intent.getStringExtra(DETAIL_TITLE)) }
+                arguments = Bundle().apply {
+                    putString(DIALOG_TITLE, intent.getStringExtra(DETAIL_TITLE))
+                    putString(DIALOG_WEBSITE, intent.getStringExtra(DIALOG_WEBSITE))
+                }
             }.show(fragmentManager, DIALOG_TAG)
         }
 

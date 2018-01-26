@@ -6,6 +6,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.R
 import java.net.URL
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
+import kotlin.math.round
 
 object EdinburghFestivalCityUtilities {
     fun buildUrl(context: Context): URL = with(context) {
@@ -44,4 +45,17 @@ object EdinburghFestivalCityUtilities {
         mac.init(SecretKeySpec(signingKey.toByteArray(), cryptoAlgorithm))
         return mac.doFinal(unsignedQuery.toByteArray()).joinToString("") { String.format("%02x", it) }
     }
+}
+
+fun Float.asStarRating(): String = StringBuilder().apply {
+    val value = this@asStarRating
+    require(value in 0.0..5.0, { "A star rating must be between 0.0 and 5.0" })
+
+    for (it in 0 until value.toInt()) append("★")
+    if ((value - value.toInt()).roundToNearestHalf() == 1.0f) append("★")
+    if (roundToNearestHalf() % 1 == 0.5f) append("½")
+}.toString()
+
+fun Float.roundToNearestHalf(): Float {
+    return round(this * 2.0f) / 2.0f
 }
