@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.Uri
 import nl.pindab0ter.edinburghinternationalfilmfestival.R
 import java.net.URL
+import java.text.DateFormat
+import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.math.round
@@ -43,6 +45,8 @@ private fun generateSignatureNew(cryptoAlgorithm: String, unsignedQuery: String,
     init(SecretKeySpec(signingKey.toByteArray(), cryptoAlgorithm))
     doFinal(unsignedQuery.toByteArray()).joinToString("") { String.format("%02x", it) }
 }
+
+fun Date.formatForDisplay(): String = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(this)
 
 fun Float.asStarRating(): String = StringBuilder().apply {
     val value = this@asStarRating

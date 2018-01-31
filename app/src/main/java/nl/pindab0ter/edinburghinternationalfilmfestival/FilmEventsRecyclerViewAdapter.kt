@@ -17,7 +17,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion
 import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_WEBSITE
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.ImageFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
-import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatShowDate
+import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplay
 
 class FilmEventsRecyclerViewAdapter(private val parentActivity: ListActivity, private val twoPane: Boolean) :
         RecyclerView.Adapter<FilmEventsRecyclerViewAdapter.ViewHolder>() {
@@ -35,7 +35,7 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: ListActivity, pr
         onClickListener = View.OnClickListener { v ->
             val filmEvent = v.tag as FilmEvent
             val imageUrl = "https:${filmEvent.images?.versions?.original?.url}"
-            val showings = filmEvent.performances?.map { formatShowDate(it.start) }?.toTypedArray()
+            val showings = filmEvent.performances?.map { it.start?.formatForDisplay() }?.toTypedArray()
 
             if (twoPane) {
                 val fragment = DetailFragment().apply {
@@ -72,7 +72,7 @@ class FilmEventsRecyclerViewAdapter(private val parentActivity: ListActivity, pr
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         filmEvents?.get(position).let { filmEvent ->
             holder.titleView.text = filmEvent?.title
-            holder.firstShowingView.text = formatShowDate(filmEvent?.performances?.first()?.start)
+            holder.firstShowingView.text = filmEvent?.performances?.first()?.start?.formatForDisplay()
 
             filmEvent?.let {
                 imageFetcher.fetch("https:${filmEvent.images?.versions?.small320?.url}", { bitmap: Bitmap ->

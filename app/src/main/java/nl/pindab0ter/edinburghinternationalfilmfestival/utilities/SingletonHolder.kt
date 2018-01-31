@@ -1,4 +1,4 @@
-package nl.pindab0ter.edinburghinternationalfilmfestival.utilities.extensions
+package nl.pindab0ter.edinburghinternationalfilmfestival.utilities
 
 
 open class SingletonHolder<out T, in A>(creator: (A) -> T) {

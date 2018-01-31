@@ -44,6 +44,7 @@ class FilmEventsRequest(
     }
 
     override fun deliverResponse(response: List<FilmEvent>) = listener.invoke(response)
+
     class ImagesDeserializer : JsonDeserializer<FilmEvent.Images> {
         override fun deserialize(element: JsonElement, typeOfT: Type, context: JsonDeserializationContext): FilmEvent.Images = context.deserialize<FilmEvent.Images>(
                 element.asJsonObject.entrySet().first().value,
