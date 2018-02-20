@@ -10,6 +10,8 @@ import kotlinx.android.synthetic.main.film_list.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.layout.activity_master
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsFetcher
+import nl.pindab0ter.edinburghinternationalfilmfestival.dummy.EDINBURGH_FILM_FESTIVAL_REPLY_FIRST
+import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.LongLog
 
 /**
  * An activity representing a list of Pings. This activity
@@ -21,11 +23,8 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsFetcher
  */
 class ListActivity : AppCompatActivity() {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private val twoPane: Boolean
+    private val logTag = ListActivity::class.simpleName
+    private val twoPane: Boolean // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
         get() = detail_container != null
     private lateinit var adapter: FilmEventsRecyclerViewAdapter
     private var genres: List<String>? = null
@@ -82,6 +81,10 @@ class ListActivity : AppCompatActivity() {
     private fun fetchFilmEvents() = FilmEventsFetcher(this, { filmEvents ->
         adapter.swapFilmEvents(filmEvents)
         genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
+
+        LongLog.d(logTag, EDINBURGH_FILM_FESTIVAL_REPLY_FIRST)
+        LongLog.d(logTag, FilmEventsRequest.gson.toJson(filmEvents.first()))
+
         invalidateOptionsMenu()
-    }).fetch()
+    }).fetchOffline()
 }

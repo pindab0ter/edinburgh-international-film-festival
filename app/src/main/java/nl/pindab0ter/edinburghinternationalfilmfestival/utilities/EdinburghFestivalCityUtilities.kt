@@ -2,6 +2,7 @@ package nl.pindab0ter.edinburghinternationalfilmfestival.utilities
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import nl.pindab0ter.edinburghinternationalfilmfestival.R
 import java.net.URL
 import java.text.DateFormat
@@ -60,3 +61,15 @@ fun Float.asStarRating(): String = StringBuilder().apply {
     if (roundsUpToWhole()) append("★")
     if (roundsToHalf()) append("½")
 }.toString()
+
+object LongLog {
+    private const val maxLength = 1000
+
+    fun d(tag: String?, message: String?) {
+        if (message!!.length > maxLength) {
+            Log.d(tag, message.substring(0 until maxLength))
+            d(tag, message.substring(maxLength))
+        }
+        else Log.d(tag, message)
+    }
+}

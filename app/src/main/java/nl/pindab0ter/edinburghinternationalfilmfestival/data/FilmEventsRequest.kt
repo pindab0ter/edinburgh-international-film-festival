@@ -7,6 +7,9 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.HttpHeaderParser
 import com.google.gson.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent.Performance.Concession
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent.Performance.Concession.Available
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent.Performance.Concession.Unavailable
 import java.io.UnsupportedEncodingException
 import java.lang.reflect.Type
 import java.net.URL
@@ -22,9 +25,10 @@ class FilmEventsRequest(
 ) : Request<List<FilmEvent>>(Request.Method.GET, url.toString(), errorListener) {
     companion object {
         val gson: Gson = GsonBuilder()
+                .disableHtmlEscaping()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .registerTypeAdapter(FilmEvent.Images::class.java, ImagesDeserializer())
-                .registerTypeAdapter(FilmEvent.Performance.Concession::class.java, ConcessionDeserializer())
+                .registerTypeAdapter(Concession::class.java, ConcessionDeserializer())
                 .registerTypeAdapter(Date::class.java, DateDeserializer())
                 .create()
     }
@@ -46,17 +50,21 @@ class FilmEventsRequest(
     override fun deliverResponse(response: List<FilmEvent>) = listener.invoke(response)
 
     class ImagesDeserializer : JsonDeserializer<FilmEvent.Images> {
-        override fun deserialize(element: JsonElement, typeOfT: Type, context: JsonDeserializationContext): FilmEvent.Images = context.deserialize<FilmEvent.Images>(
-                element.asJsonObject.entrySet().first().value,
-                FilmEvent.ImagesSubclass::class.java
-        )
+        override fun deserialize(element: JsonElement, typeOfT: Type, context: JsonDeserializationContext): FilmEvent.Images {
+            val images = with(element.asJsonObject) {
+                if (has("hash")) this
+                else entrySet().first().value
+            }
+
+            return context.deserialize<FilmEvent.Images>(images, FilmEvent.ImagesSubclass::class.java)
+        }
     }
 
-    class ConcessionDeserializer : JsonDeserializer<FilmEvent.Performance.Concession> {
-        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): FilmEvent.Performance.Concession = try {
-            FilmEvent.Performance.Concession.Available(json.asInt)
+    class ConcessionDeserializer : JsonDeserializer<Concession> {
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Concession = try {
+            Available(json.asInt)
         } catch (exception: NumberFormatException) {
-            FilmEvent.Performance.Concession.Unavailable()
+            Unavailable()
         }
     }
 
