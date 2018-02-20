@@ -49,8 +49,7 @@ private fun generateSignatureNew(cryptoAlgorithm: String, unsignedQuery: String,
 
 fun Date.formatForDisplay(): String = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(this)
 
-fun Float.asStarRating(): String = StringBuilder().apply {
-    val value = this@asStarRating
+fun starRatingFor(value: Float): String = StringBuilder().apply {
     require(value in 0.0..5.0, { "A star rating must be between 0.0 and 5.0" })
 
     fun Float.roundToNearestHalf(): Float = round(this * 2.0f) / 2.0f
@@ -58,8 +57,8 @@ fun Float.asStarRating(): String = StringBuilder().apply {
     fun Float.roundsUpToWhole(): Boolean = (this % 1).roundToNearestHalf() == 1.0f
 
     for (it in 0 until value.toInt()) append("★")
-    if (roundsUpToWhole()) append("★")
-    if (roundsToHalf()) append("½")
+    if (value.roundsUpToWhole()) append("★")
+    if (value.roundsToHalf()) append("½")
 }.toString()
 
 object LongLog {

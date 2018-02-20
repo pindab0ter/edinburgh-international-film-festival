@@ -6,7 +6,7 @@ import android.app.DialogFragment
 import android.content.Intent
 import android.os.Bundle
 import android.widget.RatingBar
-import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.asStarRating
+import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.starRatingFor
 
 class RatingDialogFragment : DialogFragment() {
     private lateinit var alertDialog: AlertDialog
@@ -19,7 +19,7 @@ class RatingDialogFragment : DialogFragment() {
                 .setPositiveButton(R.string.share) { dialog, _ ->
                     val title = arguments?.get(DIALOG_TITLE)
                     val website = arguments?.get(DIALOG_WEBSITE)
-                    val rating = (dialog as AlertDialog).findViewById<RatingBar>(R.id.rating_bar).rating.asStarRating()
+                    val rating = starRatingFor((dialog as AlertDialog).findViewById<RatingBar>(R.id.rating_bar).rating)
                     val shareText = String.format(getString(R.string.share_text_with_rating), title, rating, website)
 
                     startActivity(Intent().apply {
