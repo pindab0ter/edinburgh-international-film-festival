@@ -10,20 +10,25 @@ class FilmEventsDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db?.execSQL(sqlCreateWeatherTable)
     }
 
+    override fun onDowngrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        db?.execSQL("DROP TABLE IF EXISTS ${FilmEventEntry.TABLE_NAME}")
+        onCreate(db)
+    }
+
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL("DROP TABLE IF EXISTS ${FilmEventEntry.TABLE_NAME}")
+        onCreate(db)
     }
 
     companion object {
         const val DATABASE_NAME = "film_events.db"
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 2
 
         val sqlCreateWeatherTable = """
             |  CREATE TABLE ${FilmEventEntry.TABLE_NAME} (
             |  ${FilmEventEntry._ID}                 INTEGER PRIMARY KEY AUTOINCREMENT,
-            |  ${FilmEventEntry.COLUMN_CODE}         TEXT NULL,
-            |  ${FilmEventEntry.COLUMN_TITLE}        TEXT NULL,
-            |  UNIQUE (${FilmEventEntry.COLUMN_CODE}) ON CONFLICT REPLACE
+            |  ${FilmEventEntry.COLUMN_CODE}         VARCHAR NOT NULL UNIQUE ON CONFLICT IGNORE,
+            |  ${FilmEventEntry.COLUMN_TITLE}        VARCHAR NOT NULL
             |);""".trimMargin()
     }
 }

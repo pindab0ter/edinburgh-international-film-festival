@@ -17,14 +17,6 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsRequest
 import nl.pindab0ter.edinburghinternationalfilmfestival.dummy.EDINBURGH_FILM_FESTIVAL_REPLY_FIRST
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.LongLog
 
-/**
- * An activity representing a list of Pings. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a [DetailActivity] representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 class ListActivity : AppCompatActivity() {
 
     private val logTag = ListActivity::class.simpleName
@@ -84,25 +76,49 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun testDatabase() {
-        val cv = ContentValues()
-        cv.put(FilmEventEntry.COLUMN_CODE, "2104")
-        cv.put(FilmEventEntry.COLUMN_TITLE, "Kafka’s The Burrow (Kafka’s Der Bau)")
+        with(ContentValues()) {
+            put(FilmEventEntry.COLUMN_CODE, "2104")
+            put(FilmEventEntry.COLUMN_TITLE, "Kafka’s The Burrow (Kafka’s Der Bau)")
+            contentResolver.insert(FilmEventEntry.CONTENT_URI, this)
+        }
 
-        Log.v(logTag, "Inserting $cv into ${FilmEventEntry.CONTENT_URI}")
+        with(ContentValues()) {
+            put(FilmEventEntry.COLUMN_CODE, "2152")
+            put(FilmEventEntry.COLUMN_TITLE, "45 Years")
+            contentResolver.insert(FilmEventEntry.CONTENT_URI, this)
+        }
 
-        val uri = contentResolver.insert(FilmEventEntry.CONTENT_URI, cv)
+        // Force conflict
+        with(ContentValues()) {
+            put(FilmEventEntry.COLUMN_CODE, "2152")
+            put(FilmEventEntry.COLUMN_TITLE, "45 Years")
+            contentResolver.insert(FilmEventEntry.CONTENT_URI, this)
+        }
 
-        Log.v(logTag, "Inserted now has uri: $uri")
-
-        contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null, null).apply {
+        /*contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null, null).apply {
             moveToFirst()
             do {
                 Log.v(logTag, """
-                    |  _id: ${getColumnIndex(FilmEventEntry._ID)}
-                    |title: ${getColumnIndex(FilmEventEntry.COLUMN_TITLE)}
-                    | code: ${getColumnIndex(FilmEventEntry.COLUMN_CODE)}
+                    |  _id: ${getInt(getColumnIndex(FilmEventEntry._ID))}
+                    |title: ${getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE))}
+                    | code: ${getString(getColumnIndex(FilmEventEntry.COLUMN_CODE))}
                 """.trimMargin())
             } while (moveToNext())
+            close()
+        }*/
+
+        val querySingleUri = FilmEventEntry.CONTENT_URI.buildUpon().appendPath("2").build()
+        contentResolver.query(querySingleUri, null, null, null, null).apply {
+            if (count > 0) {
+                moveToFirst()
+                Log.v(logTag, """
+                |  _id: ${getInt(getColumnIndex(FilmEventEntry._ID))}
+                |title: ${getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE))}
+                | code: ${getString(getColumnIndex(FilmEventEntry.COLUMN_CODE))}
+            """.trimMargin())
+            } else {
+                Log.v(logTag, "No result for $querySingleUri")
+            }
             close()
         }
     }
