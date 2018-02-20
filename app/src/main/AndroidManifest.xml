@@ -29,6 +29,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ListActivity" />
         </activity>
+
+        <provider
+            android:name=".data.FilmEventsProvider"
+            android:authorities="@string/content_authority"
+            android:exported="false" />
     </application>
 
 </manifest>

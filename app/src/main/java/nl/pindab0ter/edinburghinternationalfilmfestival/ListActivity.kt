@@ -1,15 +1,19 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
+import android.content.ContentValues
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_master.*
 import kotlinx.android.synthetic.main.film_list.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.layout.activity_master
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.FilmEventEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsFetcher
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsRequest
 import nl.pindab0ter.edinburghinternationalfilmfestival.dummy.EDINBURGH_FILM_FESTIVAL_REPLY_FIRST
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.LongLog
 
@@ -37,7 +41,8 @@ class ListActivity : AppCompatActivity() {
         toolbar.title = title
 
         setupRecyclerView(film_list)
-        fetchFilmEvents()
+//        fetchFilmEvents()
+        testDatabase()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -76,6 +81,30 @@ class ListActivity : AppCompatActivity() {
     private fun setupRecyclerView(recyclerView: RecyclerView) {
         adapter = FilmEventsRecyclerViewAdapter(this, twoPane)
         recyclerView.adapter = adapter
+    }
+
+    private fun testDatabase() {
+        val cv = ContentValues()
+        cv.put(FilmEventEntry.COLUMN_CODE, "2104")
+        cv.put(FilmEventEntry.COLUMN_TITLE, "Kafka’s The Burrow (Kafka’s Der Bau)")
+
+        Log.v(logTag, "Inserting $cv into ${FilmEventEntry.CONTENT_URI}")
+
+        val uri = contentResolver.insert(FilmEventEntry.CONTENT_URI, cv)
+
+        Log.v(logTag, "Inserted now has uri: $uri")
+
+        contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null, null).apply {
+            moveToFirst()
+            do {
+                Log.v(logTag, """
+                    |  _id: ${getColumnIndex(FilmEventEntry._ID)}
+                    |title: ${getColumnIndex(FilmEventEntry.COLUMN_TITLE)}
+                    | code: ${getColumnIndex(FilmEventEntry.COLUMN_CODE)}
+                """.trimMargin())
+            } while (moveToNext())
+            close()
+        }
     }
 
     private fun fetchFilmEvents() = FilmEventsFetcher(this, { filmEvents ->
