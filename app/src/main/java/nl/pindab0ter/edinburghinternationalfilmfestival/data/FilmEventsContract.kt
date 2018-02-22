@@ -12,11 +12,17 @@ object FilmEventsContract {
 
     object FilmEventEntry : BaseColumns {
         val CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_FILM_EVENTS).build()!!
+        const val TABLE_NAME = "film_events"
 
         const val _ID = BaseColumns._ID
-        const val TABLE_NAME = "film_events"
         const val COLUMN_CODE = "code"
         const val COLUMN_TITLE = "title"
+        const val COLUMN_IMAGE_THUMBNAIL = "image_thumb"
+        const val COLUMN_IMAGE_THUMBNAIL_URL = "image_thumb_url"
+        const val COLUMN_IMAGE_ORIGINAL = "image_orig"
+        const val COLUMN_IMAGE_ORIGINAL_URL = "image_orig_url"
+        const val COLUMN_UPDATED = "updated"
+
         /*
         const val COLUMN_DESCRIPTION = "description"
         const val COLUMN_GENRE = "genre"
@@ -24,12 +30,10 @@ object FilmEventsContract {
         const val COLUMN_LATITUDE = "latitude"
         const val COLUMN_LONGITUDE = "longitude"
         const val COLUMN_STATUS = "status"
-        const val COLUMN_UPDATED = "updated"
         const val COLUMN_URL = "url"
         const val COLUMN_WEBSITE = "website"
         const val COLUMN_YEAR = "year"
         const val COLUMN_IMAGES = "images"
-        const val COLUMN_PERFORMANCES = "performances"
         const val COLUMN_VENUE = "venue"
         */
     }

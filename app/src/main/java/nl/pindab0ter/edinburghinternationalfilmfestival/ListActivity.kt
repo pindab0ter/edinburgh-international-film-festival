@@ -79,12 +79,18 @@ class ListActivity : AppCompatActivity() {
         with(ContentValues()) {
             put(FilmEventEntry.COLUMN_CODE, "2104")
             put(FilmEventEntry.COLUMN_TITLE, "Kafka’s The Burrow (Kafka’s Der Bau)")
+            put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, "https://edfestimages.s3.amazonaws.com/3c/51/04/3c510480057151a1180c9af9f7664ee80cf57ab2-original.jpg")
+            put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL, "https://edfestimages.s3.amazonaws.com/3c/51/04/3c510480057151a1180c9af9f7664ee80cf57ab2-thumb-100.png")
+            put(FilmEventEntry.COLUMN_UPDATED, "2015-06-08 11:50:05")
             contentResolver.insert(FilmEventEntry.CONTENT_URI, this)
         }
 
         with(ContentValues()) {
             put(FilmEventEntry.COLUMN_CODE, "2152")
             put(FilmEventEntry.COLUMN_TITLE, "45 Years")
+            put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, "https://edfestimages.s3.amazonaws.com/7a/b8/ba/7ab8bad13251a35f9957d5375d9c2a3945aa7642-original.jpg")
+            put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL, "https://edfestimages.s3.amazonaws.com/7a/b8/ba/7ab8bad13251a35f9957d5375d9c2a3945aa7642-thumb-100.png")
+            put(FilmEventEntry.COLUMN_UPDATED, "2015-06-25 12:50:05")
             contentResolver.insert(FilmEventEntry.CONTENT_URI, this)
         }
 
@@ -92,6 +98,9 @@ class ListActivity : AppCompatActivity() {
         with(ContentValues()) {
             put(FilmEventEntry.COLUMN_CODE, "2152")
             put(FilmEventEntry.COLUMN_TITLE, "45 Years")
+            put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, "https://edfestimages.s3.amazonaws.com/7a/b8/ba/7ab8bad13251a35f9957d5375d9c2a3945aa7642-original.jpg")
+            put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL, "https://edfestimages.s3.amazonaws.com/7a/b8/ba/7ab8bad13251a35f9957d5375d9c2a3945aa7642-thumb-100.png")
+            put(FilmEventEntry.COLUMN_UPDATED, "2015-06-25 12:50:05")
             contentResolver.insert(FilmEventEntry.CONTENT_URI, this)
         }
 
@@ -112,9 +121,12 @@ class ListActivity : AppCompatActivity() {
             if (count > 0) {
                 moveToFirst()
                 Log.v(logTag, """
-                |  _id: ${getInt(getColumnIndex(FilmEventEntry._ID))}
-                |title: ${getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE))}
-                | code: ${getString(getColumnIndex(FilmEventEntry.COLUMN_CODE))}
+                |    _id: ${getInt(getColumnIndex(FilmEventEntry._ID))}
+                |  title: ${getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE))}
+                |   code: ${getString(getColumnIndex(FilmEventEntry.COLUMN_CODE))}
+                |updated: ${getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))}
+                |   orig: ${getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL))}
+                |  thumb: ${getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL))}
             """.trimMargin())
             } else {
                 Log.v(logTag, "No result for $querySingleUri")
