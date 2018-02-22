@@ -107,7 +107,9 @@ class ListActivity : AppCompatActivity() {
         contentResolver.insert(PerformanceEntry.CONTENT_URI, performance1_1)
         contentResolver.insert(PerformanceEntry.CONTENT_URI, performance1_2)
 
-        val filmEvent2 = ContentValues().apply {
+        contentResolver.delete(FilmEventEntry.CONTENT_URI.buildUpon().appendPath("$filmEvent1Id").build(), null, null)
+
+        /*val filmEvent2 = ContentValues().apply {
             put(FilmEventEntry.COLUMN_CODE, "2152")
             put(FilmEventEntry.COLUMN_TITLE, "45 Years")
             put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, "https://edfestimages.s3.amazonaws.com/7a/b8/ba/7ab8bad13251a35f9957d5375d9c2a3945aa7642-original.jpg")
@@ -116,23 +118,27 @@ class ListActivity : AppCompatActivity() {
         }
 
         contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent2)
-        contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent2) // Force conflict
+        contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent2) // Force conflict*/
 
-        /*contentResolver.query(PerformanceEntry.CONTENT_URI, null, null, null, null).apply {
-            moveToFirst()
-            do {
-                Log.v(logTag, """
-                |     _id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_ID))}
-                |event_id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_FILM_EVENT_CODE))}
-                |   start: ${getString(getColumnIndex(PerformanceEntry.COLUMN_START))}
-                |     end: ${getString(getColumnIndex(PerformanceEntry.COLUMN_END))}
-                |   price: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_PRICE))}
+        contentResolver.query(PerformanceEntry.CONTENT_URI, null, null, null, null).apply {
+            if (count > 0) {
+                moveToFirst()
+                do {
+                    Log.v(logTag, """
+                |       _id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_ID))}
+                |event_code: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_FILM_EVENT_CODE))}
+                |     start: ${getString(getColumnIndex(PerformanceEntry.COLUMN_START))}
+                |       end: ${getString(getColumnIndex(PerformanceEntry.COLUMN_END))}
+                |     price: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_PRICE))}
                 """.trimMargin())
-            } while (moveToNext())
-            close()
-        }*/
+                } while (moveToNext())
+                close()
+            } else {
+                Log.v(logTag, "No performance entries found")
+            }
+        }
 
-        val querySingleUri = FilmEventEntry.CONTENT_URI.buildUpon().appendPath("$filmEvent1Id").build()
+        /*val querySingleUri = FilmEventEntry.CONTENT_URI.buildUpon().appendPath("$filmEvent1Id").build()
         contentResolver.query(querySingleUri, null, null, null, null).apply {
             if (count > 0) {
                 moveToFirst()
@@ -165,7 +171,7 @@ class ListActivity : AppCompatActivity() {
                 Log.v(logTag, "No result for $querySingleUri")
             }
             close()
-        }
+        }*/
     }
 
     private fun fetchFilmEvents() = FilmEventsFetcher(this, { filmEvents ->

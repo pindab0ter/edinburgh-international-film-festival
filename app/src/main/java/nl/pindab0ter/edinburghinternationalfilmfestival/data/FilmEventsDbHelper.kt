@@ -12,6 +12,11 @@ class FilmEventsDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db?.execSQL(sqlCreatePerformanceTable)
     }
 
+    override fun onConfigure(db: SQLiteDatabase?) {
+        super.onConfigure(db)
+        db?.setForeignKeyConstraintsEnabled(true)
+    }
+
     override fun onDowngrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         onUpgrade(db, oldVersion, newVersion)
     }
@@ -24,7 +29,7 @@ class FilmEventsDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     companion object {
         const val DATABASE_NAME = "film_events.db"
-        const val DATABASE_VERSION = 5
+        const val DATABASE_VERSION = 6
 
         // TODO: Save images as BLOB
         val sqlCreateWeatherTable = """
@@ -39,7 +44,7 @@ class FilmEventsDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         val sqlCreatePerformanceTable = """
             |CREATE TABLE ${PerformanceEntry.TABLE_NAME} (
             |   ${PerformanceEntry.COLUMN_ID}               INTEGER PRIMARY KEY AUTOINCREMENT,
-            |   ${PerformanceEntry.COLUMN_FILM_EVENT_CODE}  VARCHAR NOT NULL,
+            |   ${PerformanceEntry.COLUMN_FILM_EVENT_CODE}  VARCHAR REFERENCES ${FilmEventEntry.TABLE_NAME}(${FilmEventEntry.COLUMN_CODE}) ON DELETE CASCADE,
             |   ${PerformanceEntry.COLUMN_START}            DATE NOT NULL,
             |   ${PerformanceEntry.COLUMN_END}              DATE NOT NULL,
             |   ${PerformanceEntry.COLUMN_PRICE}            INTEGER

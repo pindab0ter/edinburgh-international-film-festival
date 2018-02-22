@@ -63,10 +63,10 @@ class FilmEventsProvider : ContentProvider() {
     }
 
     override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor = with(filmEventsDbHelper.readableDatabase) {
-        fun performTransaction(table: String, selection: String?, selectionArguments: Array<out String>?, logMessage: String): Cursor {
+        fun performTransaction(table: String, selection: String?, selectionArgs: Array<out String>?, logMessage: String): Cursor {
             Log.v(logTag, logMessage)
             beginTransaction()
-            val cursor = query(table, null, selection, selectionArguments, null, null, null)
+            val cursor = query(table, null, selection, selectionArgs, null, null, null)
             endTransaction()
 
             return cursor
@@ -98,17 +98,20 @@ class FilmEventsProvider : ContentProvider() {
     }
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int = with(filmEventsDbHelper.writableDatabase) {
-        fun performTransaction(table: String): Int {
+        fun performTransaction(table: String, selection: String?, selectionArgs: Array<out String>?): Int {
             beginTransaction()
-            val deleted = delete(table, null, null)
+            val deleted = delete(table, selection, selectionArgs)
             setTransactionSuccessful()
             endTransaction()
-            Log.v(logTag, "Deleted $deleted rows from $table")
+            Log.v(logTag, "Deleted $deleted rows")
             return deleted
         }
 
+        fun performTransaction(table: String): Int = performTransaction(table, null, null)
+
         when (uriMatcher.match(uri)) {
             CODE_FILM_EVENTS -> performTransaction(FilmEventEntry.TABLE_NAME)
+            CODE_FILM_EVENT_BY_CODE -> performTransaction(FilmEventEntry.TABLE_NAME, "${FilmEventEntry.COLUMN_CODE} = ?", Array(1) { uri.lastPathSegment })
             CODE_PERFORMANCES -> performTransaction(PerformanceEntry.TABLE_NAME)
             else -> throw IllegalArgumentException("No match found for uri $uri")
         }
