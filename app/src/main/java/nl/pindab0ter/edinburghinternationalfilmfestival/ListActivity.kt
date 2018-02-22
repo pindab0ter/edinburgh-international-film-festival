@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.film_list.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.layout.activity_master
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.FilmEventEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PerformanceEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsRequest
 import nl.pindab0ter.edinburghinternationalfilmfestival.dummy.EDINBURGH_FILM_FESTIVAL_REPLY_FIRST
@@ -76,58 +77,93 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun testDatabase() {
-        with(ContentValues()) {
+        contentResolver.delete(FilmEventEntry.CONTENT_URI, null, null)
+        contentResolver.delete(PerformanceEntry.CONTENT_URI, null, null)
+
+        val filmEvent1 = ContentValues().apply {
             put(FilmEventEntry.COLUMN_CODE, "2104")
             put(FilmEventEntry.COLUMN_TITLE, "Kafka’s The Burrow (Kafka’s Der Bau)")
             put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, "https://edfestimages.s3.amazonaws.com/3c/51/04/3c510480057151a1180c9af9f7664ee80cf57ab2-original.jpg")
             put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL, "https://edfestimages.s3.amazonaws.com/3c/51/04/3c510480057151a1180c9af9f7664ee80cf57ab2-thumb-100.png")
             put(FilmEventEntry.COLUMN_UPDATED, "2015-06-08 11:50:05")
-            contentResolver.insert(FilmEventEntry.CONTENT_URI, this)
         }
 
-        with(ContentValues()) {
+        val filmEvent1Id: Int? = contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent1).lastPathSegment.toInt()
+
+        val performance1_1 = ContentValues().apply {
+            put(PerformanceEntry.COLUMN_FILM_EVENT_ID, filmEvent1Id)
+            put(PerformanceEntry.COLUMN_START, "2015-06-19 20:35:00")
+            put(PerformanceEntry.COLUMN_END, "2015-06-19 22:25:00")
+            put(PerformanceEntry.COLUMN_PRICE, 10)
+        }
+
+        val performance1_2 = ContentValues().apply {
+            put(PerformanceEntry.COLUMN_FILM_EVENT_ID, filmEvent1Id)
+            put(PerformanceEntry.COLUMN_START, "2015-06-23 18:05:00")
+            put(PerformanceEntry.COLUMN_END, "2015-06-23 19:55:00")
+            put(PerformanceEntry.COLUMN_PRICE, 10)
+        }
+
+        contentResolver.insert(PerformanceEntry.CONTENT_URI, performance1_1)
+        contentResolver.insert(PerformanceEntry.CONTENT_URI, performance1_2)
+
+        /*
+        val filmEvent2 = ContentValues().apply {
             put(FilmEventEntry.COLUMN_CODE, "2152")
             put(FilmEventEntry.COLUMN_TITLE, "45 Years")
             put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, "https://edfestimages.s3.amazonaws.com/7a/b8/ba/7ab8bad13251a35f9957d5375d9c2a3945aa7642-original.jpg")
             put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL, "https://edfestimages.s3.amazonaws.com/7a/b8/ba/7ab8bad13251a35f9957d5375d9c2a3945aa7642-thumb-100.png")
             put(FilmEventEntry.COLUMN_UPDATED, "2015-06-25 12:50:05")
-            contentResolver.insert(FilmEventEntry.CONTENT_URI, this)
         }
 
-        // Force conflict
-        with(ContentValues()) {
-            put(FilmEventEntry.COLUMN_CODE, "2152")
-            put(FilmEventEntry.COLUMN_TITLE, "45 Years")
-            put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, "https://edfestimages.s3.amazonaws.com/7a/b8/ba/7ab8bad13251a35f9957d5375d9c2a3945aa7642-original.jpg")
-            put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL, "https://edfestimages.s3.amazonaws.com/7a/b8/ba/7ab8bad13251a35f9957d5375d9c2a3945aa7642-thumb-100.png")
-            put(FilmEventEntry.COLUMN_UPDATED, "2015-06-25 12:50:05")
-            contentResolver.insert(FilmEventEntry.CONTENT_URI, this)
-        }
+        contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent2)
+        contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent2) // Force conflict
+        */
 
-        /*contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null, null).apply {
+        /*contentResolver.query(PerformanceEntry.CONTENT_URI, null, null, null, null).apply {
             moveToFirst()
             do {
                 Log.v(logTag, """
-                    |  _id: ${getInt(getColumnIndex(FilmEventEntry._ID))}
-                    |title: ${getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE))}
-                    | code: ${getString(getColumnIndex(FilmEventEntry.COLUMN_CODE))}
+                |     _id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_ID))}
+                |event_id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_FILM_EVENT_ID))}
+                |   start: ${getString(getColumnIndex(PerformanceEntry.COLUMN_START))}
+                |     end: ${getString(getColumnIndex(PerformanceEntry.COLUMN_END))}
+                |   price: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_PRICE))}
                 """.trimMargin())
             } while (moveToNext())
             close()
         }*/
 
-        val querySingleUri = FilmEventEntry.CONTENT_URI.buildUpon().appendPath("2").build()
+        val querySingleUri = FilmEventEntry.CONTENT_URI.buildUpon().appendPath("$filmEvent1Id").build()
         contentResolver.query(querySingleUri, null, null, null, null).apply {
             if (count > 0) {
                 moveToFirst()
                 Log.v(logTag, """
-                |    _id: ${getInt(getColumnIndex(FilmEventEntry._ID))}
+                |    _id: ${getInt(getColumnIndex(FilmEventEntry.COLUMN_ID))}
                 |  title: ${getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE))}
                 |   code: ${getString(getColumnIndex(FilmEventEntry.COLUMN_CODE))}
                 |updated: ${getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))}
                 |   orig: ${getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL))}
                 |  thumb: ${getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL))}
-            """.trimMargin())
+                """.trimMargin())
+
+                val queryPerformancesByFilmEventId = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(getInt(getColumnIndex(FilmEventEntry.COLUMN_ID)).toString()).build()
+                contentResolver.query(queryPerformancesByFilmEventId, null, null, null, null).apply {
+                    if (count > 0) {
+                        moveToFirst()
+                        do {
+                            Log.v(logTag, """
+                            |     _id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_ID))}
+                            |event_id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_FILM_EVENT_ID))}
+                            |   start: ${getString(getColumnIndex(PerformanceEntry.COLUMN_START))}
+                            |     end: ${getString(getColumnIndex(PerformanceEntry.COLUMN_END))}
+                            |   price: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_PRICE))}
+                            """.trimMargin())
+                        } while (moveToNext())
+                    } else {
+                        Log.v(logTag, "No result for $queryPerformancesByFilmEventId")
+                    }
+                }
             } else {
                 Log.v(logTag, "No result for $querySingleUri")
             }

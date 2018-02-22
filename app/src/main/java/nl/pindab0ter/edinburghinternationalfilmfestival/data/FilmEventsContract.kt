@@ -7,6 +7,8 @@ object FilmEventsContract {
     const val CONTENT_AUTHORITY = "nl.pindab0ter.edinburghinternationalfilmfestival"
     const val PATH_FILM_EVENTS = "film_events"
     const val PATH_FILM_EVENT_BY_ID = PATH_FILM_EVENTS + "/#"
+    const val PATH_PERFORMANCES = "performances"
+    const val PATH_PERFORMANCE_BY_FILM_EVENT_ID = PATH_PERFORMANCES + "/#"
 
     val BASE_CONTENT_URI = Uri.parse("content://$CONTENT_AUTHORITY")!!
 
@@ -14,7 +16,7 @@ object FilmEventsContract {
         val CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_FILM_EVENTS).build()!!
         const val TABLE_NAME = "film_events"
 
-        const val _ID = BaseColumns._ID
+        const val COLUMN_ID = BaseColumns._ID
         const val COLUMN_CODE = "code"
         const val COLUMN_TITLE = "title"
         const val COLUMN_IMAGE_THUMBNAIL = "image_thumb"
@@ -38,16 +40,27 @@ object FilmEventsContract {
         */
     }
 
+    object PerformanceEntry : BaseColumns {
+        val CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PERFORMANCES).build()!!
+        const val TABLE_NAME = "performances"
+
+        const val COLUMN_ID = BaseColumns._ID
+        const val COLUMN_FILM_EVENT_ID = "film_event_id"
+        const val COLUMN_START = "start"
+        const val COLUMN_END = "end"
+        const val COLUMN_PRICE = "price"
+    }
+
     /*
     object ImagesEntry : BaseColumns {
-        const val _ID = BaseColumns._ID
+        const val _ID = BaseColumns.COLUMN_ID
         const val COLUMN_ORIENTATION = "orientation"
         const val COLUMN_TYPE = "type"
         const val COLUMN_VERSIONS = "versions"
     }
 
     object VersionsEntry : BaseColumns {
-        const val _ID = BaseColumns._ID
+        const val _ID = BaseColumns.COLUMN_ID
         const val COLUMN_ORIGINAL = "original"
         const val COLUMN_SQUARE75 = "square_75"
         const val COLUMN_SQUARE150 = "square_150"
@@ -58,7 +71,7 @@ object FilmEventsContract {
     }
 
     object VersionEntry : BaseColumns {
-        const val _ID = BaseColumns._ID
+        const val _ID = BaseColumns.COLUMN_ID
         const val COLUMN_TYPE = "type"
         const val COLUMN_MIME = "mime"
         const val COLUMN_HEIGHT = "height"
@@ -66,19 +79,8 @@ object FilmEventsContract {
         const val COLUMN_URL = "url"
     }
 
-    object PerformanceEntry : BaseColumns {
-        const val _ID = BaseColumns._ID
-        const val COLUMN_CONCESSION = "concession"
-        const val COLUMN_CONCESSION_ADDITIONAL = "concession_additional"
-        const val COLUMN_CONCESSION_FAMILY = "concession_family"
-        const val COLUMN_START = "start"
-        const val COLUMN_END = "end"
-        const val COLUMN_PRICE = "price"
-        const val COLUMN_TITLE = "title"
-    }
-
     object VenueEntry : BaseColumns {
-        const val _ID = BaseColumns._ID
+        const val _ID = BaseColumns.COLUMN_ID
         const val COLUMN_ADDRESS = "address"
         const val COLUMN_CODE = "code"
         const val COLUMN_DESCRIPTION = "description"

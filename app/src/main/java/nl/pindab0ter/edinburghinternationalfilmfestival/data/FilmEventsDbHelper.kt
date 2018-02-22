@@ -9,27 +9,28 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.
 class FilmEventsDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(sqlCreateWeatherTable)
+        db?.execSQL(sqlCreatePerformanceTable)
     }
 
     override fun onDowngrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        db?.execSQL("DROP TABLE IF EXISTS ${FilmEventEntry.TABLE_NAME}")
-        onCreate(db)
+        onUpgrade(db, oldVersion, newVersion)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL("DROP TABLE IF EXISTS ${FilmEventEntry.TABLE_NAME}")
+        db?.execSQL("DROP TABLE IF EXISTS ${PerformanceEntry.TABLE_NAME}")
         onCreate(db)
     }
 
     companion object {
         const val DATABASE_NAME = "film_events.db"
-        const val DATABASE_VERSION = 3
+        const val DATABASE_VERSION = 4
 
         // TODO: Save images as BLOB
         // TODO: USE COLUMN_CODE as PRIMARY KEY?
         val sqlCreateWeatherTable = """
             |CREATE TABLE ${FilmEventEntry.TABLE_NAME} (
-            |   ${FilmEventEntry._ID}                        INTEGER PRIMARY KEY AUTOINCREMENT,
+            |   ${FilmEventEntry.COLUMN_ID}                  INTEGER PRIMARY KEY AUTOINCREMENT,
             |   ${FilmEventEntry.COLUMN_CODE}                VARCHAR NOT NULL UNIQUE ON CONFLICT IGNORE,
             |   ${FilmEventEntry.COLUMN_TITLE}               VARCHAR NOT NULL,
             |   ${FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL} VARCHAR,
@@ -39,8 +40,8 @@ class FilmEventsDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
         val sqlCreatePerformanceTable = """
             |CREATE TABLE ${PerformanceEntry.TABLE_NAME} (
-            |   ${PerformanceEntry._ID}                  INTEGER PRIMARY KEY AUTOINCREMENT,
-            |   ${PerformanceEntry.COLUMN_EVENT_ID}      INTEGER NOT NULL,
+            |   ${PerformanceEntry.COLUMN_ID}            INTEGER PRIMARY KEY AUTOINCREMENT,
+            |   ${PerformanceEntry.COLUMN_FILM_EVENT_ID} INTEGER NOT NULL,
             |   ${PerformanceEntry.COLUMN_START}         DATE NOT NULL,
             |   ${PerformanceEntry.COLUMN_END}           DATE NOT NULL,
             |   ${PerformanceEntry.COLUMN_PRICE}         INTEGER
