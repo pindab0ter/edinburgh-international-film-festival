@@ -12,7 +12,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PATH_FILM_EVENTS
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PATH_FILM_EVENT_BY_ID
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PATH_PERFORMANCES
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PATH_PERFORMANCE_BY_FILM_EVENT_ID
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PATH_PERFORMANCE_BY_FILM_EVENT_CODE
 
 class FilmEventsProvider : ContentProvider() {
     private lateinit var filmEventsDbHelper: FilmEventsDbHelper
@@ -24,26 +24,40 @@ class FilmEventsProvider : ContentProvider() {
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri = with(filmEventsDbHelper.writableDatabase) {
-        fun performTransaction(table: String, type: String): Uri {
-            beginTransaction()
-            val id = insert(table, null, values)
-            return if (id != -1L) {
-                setTransactionSuccessful()
-                endTransaction()
-                Log.v(logTag, "Inserted $type with id $id")
-                FilmEventsContract.BASE_CONTENT_URI.buildUpon()
-                        .appendPath(id.toString())
-                        .build()
-            } else {
-                endTransaction()
-                Log.v(logTag, "Failed to insert $type")
-                Uri.EMPTY
-            }
-        }
-
         when (uriMatcher.match(uri)) {
-            CODE_FILM_EVENTS -> performTransaction(FilmEventEntry.TABLE_NAME, "film event")
-            CODE_PERFORMANCES -> performTransaction(PerformanceEntry.TABLE_NAME, "performance")
+            CODE_FILM_EVENTS -> {
+                beginTransaction()
+                val id = insert(FilmEventEntry.TABLE_NAME, null, values)
+                val code = values?.getAsString(FilmEventEntry.COLUMN_CODE)
+                return if (id != -1L) {
+                    setTransactionSuccessful()
+                    endTransaction()
+                    Log.v(logTag, "Inserted film_event with code $code")
+                    FilmEventsContract.BASE_CONTENT_URI.buildUpon()
+                            .appendPath(code)
+                            .build()
+                } else {
+                    endTransaction()
+                    Log.v(logTag, "Failed to insert film_event")
+                    Uri.EMPTY
+                }
+            }
+            CODE_PERFORMANCES -> {
+                beginTransaction()
+                val id = insert(PerformanceEntry.TABLE_NAME, null, values)
+                return if (id != -1L) {
+                    setTransactionSuccessful()
+                    endTransaction()
+                    Log.v(logTag, "Inserted performance with id $id")
+                    FilmEventsContract.BASE_CONTENT_URI.buildUpon()
+                            .appendPath(id.toString())
+                            .build()
+                } else {
+                    endTransaction()
+                    Log.v(logTag, "Failed to insert performance")
+                    Uri.EMPTY
+                }
+            }
             else -> throw IllegalArgumentException("No match found for uri $uri")
         }
     }
@@ -62,18 +76,18 @@ class FilmEventsProvider : ContentProvider() {
 
         when (uriMatcher.match(uri)) {
             CODE_FILM_EVENTS -> performTransaction(FilmEventEntry.TABLE_NAME, "Query for all film events")
-            CODE_FILM_EVENT_BY_ID -> performTransaction(
+            CODE_FILM_EVENT_BY_CODE -> performTransaction(
                     FilmEventEntry.TABLE_NAME,
-                    "${FilmEventEntry.COLUMN_ID} = ?",
+                    "${FilmEventEntry.COLUMN_CODE} = ?",
                     Array(1) { uri.lastPathSegment },
                     "Query for film event with id: ${uri.lastPathSegment}"
             )
             CODE_PERFORMANCES -> performTransaction(PerformanceEntry.TABLE_NAME, "Query for all film performances")
-            CODE_PERFORMANCES_BY_FILM_EVENT_ID -> performTransaction(
+            CODE_PERFORMANCES_BY_FILM_EVENT_CODE -> performTransaction(
                     PerformanceEntry.TABLE_NAME,
-                    "${PerformanceEntry.COLUMN_FILM_EVENT_ID} = ?",
+                    "${PerformanceEntry.COLUMN_FILM_EVENT_CODE} = ?",
                     Array(1) { uri.lastPathSegment },
-                    "Query for performances with film_event_id: ${uri.lastPathSegment}"
+                    "Query for performances with film_event_code: ${uri.lastPathSegment}"
             )
             else -> throw IllegalArgumentException("No match found for uri $uri")
         }
@@ -106,15 +120,15 @@ class FilmEventsProvider : ContentProvider() {
 
     companion object {
         const val CODE_FILM_EVENTS = 100
-        const val CODE_FILM_EVENT_BY_ID = 101
+        const val CODE_FILM_EVENT_BY_CODE = 101
         const val CODE_PERFORMANCES = 200
-        const val CODE_PERFORMANCES_BY_FILM_EVENT_ID = 201
+        const val CODE_PERFORMANCES_BY_FILM_EVENT_CODE = 201
 
         val uriMatcher = UriMatcher(UriMatcher.NO_MATCH).apply {
             addURI(CONTENT_AUTHORITY, PATH_FILM_EVENTS, CODE_FILM_EVENTS)
-            addURI(CONTENT_AUTHORITY, PATH_FILM_EVENT_BY_ID, CODE_FILM_EVENT_BY_ID)
+            addURI(CONTENT_AUTHORITY, PATH_FILM_EVENT_BY_ID, CODE_FILM_EVENT_BY_CODE)
             addURI(CONTENT_AUTHORITY, PATH_PERFORMANCES, CODE_PERFORMANCES)
-            addURI(CONTENT_AUTHORITY, PATH_PERFORMANCE_BY_FILM_EVENT_ID, CODE_PERFORMANCES_BY_FILM_EVENT_ID)
+            addURI(CONTENT_AUTHORITY, PATH_PERFORMANCE_BY_FILM_EVENT_CODE, CODE_PERFORMANCES_BY_FILM_EVENT_CODE)
         }
     }
 }

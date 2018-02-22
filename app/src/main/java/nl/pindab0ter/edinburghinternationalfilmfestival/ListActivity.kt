@@ -91,14 +91,14 @@ class ListActivity : AppCompatActivity() {
         val filmEvent1Id: Int? = contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent1).lastPathSegment.toInt()
 
         val performance1_1 = ContentValues().apply {
-            put(PerformanceEntry.COLUMN_FILM_EVENT_ID, filmEvent1Id)
+            put(PerformanceEntry.COLUMN_FILM_EVENT_CODE, filmEvent1Id)
             put(PerformanceEntry.COLUMN_START, "2015-06-19 20:35:00")
             put(PerformanceEntry.COLUMN_END, "2015-06-19 22:25:00")
             put(PerformanceEntry.COLUMN_PRICE, 10)
         }
 
         val performance1_2 = ContentValues().apply {
-            put(PerformanceEntry.COLUMN_FILM_EVENT_ID, filmEvent1Id)
+            put(PerformanceEntry.COLUMN_FILM_EVENT_CODE, filmEvent1Id)
             put(PerformanceEntry.COLUMN_START, "2015-06-23 18:05:00")
             put(PerformanceEntry.COLUMN_END, "2015-06-23 19:55:00")
             put(PerformanceEntry.COLUMN_PRICE, 10)
@@ -107,7 +107,6 @@ class ListActivity : AppCompatActivity() {
         contentResolver.insert(PerformanceEntry.CONTENT_URI, performance1_1)
         contentResolver.insert(PerformanceEntry.CONTENT_URI, performance1_2)
 
-        /*
         val filmEvent2 = ContentValues().apply {
             put(FilmEventEntry.COLUMN_CODE, "2152")
             put(FilmEventEntry.COLUMN_TITLE, "45 Years")
@@ -118,14 +117,13 @@ class ListActivity : AppCompatActivity() {
 
         contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent2)
         contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent2) // Force conflict
-        */
 
         /*contentResolver.query(PerformanceEntry.CONTENT_URI, null, null, null, null).apply {
             moveToFirst()
             do {
                 Log.v(logTag, """
                 |     _id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_ID))}
-                |event_id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_FILM_EVENT_ID))}
+                |event_id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_FILM_EVENT_CODE))}
                 |   start: ${getString(getColumnIndex(PerformanceEntry.COLUMN_START))}
                 |     end: ${getString(getColumnIndex(PerformanceEntry.COLUMN_END))}
                 |   price: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_PRICE))}
@@ -139,22 +137,21 @@ class ListActivity : AppCompatActivity() {
             if (count > 0) {
                 moveToFirst()
                 Log.v(logTag, """
-                |    _id: ${getInt(getColumnIndex(FilmEventEntry.COLUMN_ID))}
-                |  title: ${getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE))}
                 |   code: ${getString(getColumnIndex(FilmEventEntry.COLUMN_CODE))}
+                |  title: ${getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE))}
                 |updated: ${getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))}
                 |   orig: ${getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL))}
                 |  thumb: ${getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL))}
                 """.trimMargin())
 
-                val queryPerformancesByFilmEventId = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(getInt(getColumnIndex(FilmEventEntry.COLUMN_ID)).toString()).build()
+                val queryPerformancesByFilmEventId = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(getInt(getColumnIndex(FilmEventEntry.COLUMN_CODE)).toString()).build()
                 contentResolver.query(queryPerformancesByFilmEventId, null, null, null, null).apply {
                     if (count > 0) {
                         moveToFirst()
                         do {
                             Log.v(logTag, """
                             |     _id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_ID))}
-                            |event_id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_FILM_EVENT_ID))}
+                            |event_id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_FILM_EVENT_CODE))}
                             |   start: ${getString(getColumnIndex(PerformanceEntry.COLUMN_START))}
                             |     end: ${getString(getColumnIndex(PerformanceEntry.COLUMN_END))}
                             |   price: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_PRICE))}

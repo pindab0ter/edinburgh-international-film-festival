@@ -8,7 +8,7 @@ object FilmEventsContract {
     const val PATH_FILM_EVENTS = "film_events"
     const val PATH_FILM_EVENT_BY_ID = PATH_FILM_EVENTS + "/#"
     const val PATH_PERFORMANCES = "performances"
-    const val PATH_PERFORMANCE_BY_FILM_EVENT_ID = PATH_PERFORMANCES + "/#"
+    const val PATH_PERFORMANCE_BY_FILM_EVENT_CODE = PATH_PERFORMANCES + "/#"
 
     val BASE_CONTENT_URI = Uri.parse("content://$CONTENT_AUTHORITY")!!
 
@@ -16,7 +16,6 @@ object FilmEventsContract {
         val CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_FILM_EVENTS).build()!!
         const val TABLE_NAME = "film_events"
 
-        const val COLUMN_ID = BaseColumns._ID
         const val COLUMN_CODE = "code"
         const val COLUMN_TITLE = "title"
         const val COLUMN_IMAGE_THUMBNAIL = "image_thumb"
@@ -45,7 +44,7 @@ object FilmEventsContract {
         const val TABLE_NAME = "performances"
 
         const val COLUMN_ID = BaseColumns._ID
-        const val COLUMN_FILM_EVENT_ID = "film_event_id"
+        const val COLUMN_FILM_EVENT_CODE = "film_event_code"
         const val COLUMN_START = "start"
         const val COLUMN_END = "end"
         const val COLUMN_PRICE = "price"
