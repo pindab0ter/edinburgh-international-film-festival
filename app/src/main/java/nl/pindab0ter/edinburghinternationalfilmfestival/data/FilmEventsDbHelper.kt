@@ -3,11 +3,15 @@ package nl.pindab0ter.edinburghinternationalfilmfestival.data
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.FilmEventEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PerformanceEntry
 
 class FilmEventsDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+    val logTag = FilmEventsDbHelper::class.simpleName
+
     override fun onCreate(db: SQLiteDatabase?) {
+        Log.v(logTag, "Creating database...")
         db?.execSQL(sqlCreateWeatherTable)
         db?.execSQL(sqlCreatePerformanceTable)
     }
@@ -17,13 +21,20 @@ class FilmEventsDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db?.setForeignKeyConstraintsEnabled(true)
     }
 
-    override fun onDowngrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        onUpgrade(db, oldVersion, newVersion)
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        dropAllTablesAndRecreate(db)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+    override fun onDowngrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) = onUpgrade(db, oldVersion, newVersion)
+
+    fun dropAllTables(db: SQLiteDatabase?) {
+        Log.v(logTag, "Dropping all tables...")
         db?.execSQL("DROP TABLE IF EXISTS ${FilmEventEntry.TABLE_NAME}")
         db?.execSQL("DROP TABLE IF EXISTS ${PerformanceEntry.TABLE_NAME}")
+    }
+
+    fun dropAllTablesAndRecreate(db: SQLiteDatabase?) {
+        dropAllTables(db)
         onCreate(db)
     }
 

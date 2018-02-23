@@ -34,8 +34,7 @@ class ListActivity : AppCompatActivity() {
         toolbar.title = title
 
         setupRecyclerView(film_list)
-//        fetchFilmEvents()
-        testDatabase()
+        fetchFilmEvents()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -74,104 +73,6 @@ class ListActivity : AppCompatActivity() {
     private fun setupRecyclerView(recyclerView: RecyclerView) {
         adapter = FilmEventsRecyclerViewAdapter(this, twoPane)
         recyclerView.adapter = adapter
-    }
-
-    private fun testDatabase() {
-        contentResolver.delete(FilmEventEntry.CONTENT_URI, null, null)
-        contentResolver.delete(PerformanceEntry.CONTENT_URI, null, null)
-
-        val filmEvent1 = ContentValues().apply {
-            put(FilmEventEntry.COLUMN_CODE, "2104")
-            put(FilmEventEntry.COLUMN_TITLE, "Kafka’s The Burrow (Kafka’s Der Bau)")
-            put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, "https://edfestimages.s3.amazonaws.com/3c/51/04/3c510480057151a1180c9af9f7664ee80cf57ab2-original.jpg")
-            put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL, "https://edfestimages.s3.amazonaws.com/3c/51/04/3c510480057151a1180c9af9f7664ee80cf57ab2-thumb-100.png")
-            put(FilmEventEntry.COLUMN_UPDATED, "2015-06-08 11:50:05")
-        }
-
-        val filmEvent1Id: Int? = contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent1).lastPathSegment.toInt()
-
-        val performance1_1 = ContentValues().apply {
-            put(PerformanceEntry.COLUMN_FILM_EVENT_CODE, filmEvent1Id)
-            put(PerformanceEntry.COLUMN_START, "2015-06-19 20:35:00")
-            put(PerformanceEntry.COLUMN_END, "2015-06-19 22:25:00")
-            put(PerformanceEntry.COLUMN_PRICE, 10)
-        }
-
-        val performance1_2 = ContentValues().apply {
-            put(PerformanceEntry.COLUMN_FILM_EVENT_CODE, filmEvent1Id)
-            put(PerformanceEntry.COLUMN_START, "2015-06-23 18:05:00")
-            put(PerformanceEntry.COLUMN_END, "2015-06-23 19:55:00")
-            put(PerformanceEntry.COLUMN_PRICE, 10)
-        }
-
-        contentResolver.insert(PerformanceEntry.CONTENT_URI, performance1_1)
-        contentResolver.insert(PerformanceEntry.CONTENT_URI, performance1_2)
-
-        contentResolver.delete(FilmEventEntry.CONTENT_URI.buildUpon().appendPath("$filmEvent1Id").build(), null, null)
-
-        /*val filmEvent2 = ContentValues().apply {
-            put(FilmEventEntry.COLUMN_CODE, "2152")
-            put(FilmEventEntry.COLUMN_TITLE, "45 Years")
-            put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, "https://edfestimages.s3.amazonaws.com/7a/b8/ba/7ab8bad13251a35f9957d5375d9c2a3945aa7642-original.jpg")
-            put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL, "https://edfestimages.s3.amazonaws.com/7a/b8/ba/7ab8bad13251a35f9957d5375d9c2a3945aa7642-thumb-100.png")
-            put(FilmEventEntry.COLUMN_UPDATED, "2015-06-25 12:50:05")
-        }
-
-        contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent2)
-        contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent2) // Force conflict*/
-
-        contentResolver.query(PerformanceEntry.CONTENT_URI, null, null, null, null).apply {
-            if (count > 0) {
-                moveToFirst()
-                do {
-                    Log.v(logTag, """
-                |       _id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_ID))}
-                |event_code: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_FILM_EVENT_CODE))}
-                |     start: ${getString(getColumnIndex(PerformanceEntry.COLUMN_START))}
-                |       end: ${getString(getColumnIndex(PerformanceEntry.COLUMN_END))}
-                |     price: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_PRICE))}
-                """.trimMargin())
-                } while (moveToNext())
-                close()
-            } else {
-                Log.v(logTag, "No performance entries found")
-            }
-        }
-
-        /*val querySingleUri = FilmEventEntry.CONTENT_URI.buildUpon().appendPath("$filmEvent1Id").build()
-        contentResolver.query(querySingleUri, null, null, null, null).apply {
-            if (count > 0) {
-                moveToFirst()
-                Log.v(logTag, """
-                |   code: ${getString(getColumnIndex(FilmEventEntry.COLUMN_CODE))}
-                |  title: ${getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE))}
-                |updated: ${getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))}
-                |   orig: ${getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL))}
-                |  thumb: ${getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL))}
-                """.trimMargin())
-
-                val queryPerformancesByFilmEventId = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(getInt(getColumnIndex(FilmEventEntry.COLUMN_CODE)).toString()).build()
-                contentResolver.query(queryPerformancesByFilmEventId, null, null, null, null).apply {
-                    if (count > 0) {
-                        moveToFirst()
-                        do {
-                            Log.v(logTag, """
-                            |     _id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_ID))}
-                            |event_id: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_FILM_EVENT_CODE))}
-                            |   start: ${getString(getColumnIndex(PerformanceEntry.COLUMN_START))}
-                            |     end: ${getString(getColumnIndex(PerformanceEntry.COLUMN_END))}
-                            |   price: ${getInt(getColumnIndex(PerformanceEntry.COLUMN_PRICE))}
-                            """.trimMargin())
-                        } while (moveToNext())
-                    } else {
-                        Log.v(logTag, "No result for $queryPerformancesByFilmEventId")
-                    }
-                }
-            } else {
-                Log.v(logTag, "No result for $querySingleUri")
-            }
-            close()
-        }*/
     }
 
     private fun fetchFilmEvents() = FilmEventsFetcher(this, { filmEvents ->

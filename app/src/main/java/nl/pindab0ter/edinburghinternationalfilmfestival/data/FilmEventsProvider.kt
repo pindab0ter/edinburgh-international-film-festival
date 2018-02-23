@@ -33,12 +33,12 @@ class FilmEventsProvider : ContentProvider() {
                     setTransactionSuccessful()
                     endTransaction()
                     Log.v(logTag, "Inserted film_event with code $code")
-                    FilmEventsContract.BASE_CONTENT_URI.buildUpon()
+                    FilmEventEntry.CONTENT_URI.buildUpon()
                             .appendPath(code)
                             .build()
                 } else {
                     endTransaction()
-                    Log.v(logTag, "Failed to insert film_event")
+                    // TODO: Propagate SQLError?
                     Uri.EMPTY
                 }
             }
@@ -49,12 +49,11 @@ class FilmEventsProvider : ContentProvider() {
                     setTransactionSuccessful()
                     endTransaction()
                     Log.v(logTag, "Inserted performance with id $id")
-                    FilmEventsContract.BASE_CONTENT_URI.buildUpon()
+                    PerformanceEntry.CONTENT_URI.buildUpon()
                             .appendPath(id.toString())
                             .build()
                 } else {
                     endTransaction()
-                    Log.v(logTag, "Failed to insert performance")
                     Uri.EMPTY
                 }
             }
