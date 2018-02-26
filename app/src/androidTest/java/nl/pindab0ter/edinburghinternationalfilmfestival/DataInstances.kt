@@ -4,6 +4,8 @@ import android.content.ContentValues
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.databaseStringToDate
+import java.net.URL
 
 object DataInstances {
 
@@ -19,8 +21,6 @@ object DataInstances {
     const val filmEvent1ImgThumbUrl = "https://edfestimages.s3.amazonaws.com/3c/51/04/3c510480057151a1180c9af9f7664ee80cf57ab2-thumb-100.png"
     const val filmEvent1Updated = "2015-06-08 11:50:05"
 
-    val filmEvent1 = FilmEvent()
-
     val filmEvent1ContentValues = ContentValues().apply {
         put(FilmEventEntry.COLUMN_CODE, filmEvent1Code)
         put(FilmEventEntry.COLUMN_TITLE, filmEvent1Title)
@@ -32,26 +32,35 @@ object DataInstances {
         put(FilmEventEntry.COLUMN_UPDATED, filmEvent1Updated)
     }
 
+    val filmEvent1 = FilmEvent(filmEvent1ContentValues)
+
     //
     // FILM EVENT 1, PERFORMANCE 1
     //
     const val filmEvent1Performance1Start = "2015-06-19 20:35:00"
     const val filmEvent1Performance1End = "2015-06-19 22:25:00"
 
-    val filmEvent1Performance1 = ContentValues().apply {
+    val filmEvent1Performance1ContentValues = ContentValues().apply {
         put(PerformanceEntry.COLUMN_START, filmEvent1Performance1Start)
         put(PerformanceEntry.COLUMN_END, filmEvent1Performance1End)
     }
 
+    val filmEvent1Performance1 = FilmEvent.Performance(filmEvent1Performance1ContentValues)
     //
     // FILM EVENT 1, PERFORMANCE 2
     //
     const val filmEvent1Performance2Start = "2015-06-23 18:05:00"
-    const val filmEvent1Performance2End = "2015-06-23 19:55:00"
 
-    val filmEvent1Performance2 = ContentValues().apply {
+    const val filmEvent1Performance2End = "2015-06-23 19:55:00"
+    val filmEvent1Performance2ContentValues = ContentValues().apply {
         put(PerformanceEntry.COLUMN_START, filmEvent1Performance2Start)
         put(PerformanceEntry.COLUMN_END, filmEvent1Performance2End)
+    }
+
+    val filmEvent1Performance2 = FilmEvent.Performance(filmEvent1Performance2ContentValues)
+
+    val filmEvent1WithPerformances = FilmEvent(filmEvent1ContentValues).apply {
+        performances = arrayOf(filmEvent1Performance1, filmEvent1Performance2)
     }
 
     //

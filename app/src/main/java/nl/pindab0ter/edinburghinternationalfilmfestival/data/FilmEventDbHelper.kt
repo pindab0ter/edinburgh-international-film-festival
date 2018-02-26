@@ -60,8 +60,7 @@ class FilmEventDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_N
             |   ${PerformanceEntry.COLUMN_ID}               INTEGER PRIMARY KEY AUTOINCREMENT,
             |   ${PerformanceEntry.COLUMN_FILM_EVENT_CODE}  VARCHAR REFERENCES ${FilmEventEntry.TABLE_NAME}(${FilmEventEntry.COLUMN_CODE}) ON DELETE CASCADE,
             |   ${PerformanceEntry.COLUMN_START}            DATE NOT NULL,
-            |   ${PerformanceEntry.COLUMN_END}              DATE NOT NULL,
-            |   ${PerformanceEntry.COLUMN_PRICE}            INTEGER
+            |   ${PerformanceEntry.COLUMN_END}              DATE NOT NULL
             |);
             """.trimMargin()
     }

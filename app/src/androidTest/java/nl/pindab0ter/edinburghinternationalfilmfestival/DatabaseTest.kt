@@ -10,10 +10,10 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1GenreTags
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1ImgOrigUrl
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1ImgThumbUrl
-import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Performance1
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Performance1ContentValues
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Performance1End
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Performance1Start
-import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Performance2
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Performance2ContentValues
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Performance2End
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Performance2Start
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Title
@@ -58,8 +58,8 @@ class DatabaseTest {
         val filmEvent1PerformancesUri = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(filmEvent1Uri.lastPathSegment).build()
 
         // Insert performances
-        contentResolver.insert(filmEvent1PerformancesUri, filmEvent1Performance1)
-        contentResolver.insert(filmEvent1PerformancesUri, filmEvent1Performance2)
+        contentResolver.insert(filmEvent1PerformancesUri, filmEvent1Performance1ContentValues)
+        contentResolver.insert(filmEvent1PerformancesUri, filmEvent1Performance2ContentValues)
 
         // Insert filmEvent2
         contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent2)
@@ -124,8 +124,8 @@ class DatabaseTest {
         val filmEvent1PerformancesUri = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(filmEvent1Uri.lastPathSegment).build()
 
         // Insert performances
-        contentResolver.insert(filmEvent1PerformancesUri, filmEvent1Performance1)
-        contentResolver.insert(filmEvent1PerformancesUri, filmEvent1Performance2)
+        contentResolver.insert(filmEvent1PerformancesUri, filmEvent1Performance1ContentValues)
+        contentResolver.insert(filmEvent1PerformancesUri, filmEvent1Performance2ContentValues)
 
         // Delete filmEvent 1
         contentResolver.delete(filmEvent1Uri, null, null)

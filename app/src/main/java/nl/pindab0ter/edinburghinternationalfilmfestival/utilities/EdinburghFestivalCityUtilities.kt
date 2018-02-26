@@ -52,7 +52,7 @@ private fun generateSignatureNew(cryptoAlgorithm: String, unsignedQuery: String,
 private val dateFormatForDatabase = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 fun Date.formatForDisplay(): String = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(this)
 fun Date.formatForDatabase(): String = dateFormatForDatabase.format(this)
-fun databaseStringToDate(string: String): Date = dateFormatForDatabase.parse(string)
+fun databaseStringToDate(string: String?): Date? = dateFormatForDatabase.parse(string)
 
 fun starRatingFor(value: Float): String = StringBuilder().apply {
     require(value in 0.0..5.0, { "A star rating must be between 0.0 and 5.0" })

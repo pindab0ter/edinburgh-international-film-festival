@@ -11,7 +11,7 @@ class UtilitiesTest {
     @Test
     fun parseDate() {
         val date = Calendar.getInstance().apply { set(2015, 5, 19, 20, 35, 0) }.time
-        assertEquals(databaseStringToDate("2015-06-19 20:35:00").time / 1000, date.time / 1000)
+        assertEquals(databaseStringToDate("2015-06-19 20:35:00")!!.time / 1000, date.time / 1000)
     }
 
     @Test

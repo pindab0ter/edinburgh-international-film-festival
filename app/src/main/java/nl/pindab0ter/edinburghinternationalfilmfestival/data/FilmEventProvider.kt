@@ -44,12 +44,13 @@ class FilmEventProvider : ContentProvider() {
             }
             CODE_PERFORMANCES_BY_FILM_EVENT_CODE -> {
                 beginTransaction()
-                values?.put(PerformanceEntry.COLUMN_FILM_EVENT_CODE, uri.lastPathSegment)
+                val filmEventCode = uri.lastPathSegment
+                values?.put(PerformanceEntry.COLUMN_FILM_EVENT_CODE, filmEventCode)
                 val id = insert(PerformanceEntry.TABLE_NAME, null, values)
                 return if (id != -1L) {
                     setTransactionSuccessful()
                     endTransaction()
-                    Log.v(logTag, "Inserted performance with id $id")
+                    Log.v(logTag, "Inserted performance for film_event with code $filmEventCode")
                     PerformanceEntry.CONTENT_URI.buildUpon()
                             .appendPath(id.toString())
                             .build()

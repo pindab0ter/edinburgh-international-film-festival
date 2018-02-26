@@ -22,6 +22,17 @@ class FilmEvent() {
         this.updated = updated
     }
 
+    constructor(code: String?, title: String?, description: String?, genreTags: String, website: String?, imageOriginalUrl: String?, imageThumbnailUrl: String?, updated: String?) : this() {
+        this.code = code
+        this.title = title
+        this.description = description
+        this.genreTagsSource = genreTags
+        this.website = URL(website)
+        this.imageOriginalUrl = URL(imageOriginalUrl)
+        this.imageThumbnailUrl = URL(imageThumbnailUrl)
+        this.updated = databaseStringToDate(updated)
+    }
+
     constructor(cv: ContentValues) : this() {
         this.code = cv.getAsString(FilmEventEntry.COLUMN_CODE)
         this.title = cv.getAsString(FilmEventEntry.COLUMN_TITLE)
@@ -37,7 +48,7 @@ class FilmEvent() {
     var description: String? = null
 
     @SerializedName("genre_tags")
-    private var genreTagsSource: String? = null
+    var genreTagsSource: String? = null
 
     var genreTags: Array<String>?
         get() = genreTagsSource?.split(",")?.map { it.trim() }?.toTypedArray()
@@ -73,6 +84,7 @@ class FilmEvent() {
         }
 
     open class Images {
+
         class Versions {
             class Version {
                 var url: URL? = null
@@ -82,9 +94,18 @@ class FilmEvent() {
             var original: Version? = null
             @SerializedName("thumb-100")
             var thumb100: Version? = null
+
+            init {
+                original = Version()
+                thumb100 = Version()
+            }
         }
 
         var versions: Versions? = null
+
+        init {
+            this.versions = Versions()
+        }
     }
 
     // Subclass to prevent recursive deserialization
@@ -105,23 +126,11 @@ class FilmEvent() {
 
         var start: Date? = null
         var end: Date? = null
-
-        fun asContentValues(): ContentValues = ContentValues().apply {
-            if (start != null) put(PerformanceEntry.COLUMN_START, start?.formatForDatabase())
-            if (end != null) put(PerformanceEntry.COLUMN_START, end?.formatForDatabase())
-        }
     }
 
     var performances: Array<Performance>? = null
 
-    fun asContentValues(): ContentValues = ContentValues().apply {
-        if (code != null) put(FilmEventEntry.COLUMN_CODE, code)
-        if (title != null) put(FilmEventEntry.COLUMN_TITLE, title)
-        if (description != null) put(FilmEventEntry.COLUMN_DESCRIPTION, description)
-        if (genreTags != null) put(FilmEventEntry.COLUMN_GENRE_TAGS, genreTags?.joinToString())
-        if (website != null) put(FilmEventEntry.COLUMN_WEBSITE, website?.toString())
-        if (imageOriginalUrl != null) put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, imageOriginalUrl?.toString())
-        if (imageThumbnailUrl != null) put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL, imageThumbnailUrl?.toString())
-        if (updated != null) put(FilmEventEntry.COLUMN_UPDATED, updated?.formatForDatabase())
+    init {
+        images = Images()
     }
 }
