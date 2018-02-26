@@ -6,6 +6,7 @@ import android.util.Log
 import nl.pindab0ter.edinburghinternationalfilmfestival.R
 import java.net.URL
 import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
@@ -47,7 +48,11 @@ private fun generateSignatureNew(cryptoAlgorithm: String, unsignedQuery: String,
     doFinal(unsignedQuery.toByteArray()).joinToString("") { String.format("%02x", it) }
 }
 
+
+private val dateFormatForDatabase = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 fun Date.formatForDisplay(): String = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(this)
+fun Date.formatForDatabase(): String = dateFormatForDatabase.format(this)
+fun databaseStringToDate(string: String): Date = dateFormatForDatabase.parse(string)
 
 fun starRatingFor(value: Float): String = StringBuilder().apply {
     require(value in 0.0..5.0, { "A star rating must be between 0.0 and 5.0" })
@@ -68,7 +73,6 @@ object LongLog {
         if (message!!.length > maxLength) {
             Log.d(tag, message.substring(0 until maxLength))
             d(tag, message.substring(maxLength))
-        }
-        else Log.d(tag, message)
+        } else Log.d(tag, message)
     }
 }

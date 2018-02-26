@@ -34,7 +34,7 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
     init {
         onClickListener = View.OnClickListener { v ->
             val filmEvent = v.tag as FilmEvent
-            val imageUrl = "https:${filmEvent.images?.versions?.original?.url}"
+            val imageUrl = filmEvent.imageOriginalUrl.toString()
             val showings = filmEvent.performances?.map { it.start?.formatForDisplay() }?.toTypedArray()
 
             if (twoPane) {
@@ -43,7 +43,7 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
                         putString(DETAIL_TITLE, filmEvent.title)
                         putString(DETAIL_DESCRIPTION, filmEvent.description)
                         putString(DETAIL_IMAGE_URL, imageUrl)
-                        putString(DIALOG_WEBSITE, filmEvent.website)
+                        putString(DIALOG_WEBSITE, filmEvent.website.toString())
                         putStringArray(DETAIL_SHOWINGS, showings)
                     }
                 }
@@ -56,7 +56,7 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
                     putExtra(DETAIL_TITLE, filmEvent.title)
                     putExtra(DETAIL_DESCRIPTION, filmEvent.description)
                     putExtra(DETAIL_IMAGE_URL, imageUrl)
-                    putExtra(DIALOG_WEBSITE, filmEvent.website)
+                    putExtra(DIALOG_WEBSITE, filmEvent.website.toString())
                     putExtra(DETAIL_SHOWINGS, showings)
                 }
                 v.context.startActivity(intent)
@@ -75,7 +75,7 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
             holder.firstShowingView.text = filmEvent?.performances?.first()?.start?.formatForDisplay()
 
             filmEvent?.let {
-                imageFetcher.fetch("https:${filmEvent.images?.versions?.small320?.url}", { bitmap: Bitmap ->
+                imageFetcher.fetch(filmEvent.imageThumbnailUrl.toString(), { bitmap: Bitmap ->
                     holder.imageView.setImageBitmap(bitmap)
                 })
             }

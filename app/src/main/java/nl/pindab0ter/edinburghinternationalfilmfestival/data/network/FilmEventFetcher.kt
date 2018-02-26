@@ -13,6 +13,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.RequestQueueHo
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.buildUrl
 import java.io.UnsupportedEncodingException
 import java.lang.reflect.Type
+import java.net.MalformedURLException
 import java.net.URL
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
@@ -46,6 +47,7 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
                     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                     .registerTypeAdapter(FilmEvent.Images::class.java, ImagesDeserializer())
                     .registerTypeAdapter(Date::class.java, DateDeserializer())
+                    .registerTypeAdapter(URL::class.java, URLDeserializer())
                     .create()
         }
 
@@ -84,6 +86,10 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
             } catch (exception: Exception) {
                 throw IllegalArgumentException("Could not parse $json as a Date")
             }
+        }
+
+        class URLDeserializer : JsonDeserializer<URL> {
+            override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): URL = URL("https:${json?.asString?.trim('\"')}")
         }
     }
 }
