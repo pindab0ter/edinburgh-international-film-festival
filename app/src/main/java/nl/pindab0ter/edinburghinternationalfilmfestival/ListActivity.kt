@@ -1,22 +1,18 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
-import android.content.ContentValues
 import android.os.Bundle
+import android.support.annotation.StyleableRes
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import kotlinx.android.synthetic.main.activity_master.*
 import kotlinx.android.synthetic.main.film_list.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.layout.activity_master
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.FilmEventEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PerformanceEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsFetcher
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsRequest
-import nl.pindab0ter.edinburghinternationalfilmfestival.dummy.EDINBURGH_FILM_FESTIVAL_REPLY_FIRST
-import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.LongLog
 
 class ListActivity : AppCompatActivity() {
 
@@ -75,13 +71,20 @@ class ListActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
+    fun fetchFilmEvents(view: View) = fetchFilmEvents()
+
     private fun fetchFilmEvents() = FilmEventsFetcher(this, { filmEvents ->
         adapter.swapFilmEvents(filmEvents)
         genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
 
-        LongLog.d(logTag, EDINBURGH_FILM_FESTIVAL_REPLY_FIRST)
-        LongLog.d(logTag, FilmEventsRequest.gson.toJson(filmEvents.first()))
+        film_list.visibility = View.VISIBLE
+        failed_to_load_events.visibility = View.GONE
 
         invalidateOptionsMenu()
-    }).fetchOffline()
+    }, { volleyError ->
+        Log.e(logTag, "$volleyError")
+
+        film_list.visibility = View.GONE
+        failed_to_load_events.visibility = View.VISIBLE
+    }).fetch()
 }

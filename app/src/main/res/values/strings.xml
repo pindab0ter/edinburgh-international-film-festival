@@ -26,4 +26,6 @@
     <string name="rate_and_share_message">Your rating for %1$s:</string>
     <string name="this_event">this event</string>
     <string name="share_text_with_rating">Hi, I rated \"%1$s\" %2$s.\nFind out more here:\n%3$s</string>
+    <string name="failed_to_load_events">Failed to load events</string>
+    <string name="try_again">Try again</string>
 </resources>
