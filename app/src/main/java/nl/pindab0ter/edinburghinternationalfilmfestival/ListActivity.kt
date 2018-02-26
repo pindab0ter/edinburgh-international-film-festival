@@ -1,7 +1,6 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.os.Bundle
-import android.support.annotation.StyleableRes
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -12,14 +11,14 @@ import kotlinx.android.synthetic.main.activity_master.*
 import kotlinx.android.synthetic.main.film_list.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.layout.activity_master
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsFetcher
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.FilmEventFetcher
 
 class ListActivity : AppCompatActivity() {
 
     private val logTag = ListActivity::class.simpleName
     private val twoPane: Boolean // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
         get() = detail_container != null
-    private lateinit var adapter: FilmEventsRecyclerViewAdapter
+    private lateinit var adapter: FilmEventRecyclerViewAdapter
     private var genres: List<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,13 +66,13 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        adapter = FilmEventsRecyclerViewAdapter(this, twoPane)
+        adapter = FilmEventRecyclerViewAdapter(this, twoPane)
         recyclerView.adapter = adapter
     }
 
     fun fetchFilmEvents(view: View) = fetchFilmEvents()
 
-    private fun fetchFilmEvents() = FilmEventsFetcher(this, { filmEvents ->
+    private fun fetchFilmEvents() = FilmEventFetcher(this, { filmEvents ->
         adapter.swapFilmEvents(filmEvents)
         genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
 

@@ -4,15 +4,15 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.FilmEventEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PerformanceEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
 
-class FilmEventsDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-    val logTag = FilmEventsDbHelper::class.simpleName
+class FilmEventDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+    val logTag = FilmEventDbHelper::class.simpleName
 
     override fun onCreate(db: SQLiteDatabase?) {
         Log.v(logTag, "Creating database...")
-        db?.execSQL(sqlCreateWeatherTable)
+        db?.execSQL(sqlCreateFilmEventTable)
         db?.execSQL(sqlCreatePerformanceTable)
     }
 
@@ -39,11 +39,11 @@ class FilmEventsDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     }
 
     companion object {
-        const val DATABASE_NAME = "film_events.db"
+        const val DATABASE_NAME = "film_festival.db"
         const val DATABASE_VERSION = 7
 
         // TODO: Save images as BLOB
-        val sqlCreateWeatherTable = """
+        val sqlCreateFilmEventTable = """
             |CREATE TABLE ${FilmEventEntry.TABLE_NAME} (
             |   ${FilmEventEntry.COLUMN_CODE}                VARCHAR PRIMARY KEY,
             |   ${FilmEventEntry.COLUMN_TITLE}               VARCHAR NOT NULL,

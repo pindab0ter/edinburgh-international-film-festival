@@ -12,7 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.ImageFetcher
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.ImageFetcher
 
 /**
  * A fragment representing a single FilmEvent detail screen.

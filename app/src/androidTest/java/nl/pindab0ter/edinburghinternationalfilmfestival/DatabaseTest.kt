@@ -5,9 +5,9 @@ import android.content.ContentValues
 import android.content.Context
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.FilmEventEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PerformanceEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsDbHelper
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDbHelper
 import org.junit.After
 
 import org.junit.Test
@@ -19,21 +19,21 @@ import org.junit.Before
 @RunWith(AndroidJUnit4::class)
 class DatabaseTest {
     private lateinit var context: Context
-    private lateinit var filmEventsDbHelper: FilmEventsDbHelper
+    private lateinit var filmEventDbHelper: FilmEventDbHelper
     private lateinit var contentResolver: ContentResolver
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getTargetContext()
-        filmEventsDbHelper = FilmEventsDbHelper(context)
+        filmEventDbHelper = FilmEventDbHelper(context)
         contentResolver = context.contentResolver
 
-        filmEventsDbHelper.dropAllTablesAndRecreate(filmEventsDbHelper.writableDatabase)
+        filmEventDbHelper.dropAllTablesAndRecreate(filmEventDbHelper.writableDatabase)
     }
 
     @After
     fun tearDown() {
-        filmEventsDbHelper.dropAllTables(filmEventsDbHelper.writableDatabase)
+        filmEventDbHelper.dropAllTables(filmEventDbHelper.writableDatabase)
     }
 
     @Test

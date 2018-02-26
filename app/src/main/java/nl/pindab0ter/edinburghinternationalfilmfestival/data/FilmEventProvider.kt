@@ -6,24 +6,24 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 import android.util.Log
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.CONTENT_AUTHORITY
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.FilmEventEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PerformanceEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PATH_FILM_EVENTS
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PATH_FILM_EVENT_BY_ID
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PATH_PERFORMANCES
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventsContract.PATH_PERFORMANCE_BY_FILM_EVENT_CODE
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.CONTENT_AUTHORITY
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_FILM_EVENTS
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_FILM_EVENT_BY_ID
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_PERFORMANCES
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_PERFORMANCE_BY_FILM_EVENT_CODE
 
-class FilmEventsProvider : ContentProvider() {
-    private lateinit var filmEventsDbHelper: FilmEventsDbHelper
-    private val logTag = FilmEventsProvider::class.simpleName
+class FilmEventProvider : ContentProvider() {
+    private lateinit var filmEventDbHelper: FilmEventDbHelper
+    private val logTag = FilmEventProvider::class.simpleName
 
     override fun onCreate(): Boolean {
-        filmEventsDbHelper = FilmEventsDbHelper(context)
+        filmEventDbHelper = FilmEventDbHelper(context)
         return true
     }
 
-    override fun insert(uri: Uri, values: ContentValues?): Uri = with(filmEventsDbHelper.writableDatabase) {
+    override fun insert(uri: Uri, values: ContentValues?): Uri = with(filmEventDbHelper.writableDatabase) {
         when (uriMatcher.match(uri)) {
             CODE_FILM_EVENTS -> {
                 beginTransaction()
@@ -61,7 +61,7 @@ class FilmEventsProvider : ContentProvider() {
         }
     }
 
-    override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor = with(filmEventsDbHelper.readableDatabase) {
+    override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor = with(filmEventDbHelper.readableDatabase) {
         fun performTransaction(table: String, selection: String?, selectionArgs: Array<out String>?, logMessage: String): Cursor {
             Log.v(logTag, logMessage)
             beginTransaction()
@@ -96,7 +96,7 @@ class FilmEventsProvider : ContentProvider() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int = with(filmEventsDbHelper.writableDatabase) {
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int = with(filmEventDbHelper.writableDatabase) {
         fun performTransaction(table: String, selection: String?, selectionArgs: Array<out String>?): Int {
             beginTransaction()
             val deleted = delete(table, selection, selectionArgs)

@@ -1,4 +1,4 @@
-package nl.pindab0ter.edinburghinternationalfilmfestival.data
+package nl.pindab0ter.edinburghinternationalfilmfestival.data.network
 
 import android.content.Context
 import android.graphics.Bitmap

@@ -15,12 +15,12 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_SHOWINGS
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_TITLE
 import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_WEBSITE
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.ImageFetcher
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.ImageFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplay
 
-class FilmEventsRecyclerViewAdapter(private val parentActivity: ListActivity, private val twoPane: Boolean) :
-        RecyclerView.Adapter<FilmEventsRecyclerViewAdapter.ViewHolder>() {
+class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, private val twoPane: Boolean) :
+        RecyclerView.Adapter<FilmEventRecyclerViewAdapter.ViewHolder>() {
 
     private val onClickListener: View.OnClickListener
     private val imageFetcher: ImageFetcher = ImageFetcher(parentActivity)
