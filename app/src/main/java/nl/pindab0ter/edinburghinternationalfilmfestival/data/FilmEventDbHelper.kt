@@ -66,15 +66,3 @@ class FilmEventDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_N
             """.trimMargin()
     }
 }
-
-/*
-|  ${FilmEventEntry.COLUMN_URL}          TEXT NULL,
-|  ${FilmEventEntry.COLUMN_WEBSITE}      TEXT NULL,
-|  ${FilmEventEntry.COLUMN_YEAR}         TEXT NULL,
-|  ${FilmEventEntry.COLUMN_IMAGES}       TEXT NULL,
-|  ${FilmEventEntry.COLUMN_VENUE}        TEXT NULL,
-|  ${FilmEventEntry.COLUMN_GENRE}        TEXT NULL,
-|  ${FilmEventEntry.COLUMN_LATITUDE}     TEXT NULL,
-|  ${FilmEventEntry.COLUMN_LONGITUDE}    TEXT NULL,
-|  ${FilmEventEntry.COLUMN_STATUS}       TEXT NULL,
-*/

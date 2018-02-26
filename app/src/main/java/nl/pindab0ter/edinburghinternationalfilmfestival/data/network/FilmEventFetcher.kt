@@ -45,7 +45,6 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
                     .disableHtmlEscaping()
                     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                     .registerTypeAdapter(FilmEvent.Images::class.java, ImagesDeserializer())
-                    .registerTypeAdapter(FilmEvent.Performance.Concession::class.java, ConcessionDeserializer())
                     .registerTypeAdapter(Date::class.java, DateDeserializer())
                     .create()
         }
@@ -74,14 +73,6 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
                 }
 
                 return context.deserialize<FilmEvent.Images>(images, FilmEvent.ImagesSubclass::class.java)
-            }
-        }
-
-        class ConcessionDeserializer : JsonDeserializer<FilmEvent.Performance.Concession> {
-            override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): FilmEvent.Performance.Concession = try {
-                FilmEvent.Performance.Concession.Available(json.asInt)
-            } catch (exception: NumberFormatException) {
-                FilmEvent.Performance.Concession.Unavailable()
             }
         }
 

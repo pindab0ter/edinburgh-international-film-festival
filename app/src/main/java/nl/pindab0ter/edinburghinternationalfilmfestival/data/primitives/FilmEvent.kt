@@ -1,20 +1,22 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives
 
+import android.media.Image
 import com.google.gson.annotations.SerializedName
+import java.net.URL
 import java.util.Date
 
 class FilmEvent {
-    val code: String? = null
-    val description: String? = null
-    val genre: String? = null
+    var code: String? = null
+    var description: String? = null
 
     @SerializedName("genre_tags")
-    private val genreTagsSource: String? = null
-    val genreTags: Array<String>?
-        get() = genreTagsSource?.split(",")?.map { it.trim() }?.toTypedArray()
+    private var genreTagsSource: String? = null
 
-    val latitude: Double? = null
-    val longitude: Double? = null
+    var genreTags: Array<String>?
+        get() = genreTagsSource?.split(",")?.map { it.trim() }?.toTypedArray()
+        set(value) {
+            genreTagsSource = value?.joinToString()
+        }
 
     enum class Status {
         @SerializedName("active")
@@ -25,94 +27,49 @@ class FilmEvent {
         Deleted
     }
 
-    val status: Status? = null
-    val title: String? = null
-    val updated: Date? = null
-    val url: String? = null
-    val website: String? = null
-    val year: Int? = null
+    var title: String? = null
+    var updated: Date? = null
+    var website: URL? = null
 
-    open class Images {
-
-        val hash: String? = null
-
-        enum class Orientation {
-            @SerializedName("landscape")
-            Landscape,
-            @SerializedName("portrait")
-            Portrait
+    var imageOriginal: Image? = null
+    var imageOriginalUrl: URL?
+        get() = URL(images?.versions?.original?.url)
+        set(value) {
+            images?.versions?.original?.url = value.toString()
         }
 
-        val orientation: Orientation? = null
-        val type: String? = null
+    var imageThumbnail: Image? = null
+    var imageThumbnailUrl: URL?
+        get() = URL(images?.versions?.thumb100?.url)
+        set(value) {
+            images?.versions?.thumb100?.url = value.toString()
+        }
 
+    open class Images {
         class Versions {
             class Version {
-                val type: String? = null
-                val mime: String? = null
-                val height: Int? = null
-                val width: Int? = null
-                val url: String? = null
+                var url: String? = null
             }
 
             @SerializedName("original")
-            val original: Version? = null
-            @SerializedName("square-75")
-            val square75: Version? = null
-            @SerializedName("square-150")
-            val square150: Version? = null
+            var original: Version? = null
             @SerializedName("thumb-100")
-            val thumb100: Version? = null
-            @SerializedName("medium-640")
-            val medium640: Version? = null
-            @SerializedName("small-320")
-            val small320: Version? = null
-            @SerializedName("large-1024")
-            val large1024: Version? = null
+            var thumb100: Version? = null
         }
 
-        val versions: Versions? = null
+        var versions: Versions? = null
     }
 
     // Subclass to prevent recursive deserialization
     class ImagesSubclass : Images()
 
-    val images: Images? = null
+    private var images: Images? = null
 
     class Performance {
-        sealed class Concession {
-            class Available(val amount: Int) : Concession()
-            class Unavailable : Concession()
-        }
-
-        val concession: Concession? = null
-        val concessionAdditional: Concession? = null
-        val concessionFamily: Concession? = null
-        val start: Date? = null
-        val end: Date? = null
-        val price: Int? = null
-        val title: String? = null
+        var start: Date? = null
+        var end: Date? = null
+        var price: Int? = null
     }
 
-    val performances: Array<Performance>? = null
-
-    class Venue {
-        val address: String? = null
-        val code: String? = null
-        val description: String? = null
-        val email: String? = null
-        val name: String? = null
-        val phone: String? = null
-
-        class Position {
-            val lat: Double? = null
-            val lon: Double? = null
-        }
-
-        val position: Position? = null
-        val postCode: String? = null
-        val webAddress: String? = null
-    }
-
-    val venue: Venue? = null
+    var performances: Array<Performance>? = null
 }
