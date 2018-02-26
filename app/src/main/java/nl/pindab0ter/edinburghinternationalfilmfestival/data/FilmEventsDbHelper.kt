@@ -40,13 +40,16 @@ class FilmEventsDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     companion object {
         const val DATABASE_NAME = "film_events.db"
-        const val DATABASE_VERSION = 6
+        const val DATABASE_VERSION = 7
 
         // TODO: Save images as BLOB
         val sqlCreateWeatherTable = """
             |CREATE TABLE ${FilmEventEntry.TABLE_NAME} (
             |   ${FilmEventEntry.COLUMN_CODE}                VARCHAR PRIMARY KEY,
             |   ${FilmEventEntry.COLUMN_TITLE}               VARCHAR NOT NULL,
+            |   ${FilmEventEntry.COLUMN_DESCRIPTION}         VARCHAR,
+            |   ${FilmEventEntry.COLUMN_GENRE_TAGS}          VARCHAR,
+            |   ${FilmEventEntry.COLUMN_WEBSITE}             VARCHAR,
             |   ${FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL} VARCHAR,
             |   ${FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL}  VARCHAR,
             |   ${FilmEventEntry.COLUMN_UPDATED}             DATE NOT NULL
@@ -70,9 +73,7 @@ class FilmEventsDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 |  ${FilmEventEntry.COLUMN_YEAR}         TEXT NULL,
 |  ${FilmEventEntry.COLUMN_IMAGES}       TEXT NULL,
 |  ${FilmEventEntry.COLUMN_VENUE}        TEXT NULL,
-|  ${FilmEventEntry.COLUMN_DESCRIPTION}  TEXT NULL,
 |  ${FilmEventEntry.COLUMN_GENRE}        TEXT NULL,
-|  ${FilmEventEntry.COLUMN_GENRE_TAGS}   TEXT NULL,
 |  ${FilmEventEntry.COLUMN_LATITUDE}     TEXT NULL,
 |  ${FilmEventEntry.COLUMN_LONGITUDE}    TEXT NULL,
 |  ${FilmEventEntry.COLUMN_STATUS}       TEXT NULL,
