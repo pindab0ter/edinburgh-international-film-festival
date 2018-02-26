@@ -42,8 +42,9 @@ class FilmEventProvider : ContentProvider() {
                     Uri.EMPTY
                 }
             }
-            CODE_PERFORMANCES -> {
+            CODE_PERFORMANCES_BY_FILM_EVENT_CODE -> {
                 beginTransaction()
+                values?.put(PerformanceEntry.COLUMN_FILM_EVENT_CODE, uri.lastPathSegment)
                 val id = insert(PerformanceEntry.TABLE_NAME, null, values)
                 return if (id != -1L) {
                     setTransactionSuccessful()
