@@ -12,7 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.ImageFetcher
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.BitmapFetcher
 
 /**
  * A fragment representing a single FilmEvent detail screen.
@@ -46,7 +46,7 @@ class DetailFragment : Fragment() {
 
         val rootView = inflater.inflate(R.layout.fragment_detail, container, false) as LinearLayout
 
-        ImageFetcher(context!!).fetch(imageUrl) { bitmap: Bitmap ->
+        BitmapFetcher(context!!).fetch(imageUrl) { bitmap: Bitmap ->
             activity?.toolbar_layout?.background = BitmapDrawable(resources, bitmap)
             activity?.toolbar_layout?.contentScrim = BitmapDrawable(resources, bitmap)
         }

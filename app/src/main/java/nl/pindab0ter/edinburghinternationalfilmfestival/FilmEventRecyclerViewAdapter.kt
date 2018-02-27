@@ -15,15 +15,16 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_SHOWINGS
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_TITLE
 import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_WEBSITE
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.ImageFetcher
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.BitmapFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplay
+import java.util.*
 
 class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, private val twoPane: Boolean) :
-        RecyclerView.Adapter<FilmEventRecyclerViewAdapter.ViewHolder>() {
+        RecyclerView.Adapter<FilmEventRecyclerViewAdapter.ViewHolder>(), Observer {
 
     private val onClickListener: View.OnClickListener
-    private val imageFetcher: ImageFetcher = ImageFetcher(parentActivity)
+    private val bitmapFetcher: BitmapFetcher = BitmapFetcher(parentActivity)
 
     private var unfilteredFilmEvents: List<FilmEvent>? = null
     private var filmEvents: List<FilmEvent>? = null
@@ -73,11 +74,10 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
         filmEvents?.get(position).let { filmEvent ->
             holder.titleView.text = filmEvent?.title
             holder.firstShowingView.text = filmEvent?.performances?.first()?.start?.formatForDisplay()
-
-            filmEvent?.let {
-                imageFetcher.fetch(filmEvent.imageThumbnailUrl.toString(), { bitmap: Bitmap ->
-                    holder.imageView.setImageBitmap(bitmap)
-                })
+            if (filmEvent?.imageThumbnail != null) {
+                holder.imageView.setImageBitmap(filmEvent.imageThumbnail)
+            } else {
+                filmEvent?.addObserver(this)
             }
 
             with(holder.itemView) {
@@ -131,5 +131,9 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
         val imageView: ImageView = view.film_list_image
         val titleView: TextView = view.film_list_title
         val firstShowingView: TextView = view.film_first_showing
+    }
+
+    override fun update(o: Observable?, arg: Any?) {
+        notifyDataSetChanged()
     }
 }

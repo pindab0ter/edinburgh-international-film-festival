@@ -1,15 +1,16 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives
 
 import android.content.ContentValues
-import android.media.Image
+import android.graphics.Bitmap
 import com.google.gson.annotations.SerializedName
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.databaseStringToDate
 import java.net.URL
 import java.util.*
+import kotlin.properties.Delegates
 
-class FilmEvent() {
+class FilmEvent() : Observable() {
     constructor(code: String?, title: String?, description: String?, genreTags: Array<String>, website: URL?, imageOriginalUrl: URL?, imageThumbnailUrl: URL?, updated: Date?) : this() {
         this.code = code
         this.title = title
@@ -59,14 +60,20 @@ class FilmEvent() {
     var updated: Date? = null
     var website: URL? = null
 
-    var imageOriginal: Image? = null
+    var imageOriginal: Bitmap? by Delegates.observable<Bitmap?>(null) { _, _, _ ->
+        setChanged()
+        notifyObservers()
+    }
     var imageOriginalUrl: URL?
         get() = _images?.versions?.original?.url
         set(value) {
             _images?.versions?.original?.url = value
         }
 
-    var imageThumbnail: Image? = null
+    var imageThumbnail: Bitmap? by Delegates.observable<Bitmap?>(null) { _, _, _ ->
+        setChanged()
+        notifyObservers()
+    }
     var imageThumbnailUrl: URL?
         get() = _images?.versions?.thumb100?.url
         set(value) {

@@ -13,7 +13,6 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.RequestQueueHo
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.buildUrl
 import java.io.UnsupportedEncodingException
 import java.lang.reflect.Type
-import java.net.MalformedURLException
 import java.net.URL
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
@@ -24,7 +23,7 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
 
     fun fetch() {
         val url = buildUrl(context)
-        val filmsRequest = FilmEventRequest(url, listener, errorListener)
+        val filmsRequest = FilmEventRequest(url, context, listener, errorListener)
 
         RequestQueueHolder.getInstance(context).add(filmsRequest)
     }
@@ -38,6 +37,7 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
 
     class FilmEventRequest(
             url: URL,
+            context: Context,
             private val listener: ((filmEvents: List<FilmEvent>) -> Unit),
             errorListener: ((error: VolleyError) -> Unit)
     ) : Request<List<FilmEvent>>(Request.Method.GET, url.toString(), errorListener) {
@@ -51,6 +51,8 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
                     .create()
         }
 
+        val bitmapFetcher: BitmapFetcher = BitmapFetcher(context)
+
         override fun getHeaders(): MutableMap<String, String>? = mutableMapOf("Accept" to "application/json;ver=2.0")
 
         override fun parseNetworkResponse(response: NetworkResponse): Response<List<FilmEvent>> {
@@ -61,6 +63,15 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
             }
 
             val filmEvents = gson.fromJson<Array<FilmEvent>>(parsed, Array<FilmEvent>::class.java)
+
+            filmEvents.forEach { filmEvent ->
+                bitmapFetcher.fetch(filmEvent.imageOriginalUrl.toString()) { bitmap ->
+                    filmEvent.imageOriginal = bitmap
+                }
+                bitmapFetcher.fetch(filmEvent.imageThumbnailUrl.toString()) { bitmap ->
+                    filmEvent.imageThumbnail = bitmap
+                }
+            }
 
             return Response.success(filmEvents.asList(), HttpHeaderParser.parseCacheHeaders(response))
         }
