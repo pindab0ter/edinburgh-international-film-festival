@@ -75,6 +75,7 @@ class FilmEventProvider : ContentProvider() {
                 }
 
                 if (rowsInserted > 0) setTransactionSuccessful()
+                Log.v(logTag, "Inserted $rowsInserted into ${FilmEventEntry.TABLE_NAME}")
                 endTransaction()
                 rowsInserted
             }
@@ -91,6 +92,7 @@ class FilmEventProvider : ContentProvider() {
                 }
 
                 if (rowsInserted > 0) setTransactionSuccessful()
+                Log.v(logTag, "Inserted $rowsInserted into ${PerformanceEntry.TABLE_NAME}")
                 endTransaction()
                 rowsInserted
             }
