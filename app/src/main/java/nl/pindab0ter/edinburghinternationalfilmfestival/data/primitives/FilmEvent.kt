@@ -100,6 +100,7 @@ class FilmEvent() {
     // Subclass to prevent recursive deserialization
     class ImagesSubclass : Images()
 
+    @SerializedName("images")
     private var _images: Images? = null
 
     class Performance() {

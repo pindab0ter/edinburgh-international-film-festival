@@ -89,7 +89,13 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
         }
 
         class URLDeserializer : JsonDeserializer<URL> {
-            override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): URL = URL("https:${json?.asString?.trim('\"')}")
+            override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): URL? {
+                json?.asString?.trim('\"')?.let { urlString ->
+                    return if (urlString.startsWith("//", false)) URL("https:$urlString")
+                    else URL(urlString)
+                }
+                return null
+            }
         }
     }
 }
