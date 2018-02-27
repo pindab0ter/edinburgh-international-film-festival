@@ -11,7 +11,9 @@ import kotlinx.android.synthetic.main.activity_master.*
 import kotlinx.android.synthetic.main.film_list.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.layout.activity_master
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDAO
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.FilmEventFetcher
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 
 class ListActivity : AppCompatActivity() {
 
@@ -20,6 +22,7 @@ class ListActivity : AppCompatActivity() {
         get() = detail_container != null
     private lateinit var adapter: FilmEventRecyclerViewAdapter
     private var genres: List<String>? = null
+    private lateinit var filmEventDAO: FilmEventDAO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +31,10 @@ class ListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = title
 
+        filmEventDAO = FilmEventDAO(this)
         setupRecyclerView(film_list)
-        fetchFilmEvents()
+
+        populateFilmEvents()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -70,9 +75,29 @@ class ListActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
+    private fun populateFilmEvents() {
+        val filmEvents = filmEventDAO.getAll()
+
+        if (filmEvents.isNotEmpty()) {
+            updateActivityForLoadSuccess(filmEvents)
+        } else {
+            fetchFilmEvents()
+        }
+    }
+
     fun fetchFilmEvents(view: View) = fetchFilmEvents()
 
     private fun fetchFilmEvents() = FilmEventFetcher(this, { filmEvents ->
+        // TODO: Insert and update (updated field)
+        // TODO: Singleton
+        filmEventDAO.insert(filmEvents)
+        updateActivityForLoadSuccess(filmEvents)
+    }, { volleyError ->
+        Log.e(logTag, "$volleyError")
+        updateActivityForLoadFailure()
+    }).fetch()
+
+    private fun updateActivityForLoadSuccess(filmEvents: List<FilmEvent>) {
         adapter.swapFilmEvents(filmEvents)
         genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
 
@@ -80,10 +105,10 @@ class ListActivity : AppCompatActivity() {
         failed_to_load_events.visibility = View.GONE
 
         invalidateOptionsMenu()
-    }, { volleyError ->
-        Log.e(logTag, "$volleyError")
+    }
 
+    private fun updateActivityForLoadFailure() {
         film_list.visibility = View.GONE
         failed_to_load_events.visibility = View.VISIBLE
-    }).fetch()
+    }
 }
