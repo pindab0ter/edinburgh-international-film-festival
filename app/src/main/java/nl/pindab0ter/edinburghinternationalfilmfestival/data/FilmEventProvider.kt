@@ -63,6 +63,41 @@ class FilmEventProvider : ContentProvider() {
         }
     }
 
+    override fun bulkInsert(uri: Uri, valuesArray: Array<out ContentValues>?): Int = with(filmEventDbHelper.writableDatabase) {
+        when (uriMatcher.match(uri)) {
+            CODE_FILM_EVENTS -> {
+                beginTransaction()
+
+                var rowsInserted = 0
+                valuesArray?.forEach { values ->
+                    val id = insert(FilmEventEntry.TABLE_NAME, null, values)
+                    if (id != -1L) rowsInserted++
+                }
+
+                if (rowsInserted > 0) setTransactionSuccessful()
+                endTransaction()
+                rowsInserted
+            }
+            CODE_PERFORMANCES_BY_FILM_EVENT_CODE -> {
+                beginTransaction()
+
+                val filmEventCode = uri.lastPathSegment
+
+                var rowsInserted = 0
+                valuesArray?.forEach { values ->
+                    values.put(PerformanceEntry.COLUMN_FILM_EVENT_CODE, filmEventCode)
+                    val id = insert(PerformanceEntry.TABLE_NAME, null, values)
+                    if (id != -1L) rowsInserted++
+                }
+
+                if (rowsInserted > 0) setTransactionSuccessful()
+                endTransaction()
+                rowsInserted
+            }
+            else -> throw IllegalArgumentException("No match found for uri $uri")
+        }
+    }
+
     override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor = with(filmEventDbHelper.readableDatabase) {
         fun performTransaction(table: String, selection: String?, selectionArgs: Array<out String>?, logMessage: String): Cursor {
             Log.v(logTag, logMessage)

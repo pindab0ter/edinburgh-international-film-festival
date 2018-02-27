@@ -21,7 +21,14 @@ class FilmEventDAO(context: Context) {
     }
 
     fun insert(filmEvents: List<FilmEvent>) {
-        TODO("Not yet implemented")
+        contentResolver.bulkInsert(FilmEventEntry.CONTENT_URI, filmEvents.map { it.toContentValues() }.toTypedArray())
+        filmEvents.forEach { filmEvent ->
+            val performanceUrl = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(filmEvent.code).build()
+
+            filmEvent.performances?.forEach { performance ->
+                contentResolver.insert(performanceUrl, performance.toContentValues())
+            }
+        }
     }
 
     fun getAll(): List<FilmEvent> {

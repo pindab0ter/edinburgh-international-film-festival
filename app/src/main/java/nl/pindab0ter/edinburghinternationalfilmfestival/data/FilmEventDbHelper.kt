@@ -40,7 +40,7 @@ class FilmEventDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_N
 
     companion object {
         const val DATABASE_NAME = "film_festival.db"
-        const val DATABASE_VERSION = 7
+        const val DATABASE_VERSION = 8
 
         // TODO: Save images as BLOB
         val sqlCreateFilmEventTable = """
@@ -58,7 +58,7 @@ class FilmEventDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_N
         val sqlCreatePerformanceTable = """
             |CREATE TABLE ${PerformanceEntry.TABLE_NAME} (
             |   ${PerformanceEntry.COLUMN_ID}               INTEGER PRIMARY KEY AUTOINCREMENT,
-            |   ${PerformanceEntry.COLUMN_FILM_EVENT_CODE}  VARCHAR REFERENCES ${FilmEventEntry.TABLE_NAME}(${FilmEventEntry.COLUMN_CODE}) ON DELETE CASCADE,
+            |   ${PerformanceEntry.COLUMN_FILM_EVENT_CODE}  VARCHAR NOT NULL REFERENCES ${FilmEventEntry.TABLE_NAME}(${FilmEventEntry.COLUMN_CODE}) ON DELETE CASCADE,
             |   ${PerformanceEntry.COLUMN_START}            DATE NOT NULL,
             |   ${PerformanceEntry.COLUMN_END}              DATE NOT NULL
             |);

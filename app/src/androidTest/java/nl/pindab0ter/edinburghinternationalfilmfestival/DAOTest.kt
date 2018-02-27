@@ -20,6 +20,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Updated
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Website
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1WithPerformances
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2WithPerformances
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
@@ -113,6 +114,19 @@ class DAOTest {
             Assert.assertEquals(filmEvent1Code, getString(getColumnIndex(FilmEventContract.PerformanceEntry.COLUMN_FILM_EVENT_CODE)))
             Assert.assertEquals(filmEvent1Performance2Start, getString(getColumnIndex(FilmEventContract.PerformanceEntry.COLUMN_START)))
             Assert.assertEquals(filmEvent1Performance2End, getString(getColumnIndex(FilmEventContract.PerformanceEntry.COLUMN_END)))
+        }
+    }
+
+    @Test
+    fun insertFilmEventArrayWithPerformances() {
+        filmEventDAO.insert(listOf(filmEvent1WithPerformances, filmEvent2WithPerformances))
+
+        contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null).apply {
+            assertEquals("Expecting to find two film event entries", 2, count)
+        }
+
+        contentResolver.query(PerformanceEntry.CONTENT_URI, null, null, null).apply {
+            assertEquals("Expecting to find four performance entries", 4, count)
         }
     }
 

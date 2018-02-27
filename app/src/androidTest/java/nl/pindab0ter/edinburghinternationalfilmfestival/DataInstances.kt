@@ -49,8 +49,8 @@ object DataInstances {
     // FILM EVENT 1, PERFORMANCE 2
     //
     const val filmEvent1Performance2Start = "2015-06-23 18:05:00"
-
     const val filmEvent1Performance2End = "2015-06-23 19:55:00"
+
     val filmEvent1Performance2ContentValues = ContentValues().apply {
         put(PerformanceEntry.COLUMN_START, filmEvent1Performance2Start)
         put(PerformanceEntry.COLUMN_END, filmEvent1Performance2End)
@@ -74,7 +74,7 @@ object DataInstances {
     const val filmEvent2ImgThumbUrl = "https://edfestimages.s3.amazonaws.com/7a/b8/ba/7ab8bad13251a35f9957d5375d9c2a3945aa7642-thumb-100.png"
     const val filmEvent2Updated = "2015-06-25 12:50:05"
 
-    val filmEvent2 = ContentValues().apply {
+    val filmEvent2ContentValues = ContentValues().apply {
         put(FilmEventEntry.COLUMN_CODE, filmEvent2Code)
         put(FilmEventEntry.COLUMN_TITLE, filmEvent2Title)
         put(FilmEventEntry.COLUMN_DESCRIPTION, filmEvent2Description)
@@ -83,5 +83,38 @@ object DataInstances {
         put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, filmEvent2ImgOrigUrl)
         put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL, filmEvent2ImgThumbUrl)
         put(FilmEventEntry.COLUMN_UPDATED, filmEvent2Updated)
+    }
+
+    val filmEvent2 = FilmEvent(filmEvent2ContentValues)
+
+
+    //
+    // FILM EVENT 1, PERFORMANCE 1
+    //
+    const val filmEvent2Performance1Start = "2015-06-19 18:10:00"
+    const val filmEvent2Performance1End = "2015-06-19 19:43:00"
+
+    val filmEvent2Performance1ContentValues = ContentValues().apply {
+        put(PerformanceEntry.COLUMN_START, filmEvent2Performance1Start)
+        put(PerformanceEntry.COLUMN_END, filmEvent2Performance1End)
+    }
+
+    val filmEvent2Performance1 = FilmEvent.Performance(filmEvent2Performance1ContentValues)
+
+    //
+    // FILM EVENT 1, PERFORMANCE 2
+    //
+    const val filmEvent2Performance2Start = "2015-06-21 18:10:00"
+    const val filmEvent2Performance2End = "2015-06-21 19:43:00"
+
+    val filmEvent2Performance2ContentValues = ContentValues().apply {
+        put(PerformanceEntry.COLUMN_START, filmEvent2Performance2Start)
+        put(PerformanceEntry.COLUMN_END, filmEvent2Performance2End)
+    }
+
+    val filmEvent2Performance2 = FilmEvent.Performance(filmEvent2Performance2ContentValues)
+
+    val filmEvent2WithPerformances = FilmEvent(filmEvent2ContentValues).apply {
+        performances = arrayOf(filmEvent2Performance1, filmEvent2Performance2)
     }
 }

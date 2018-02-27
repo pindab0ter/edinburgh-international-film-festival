@@ -4,8 +4,8 @@ import android.content.ContentResolver
 import android.content.Context
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
-import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1ContentValues
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Code
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1ContentValues
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Description
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1GenreTags
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1ImgOrigUrl
@@ -19,14 +19,15 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Title
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Updated
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Website
-import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Code
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2ContentValues
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance1ContentValues
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance2ContentValues
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDbHelper
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -61,11 +62,11 @@ class DatabaseTest {
         contentResolver.insert(filmEvent1PerformancesUri, filmEvent1Performance1ContentValues)
         contentResolver.insert(filmEvent1PerformancesUri, filmEvent1Performance2ContentValues)
 
-        // Insert filmEvent2
-        contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent2)
+        // Insert filmEvent2ContentValues
+        contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent2ContentValues)
 
         contentResolver.query(filmEvent1Uri, null, null, null, null).apply {
-            assertTrue("Expecting to find one film event entry", count == 1)
+            assertEquals("Expecting to find one film event entry", 1, count)
 
             moveToFirst()
             assertEquals(filmEvent1Code, getString(getColumnIndex(FilmEventEntry.COLUMN_CODE)))
@@ -81,7 +82,7 @@ class DatabaseTest {
         }
 
         contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null, null).apply {
-            assertTrue("Expecting to find two film event entries", count == 2)
+            assertEquals("Expecting to find two film event entries", 2, count)
 
             moveToFirst()
             assertEquals(filmEvent1Code, getString(getColumnIndex(FilmEventEntry.COLUMN_CODE)))
@@ -93,7 +94,7 @@ class DatabaseTest {
         }
 
         contentResolver.query(filmEvent1PerformancesUri, null, null, null).apply {
-            assertTrue("Expecting to find two performance entries", count == 2)
+            assertEquals("Expecting to find two performance entries", 2, count)
 
             moveToFirst()
             assertEquals(1, getInt(getColumnIndex(PerformanceEntry.COLUMN_ID)))
@@ -113,7 +114,26 @@ class DatabaseTest {
         contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent1ContentValues)
 
         contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null).apply {
-            assertTrue("Expecting to find two performance entries", count == 1)
+            assertEquals("Expecting to find one performance entry", 1, count)
+        }
+    }
+
+    @Test
+    fun bulkInsertFilmEntries() {
+        contentResolver.bulkInsert(FilmEventEntry.CONTENT_URI, arrayOf(filmEvent1ContentValues, filmEvent2ContentValues))
+
+        contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null).apply {
+            assertEquals("Expecting to find two film event entries", 2, count)
+        }
+
+        val performance1Url = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(filmEvent1Code).build()
+        contentResolver.bulkInsert(performance1Url, arrayOf(filmEvent1Performance1ContentValues, filmEvent1Performance2ContentValues))
+
+        val performance2Url = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(filmEvent2Code).build()
+        contentResolver.bulkInsert(performance2Url, arrayOf(filmEvent2Performance1ContentValues, filmEvent2Performance2ContentValues))
+
+        contentResolver.query(PerformanceEntry.CONTENT_URI, null, null, null).apply {
+            assertEquals("Expecting to find four performance entries", 4, count)
         }
     }
 
@@ -131,7 +151,7 @@ class DatabaseTest {
         contentResolver.delete(filmEvent1Uri, null, null)
 
         contentResolver.query(filmEvent1PerformancesUri, null, null, null).apply {
-            assertTrue("Expecting to find no performance entries", count == 0)
+            assertEquals("Expecting to find no performance entries", 0, count)
         }
     }
 }
