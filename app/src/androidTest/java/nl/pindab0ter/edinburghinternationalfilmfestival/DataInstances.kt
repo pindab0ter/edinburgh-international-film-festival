@@ -4,8 +4,6 @@ import android.content.ContentValues
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
-import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.databaseStringToDate
-import java.net.URL
 
 object DataInstances {
 
@@ -46,6 +44,7 @@ object DataInstances {
     }
 
     val filmEvent1Performance1 = FilmEvent.Performance(filmEvent1Performance1ContentValues)
+
     //
     // FILM EVENT 1, PERFORMANCE 2
     //

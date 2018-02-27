@@ -5,7 +5,6 @@ import android.media.Image
 import com.google.gson.annotations.SerializedName
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDatabase
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.databaseStringToDate
 import java.net.URL
 import java.util.*
@@ -26,7 +25,7 @@ class FilmEvent() {
         this.code = code
         this.title = title
         this.description = description
-        this.genreTagsSource = genreTags
+        this._genreTags = genreTags
         this.website = URL(website)
         this.imageOriginalUrl = URL(imageOriginalUrl)
         this.imageThumbnailUrl = URL(imageThumbnailUrl)
@@ -37,7 +36,7 @@ class FilmEvent() {
         this.code = cv.getAsString(FilmEventEntry.COLUMN_CODE)
         this.title = cv.getAsString(FilmEventEntry.COLUMN_TITLE)
         this.description = cv.getAsString(FilmEventEntry.COLUMN_DESCRIPTION)
-        this.genreTagsSource = cv.getAsString(FilmEventEntry.COLUMN_GENRE_TAGS)
+        this._genreTags = cv.getAsString(FilmEventEntry.COLUMN_GENRE_TAGS)
         this.website = URL(cv.getAsString(FilmEventEntry.COLUMN_WEBSITE))
         this.imageOriginalUrl = URL(cv.getAsString(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL))
         this.imageThumbnailUrl = URL(cv.getAsString(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL))
@@ -48,22 +47,13 @@ class FilmEvent() {
     var description: String? = null
 
     @SerializedName("genre_tags")
-    var genreTagsSource: String? = null
+    var _genreTags: String? = null
 
     var genreTags: Array<String>?
-        get() = genreTagsSource?.split(",")?.map { it.trim() }?.toTypedArray()
+        get() = _genreTags?.split(",")?.map { it.trim() }?.toTypedArray()
         set(value) {
-            genreTagsSource = value?.joinToString()
+            _genreTags = value?.joinToString()
         }
-
-    enum class Status {
-        @SerializedName("active")
-        Active,
-        @SerializedName("cancelled")
-        Cancelled,
-        @SerializedName("deleted")
-        Deleted
-    }
 
     var title: String? = null
     var updated: Date? = null
@@ -71,20 +61,19 @@ class FilmEvent() {
 
     var imageOriginal: Image? = null
     var imageOriginalUrl: URL?
-        get() = images?.versions?.original?.url
+        get() = _images?.versions?.original?.url
         set(value) {
-            images?.versions?.original?.url = value
+            _images?.versions?.original?.url = value
         }
 
     var imageThumbnail: Image? = null
     var imageThumbnailUrl: URL?
-        get() = images?.versions?.thumb100?.url
+        get() = _images?.versions?.thumb100?.url
         set(value) {
-            images?.versions?.thumb100?.url = value
+            _images?.versions?.thumb100?.url = value
         }
 
     open class Images {
-
         class Versions {
             class Version {
                 var url: URL? = null
@@ -111,7 +100,7 @@ class FilmEvent() {
     // Subclass to prevent recursive deserialization
     class ImagesSubclass : Images()
 
-    private var images: Images? = null
+    private var _images: Images? = null
 
     class Performance() {
         constructor(cv: ContentValues) : this() {
@@ -131,6 +120,6 @@ class FilmEvent() {
     var performances: Array<Performance>? = null
 
     init {
-        images = Images()
+        _images = Images()
     }
 }
