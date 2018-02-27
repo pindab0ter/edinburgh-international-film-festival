@@ -20,13 +20,24 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Updated
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Website
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1WithPerformances
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Code
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2ContentValues
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance1ContentValues
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance1End
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance1Start
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance2ContentValues
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance2End
+import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance2Start
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2WithPerformances
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDAO
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDbHelper
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.databaseStringToDate
+import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDatabase
 import org.junit.After
 import org.junit.Assert
 import org.junit.Assert.*
@@ -131,6 +142,13 @@ class DAOTest {
     }
 
     @Test
+    fun getFilmEventsWhenEmpty() {
+        val filmEvents = filmEventDAO.getAll()
+
+        assertEquals(emptyList<FilmEvent>(), filmEvents)
+    }
+
+    @Test
     fun getFilmEvent() {
         val filmEvent1Uri = contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent1ContentValues)
 
@@ -158,18 +176,44 @@ class DAOTest {
         val filmEvent = filmEventDAO.get(filmEvent1Uri.lastPathSegment)
 
         assertEquals(filmEvent1Code, filmEvent?.code)
-        assertEquals(filmEvent1Title, filmEvent?.title)
-        assertEquals(filmEvent1Description, filmEvent?.description)
-        assertArrayEquals(filmEvent1GenreTags.split(",").map { it.trim() }.toTypedArray(), filmEvent?.genreTags)
-        assertEquals(URL(filmEvent1Website), filmEvent?.website)
-        assertEquals(databaseStringToDate(filmEvent1Updated), filmEvent?.updated)
-        assertEquals(URL(filmEvent1ImgOrigUrl), filmEvent?.imageOriginalUrl)
-        assertEquals(URL(filmEvent1ImgThumbUrl), filmEvent?.imageThumbnailUrl)
 
         assertEquals(databaseStringToDate(filmEvent1Performance1Start), filmEvent?.performances?.get(0)?.start)
         assertEquals(databaseStringToDate(filmEvent1Performance1End), filmEvent?.performances?.get(0)?.end)
 
         assertEquals(databaseStringToDate(filmEvent1Performance2Start), filmEvent?.performances?.get(1)?.start)
         assertEquals(databaseStringToDate(filmEvent1Performance2End), filmEvent?.performances?.get(1)?.end)
+    }
+
+    @Test
+    fun getAllFilmEvents() {
+        contentResolver.bulkInsert(FilmEventEntry.CONTENT_URI, arrayOf(filmEvent1ContentValues, filmEvent2ContentValues))
+
+        val filmEvents = filmEventDAO.getAll()
+
+        assertEquals(filmEvent1Code, filmEvents[0].code)
+        assertEquals(filmEvent2Code, filmEvents[1].code)
+    }
+
+    @Test
+    fun getAllFilmEventsWithPerformances() {
+        contentResolver.bulkInsert(FilmEventEntry.CONTENT_URI, arrayOf(filmEvent1ContentValues, filmEvent2ContentValues))
+
+        val filmEvent1PerformancesUri = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(filmEvent1Code).build()
+        contentResolver.bulkInsert(filmEvent1PerformancesUri, arrayOf(filmEvent1Performance1ContentValues, filmEvent1Performance2ContentValues))
+        val filmEvent2PerformancesUri = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(filmEvent2Code).build()
+        contentResolver.bulkInsert(filmEvent2PerformancesUri, arrayOf(filmEvent2Performance1ContentValues, filmEvent2Performance2ContentValues))
+
+        val filmEvents = filmEventDAO.getAll()
+
+        assertEquals(filmEvent1Code, filmEvents[0].code)
+        assertEquals(filmEvent2Code, filmEvents[1].code)
+        assertEquals(filmEvent1Performance1Start, filmEvents[0].performances?.get(0)?.start?.formatForDatabase())
+        assertEquals(filmEvent1Performance1End, filmEvents[0].performances?.get(0)?.end?.formatForDatabase())
+        assertEquals(filmEvent1Performance2Start, filmEvents[0].performances?.get(1)?.start?.formatForDatabase())
+        assertEquals(filmEvent1Performance2End, filmEvents[0].performances?.get(1)?.end?.formatForDatabase())
+        assertEquals(filmEvent2Performance1Start, filmEvents[1].performances?.get(0)?.start?.formatForDatabase())
+        assertEquals(filmEvent2Performance1End, filmEvents[1].performances?.get(0)?.end?.formatForDatabase())
+        assertEquals(filmEvent2Performance2Start, filmEvents[1].performances?.get(1)?.start?.formatForDatabase())
+        assertEquals(filmEvent2Performance2End, filmEvents[1].performances?.get(1)?.end?.formatForDatabase())
     }
 }

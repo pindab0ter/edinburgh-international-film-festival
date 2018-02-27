@@ -31,8 +31,48 @@ class FilmEventDAO(context: Context) {
         }
     }
 
-    fun getAll(): List<FilmEvent> {
-        TODO("Not yet implemented")
+    fun getAll(): List<FilmEvent> = contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null, null).run {
+        if (count == 0) return emptyList()
+
+        val filmEvents = ArrayList<FilmEvent>()
+        moveToFirst()
+
+        do {
+            val filmEvent = FilmEvent(
+                    getString(getColumnIndex(FilmEventEntry.COLUMN_CODE)),
+                    getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE)),
+                    getString(getColumnIndex(FilmEventEntry.COLUMN_DESCRIPTION)),
+                    getString(getColumnIndex(FilmEventEntry.COLUMN_GENRE_TAGS)),
+                    getString(getColumnIndex(FilmEventEntry.COLUMN_WEBSITE)),
+                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL)),
+                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL)),
+                    getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))
+            )
+
+            filmEvent.performances = getPerformances(filmEvent.code!!)
+
+            filmEvents.add(filmEvent)
+        } while (moveToNext())
+
+        return filmEvents
+    }
+
+    private fun getPerformances(code: String): Array<FilmEvent.Performance> = contentResolver.query(PerformanceEntry.CONTENT_URI.buildUpon().appendPath(code).build(), null, null, null, null).run {
+        return if (count != 0) {
+            val performances = ArrayList<FilmEvent.Performance>()
+            moveToFirst()
+
+            do {
+                performances.add(FilmEvent.Performance(
+                        databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_START))),
+                        databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_END)))
+                ))
+            } while (moveToNext())
+
+            performances.toTypedArray()
+        } else {
+            emptyArray()
+        }
     }
 
     fun get(code: String): FilmEvent? {
