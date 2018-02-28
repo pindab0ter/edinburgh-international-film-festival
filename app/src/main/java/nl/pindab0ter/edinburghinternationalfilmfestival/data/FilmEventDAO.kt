@@ -28,8 +28,11 @@ class FilmEventDAO(context: Context) {
         }
     }
 
-    fun getAll(): List<FilmEvent> = contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null, null).run {
-        if (count == 0) return emptyList()
+    fun getAll(): List<FilmEvent>? = contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null, null).run {
+        if (count == 0) {
+            close()
+            return null
+        }
 
         val filmEvents = ArrayList<FilmEvent>()
         moveToFirst()
@@ -51,25 +54,28 @@ class FilmEventDAO(context: Context) {
             filmEvents.add(filmEvent)
         } while (moveToNext())
 
+        close()
         return filmEvents
     }
 
     private fun getPerformances(code: String): Array<FilmEvent.Performance> = contentResolver.query(PerformanceEntry.CONTENT_URI.buildUpon().appendPath(code).build(), null, null, null, null).run {
-        return if (count != 0) {
-            val performances = ArrayList<FilmEvent.Performance>()
-            moveToFirst()
-
-            do {
-                performances.add(FilmEvent.Performance(
-                        databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_START))),
-                        databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_END)))
-                ))
-            } while (moveToNext())
-
-            performances.toTypedArray()
-        } else {
-            emptyArray()
+        if (count == 0) {
+            close()
+            return emptyArray()
         }
+
+        val performances = ArrayList<FilmEvent.Performance>()
+        moveToFirst()
+
+        do {
+            performances.add(FilmEvent.Performance(
+                    databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_START))),
+                    databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_END)))
+            ))
+        } while (moveToNext())
+
+        close()
+        performances.toTypedArray()
     }
 
     fun get(code: String): FilmEvent? {
@@ -77,6 +83,11 @@ class FilmEventDAO(context: Context) {
         var filmEvent: FilmEvent? = null
 
         contentResolver.query(filmEventUrl, null, null, null, null).apply {
+            if (count == 0) {
+                close()
+                return null
+            }
+
             moveToFirst()
             filmEvent = FilmEvent(
                     getString(getColumnIndex(FilmEventEntry.COLUMN_CODE)),
@@ -88,24 +99,31 @@ class FilmEventDAO(context: Context) {
                     getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL)),
                     getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))
             )
+
+            close()
         }
 
         val performancesUri = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(code).build()
         val performances = ArrayList<FilmEvent.Performance>()
-        contentResolver.query(performancesUri, null, null, null, null).apply {
-            if (count > 0) {
-                moveToFirst()
 
-                do {
-                    performances.add(FilmEvent.Performance(
-                            databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_START))),
-                            databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_END)))
-                    ))
-                } while (moveToNext())
+        contentResolver.query(performancesUri, null, null, null, null).apply {
+            if (count == 0) {
+                close()
+                return null
             }
-            filmEvent?.performances = performances.sortedBy { it.start }.toTypedArray()
+
+            moveToFirst()
+            do {
+                performances.add(FilmEvent.Performance(
+                        databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_START))),
+                        databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_END)))
+                ))
+            } while (moveToNext())
+
+            close()
         }
 
+        filmEvent?.performances = performances.sortedBy { it.start }.toTypedArray()
         filmEvent?.verifyNotNullFields()
 
         return filmEvent

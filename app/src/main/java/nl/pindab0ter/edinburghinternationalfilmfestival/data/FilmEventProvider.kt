@@ -32,12 +32,14 @@ class FilmEventProvider : ContentProvider() {
                 return if (id != -1L) {
                     setTransactionSuccessful()
                     endTransaction()
+                    close()
                     Log.v(logTag, "Inserted film_event with code $code")
                     FilmEventEntry.CONTENT_URI.buildUpon()
                             .appendPath(code)
                             .build()
                 } else {
                     endTransaction()
+                    close()
                     // TODO: Propagate SQLError?
                     Uri.EMPTY
                 }
@@ -50,12 +52,14 @@ class FilmEventProvider : ContentProvider() {
                 return if (id != -1L) {
                     setTransactionSuccessful()
                     endTransaction()
+                    close()
                     Log.v(logTag, "Inserted performance for film_event with code $filmEventCode")
                     PerformanceEntry.CONTENT_URI.buildUpon()
                             .appendPath(id.toString())
                             .build()
                 } else {
                     endTransaction()
+                    close()
                     Uri.EMPTY
                 }
             }
@@ -77,6 +81,7 @@ class FilmEventProvider : ContentProvider() {
                 if (rowsInserted > 0) setTransactionSuccessful()
                 Log.v(logTag, "Inserted $rowsInserted into ${FilmEventEntry.TABLE_NAME}")
                 endTransaction()
+                close()
                 rowsInserted
             }
             CODE_PERFORMANCES_BY_FILM_EVENT_CODE -> {
@@ -94,6 +99,7 @@ class FilmEventProvider : ContentProvider() {
                 if (rowsInserted > 0) setTransactionSuccessful()
                 Log.v(logTag, "Inserted $rowsInserted into ${PerformanceEntry.TABLE_NAME}")
                 endTransaction()
+                close()
                 rowsInserted
             }
             else -> throw IllegalArgumentException("No match found for uri $uri")
@@ -101,32 +107,11 @@ class FilmEventProvider : ContentProvider() {
     }
 
     override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor = with(filmEventDbHelper.readableDatabase) {
-        fun performTransaction(table: String, selection: String?, selectionArgs: Array<out String>?, logMessage: String): Cursor {
-            Log.v(logTag, logMessage)
-            beginTransaction()
-            val cursor = query(table, null, selection, selectionArgs, null, null, null)
-            endTransaction()
-
-            return cursor
-        }
-
-        fun performTransaction(table: String, logMessage: String): Cursor = performTransaction(table, null, null, logMessage)
-
         when (uriMatcher.match(uri)) {
-            CODE_FILM_EVENTS -> performTransaction(FilmEventEntry.TABLE_NAME, "Query for all film events")
-            CODE_FILM_EVENT_BY_CODE -> performTransaction(
-                    FilmEventEntry.TABLE_NAME,
-                    "${FilmEventEntry.COLUMN_CODE} = ?",
-                    Array(1) { uri.lastPathSegment },
-                    "Query for film event with id: ${uri.lastPathSegment}"
-            )
-            CODE_PERFORMANCES -> performTransaction(PerformanceEntry.TABLE_NAME, "Query for all film performances")
-            CODE_PERFORMANCES_BY_FILM_EVENT_CODE -> performTransaction(
-                    PerformanceEntry.TABLE_NAME,
-                    "${PerformanceEntry.COLUMN_FILM_EVENT_CODE} = ?",
-                    Array(1) { uri.lastPathSegment },
-                    "Query for performances with film_event_code: ${uri.lastPathSegment}"
-            )
+            CODE_FILM_EVENTS -> query(FilmEventEntry.TABLE_NAME, null, null, null, null, null, null)
+            CODE_FILM_EVENT_BY_CODE -> query(FilmEventEntry.TABLE_NAME, null, "${FilmEventEntry.COLUMN_CODE} = ?", Array(1) { uri.lastPathSegment }, null, null, null)
+            CODE_PERFORMANCES -> query(PerformanceEntry.TABLE_NAME, null, null, null, null, null, null)
+            CODE_PERFORMANCES_BY_FILM_EVENT_CODE -> query(PerformanceEntry.TABLE_NAME, null, "${PerformanceEntry.COLUMN_FILM_EVENT_CODE} = ?", Array(1) { uri.lastPathSegment }, null, null, null)
             else -> throw IllegalArgumentException("No match found for uri $uri")
         }
     }
@@ -141,6 +126,7 @@ class FilmEventProvider : ContentProvider() {
             val deleted = delete(table, selection, selectionArgs)
             setTransactionSuccessful()
             endTransaction()
+            close()
             Log.v(logTag, "Deleted $deleted rows")
             return deleted
         }

@@ -1,6 +1,7 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.os.Bundle
+import android.os.StrictMode
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -12,6 +13,7 @@ import kotlinx.android.synthetic.main.film_list.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.layout.activity_master
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDAO
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDbHelper
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.FilmEventFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 
@@ -26,6 +28,8 @@ class ListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // enableDebugMode()
+
         setContentView(activity_master)
 
         setSupportActionBar(toolbar)
@@ -110,5 +114,21 @@ class ListActivity : AppCompatActivity() {
     private fun updateActivityForLoadFailure() {
         film_list.visibility = View.GONE
         failed_to_load_events.visibility = View.VISIBLE
+    }
+
+    private fun enableDebugMode() {
+        FilmEventDbHelper(this).apply {
+            dropAllTablesAndRecreate(writableDatabase)
+            close()
+        }
+        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .build())
+        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .penaltyDeath()
+                .build())
     }
 }
