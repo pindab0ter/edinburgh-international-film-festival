@@ -1,17 +1,18 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_detail.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_DESCRIPTION
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_IMAGE_URL
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_SHOWINGS
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_TITLE
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.FILM_EVENT_CODE
 import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_TAG
-import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_TITLE
 import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_WEBSITE
+import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_TITLE
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDAO
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 
 /**
  * An activity representing a single FilmEvent detail screen. This
@@ -20,17 +21,20 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Com
  * in a [ListActivity].
  */
 class DetailActivity : AppCompatActivity() {
+    private var filmEvent: FilmEvent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         setSupportActionBar(detail_toolbar)
 
+        filmEvent = FilmEventDAO(applicationContext).get(intent.getStringExtra(FILM_EVENT_CODE))
+
         fab.setOnClickListener {
             RatingDialogFragment().apply {
                 arguments = Bundle().apply {
-                    putString(DIALOG_TITLE, intent.getStringExtra(DETAIL_TITLE))
-                    putString(DIALOG_WEBSITE, intent.getStringExtra(DIALOG_WEBSITE))
+                    putString(DIALOG_TITLE, filmEvent?.title)
+                    putString(DIALOG_WEBSITE, filmEvent?.website.toString())
                 }
             }.show(fragmentManager, DIALOG_TAG)
         }
@@ -52,10 +56,7 @@ class DetailActivity : AppCompatActivity() {
             // using a fragment transaction.
             val fragment = DetailFragment().apply {
                 arguments = Bundle().apply {
-                    putString(DETAIL_TITLE, intent.getStringExtra(DETAIL_TITLE))
-                    putString(DETAIL_DESCRIPTION, intent.getStringExtra(DETAIL_DESCRIPTION))
-                    putString(DETAIL_IMAGE_URL, intent.getStringExtra(DetailFragment.DETAIL_IMAGE_URL))
-                    putStringArray(DETAIL_SHOWINGS, intent.getStringArrayExtra(DetailFragment.DETAIL_SHOWINGS))
+                    putString(FILM_EVENT_CODE, intent.getStringExtra(FILM_EVENT_CODE))
                 }
             }
 

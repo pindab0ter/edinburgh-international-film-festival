@@ -11,11 +11,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.main.main_list_item.view.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_DESCRIPTION
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_IMAGE_URL
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_SHOWINGS
-import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_TITLE
-import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_WEBSITE
+import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.FILM_EVENT_CODE
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplay
 import java.util.*
@@ -31,19 +27,13 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
     private var filteredByGenre: CharSequence? = null
 
     init {
-        onClickListener = View.OnClickListener { v ->
-            val filmEvent = v.tag as FilmEvent
-            val imageUrl = filmEvent.imageOriginal.toString()
-            val showings = filmEvent.performances?.map { it.start?.formatForDisplay() }?.toTypedArray()
+        onClickListener = View.OnClickListener { view ->
+            val filmEventCode = view.tag as String
 
             if (twoPane) {
                 val fragment = DetailFragment().apply {
                     arguments = Bundle().apply {
-                        putString(DETAIL_TITLE, filmEvent.title)
-                        putString(DETAIL_DESCRIPTION, filmEvent.description)
-                        putString(DETAIL_IMAGE_URL, imageUrl)
-                        putString(DIALOG_WEBSITE, filmEvent.website.toString())
-                        putStringArray(DETAIL_SHOWINGS, showings)
+                        putString(FILM_EVENT_CODE, filmEventCode)
                     }
                 }
                 parentActivity.supportFragmentManager
@@ -51,14 +41,10 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
                         .replace(R.id.detail_container, fragment)
                         .commit()
             } else {
-                val intent = Intent(v.context, DetailActivity::class.java).apply {
-                    putExtra(DETAIL_TITLE, filmEvent.title)
-                    putExtra(DETAIL_DESCRIPTION, filmEvent.description)
-                    putExtra(DETAIL_IMAGE_URL, imageUrl)
-                    putExtra(DIALOG_WEBSITE, filmEvent.website.toString())
-                    putExtra(DETAIL_SHOWINGS, showings)
+                val intent = Intent(view.context, DetailActivity::class.java).apply {
+                    putExtra(FILM_EVENT_CODE, filmEventCode)
                 }
-                v.context.startActivity(intent)
+                view.context.startActivity(intent)
             }
         }
     }
@@ -75,7 +61,7 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
 
 
             with(holder.itemView) {
-                tag = filmEvent
+                tag = filmEvent?.code
                 setOnClickListener(onClickListener)
             }
 
