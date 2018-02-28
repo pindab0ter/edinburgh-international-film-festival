@@ -2,6 +2,7 @@ package nl.pindab0ter.edinburghinternationalfilmfestival.data.network
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.android.volley.NetworkResponse
 import com.android.volley.Request
 import com.android.volley.Response
@@ -19,8 +20,11 @@ import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FilmEventFetcher(private val context: Context, private val listener: (filmEvents: List<FilmEvent>) -> Unit, private val errorListener: (volleyError: VolleyError) -> Unit) {
+class FilmEventFetcher(private val context: Context, private val listener: (filmEvents: List<FilmEvent>) -> Unit) {
     private val logTag = FilmEventFetcher::class.simpleName
+    private val errorListener: (volleyError: VolleyError) -> Unit = { volleyError ->
+        Log.e(logTag, "$volleyError")
+    }
 
     fun fetch() {
         val url = buildUrl(context)

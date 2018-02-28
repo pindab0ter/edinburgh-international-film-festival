@@ -1,10 +1,10 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
+import android.annotation.SuppressLint
+import android.os.AsyncTask
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -24,10 +24,8 @@ class ListActivity : AppCompatActivity() {
         get() = detail_container != null
     private lateinit var adapter: FilmEventRecyclerViewAdapter
     private var genres: List<String>? = null
-    private lateinit var filmEventDAO: FilmEventDAO
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         // enableDebugMode()
 
         setContentView(activity_master)
@@ -35,10 +33,11 @@ class ListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = title
 
-        filmEventDAO = FilmEventDAO(this)
-        setupRecyclerView(film_list)
+        adapter = FilmEventRecyclerViewAdapter(this, twoPane)
+        film_list.adapter = adapter
 
-        populateFilmEvents()
+        fetchFilmEvents()
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -74,46 +73,42 @@ class ListActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setupRecyclerView(recyclerView: RecyclerView) {
-        adapter = FilmEventRecyclerViewAdapter(this, twoPane)
-        recyclerView.adapter = adapter
+    fun fetchFilmEvents(view: View) = fetchFilmEvents()
+
+    private fun fetchFilmEvents() {
+        GetFilmEventsFromDatabaseTask().execute()
     }
 
-    private fun populateFilmEvents() {
-        val filmEvents = filmEventDAO.getAll()
-
-        if (filmEvents.isNotEmpty()) {
-            updateActivityForLoadSuccess(filmEvents)
-        } else {
-            fetchFilmEvents()
+    @SuppressLint("StaticFieldLeak")
+    inner class GetFilmEventsFromDatabaseTask : AsyncTask<Unit, Unit, List<FilmEvent>?>() {
+        override fun doInBackground(vararg params: Unit?): List<FilmEvent>? = FilmEventDAO(this@ListActivity).getAll()
+        override fun onPostExecute(filmEvents: List<FilmEvent>?) {
+            if (filmEvents.orEmpty().isEmpty()) {
+                FilmEventFetcher(this@ListActivity, { fetchedFilmEvents ->
+                    populateList(fetchedFilmEvents)
+                    InsertFilmEventsIntoDatabaseTask().execute(fetchedFilmEvents)
+                }).fetch()
+            } else {
+                populateList(filmEvents)
+            }
         }
     }
 
-    fun fetchFilmEvents(view: View) = fetchFilmEvents()
-
-    private fun fetchFilmEvents() = FilmEventFetcher(this, { filmEvents ->
-        // TODO: Insert and update (updated field)
-        // TODO: Singleton
-        filmEventDAO.insert(filmEvents)
-        updateActivityForLoadSuccess(filmEvents)
-    }, { volleyError ->
-        Log.e(logTag, "$volleyError")
-        updateActivityForLoadFailure()
-    }).fetch()
-
-    private fun updateActivityForLoadSuccess(filmEvents: List<FilmEvent>) {
-        adapter.swapFilmEvents(filmEvents)
-        genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
-
-        film_list.visibility = View.VISIBLE
-        failed_to_load_events.visibility = View.GONE
-
-        invalidateOptionsMenu()
+    @SuppressLint("StaticFieldLeak")
+    inner class InsertFilmEventsIntoDatabaseTask : AsyncTask<List<FilmEvent>, Unit, Unit>() {
+        override fun doInBackground(vararg params: List<FilmEvent>?) = FilmEventDAO(this@ListActivity).insert(params.first().orEmpty())
     }
 
-    private fun updateActivityForLoadFailure() {
-        film_list.visibility = View.GONE
-        failed_to_load_events.visibility = View.VISIBLE
+    fun populateList(filmEvents: List<FilmEvent>?) {
+        if (filmEvents != null) {
+            adapter.swapFilmEvents(filmEvents)
+            genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
+
+            film_list.visibility = View.VISIBLE
+            failed_to_load_events.visibility = View.GONE
+        }
+
+        invalidateOptionsMenu()
     }
 
     private fun enableDebugMode() {
