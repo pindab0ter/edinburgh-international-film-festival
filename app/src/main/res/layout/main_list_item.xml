@@ -19,7 +19,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_default="spread"
-        app:srcCompat="@drawable/ic_broken_image" />
+        app:srcCompat="@color/transparent" />
 
     <TextView
         android:id="@+id/film_list_title"

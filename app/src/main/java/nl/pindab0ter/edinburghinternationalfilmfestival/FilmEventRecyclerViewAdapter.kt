@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.main.main_list_item.view.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_DESCRIPTION
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_IMAGE_URL
@@ -19,8 +20,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEven
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplay
 import java.util.*
 
-class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, private val twoPane: Boolean) :
-        RecyclerView.Adapter<FilmEventRecyclerViewAdapter.ViewHolder>(), Observer {
+class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, private val twoPane: Boolean) : RecyclerView.Adapter<FilmEventRecyclerViewAdapter.ViewHolder>(), Observer {
 
     private val onClickListener: View.OnClickListener
 
@@ -73,14 +73,16 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
             holder.titleView.text = filmEvent?.title
             holder.firstShowingView.text = filmEvent?.performances?.first()?.start?.formatForDisplay()
 
-            Glide.with(parentActivity)
-                    .load(filmEvent?.imageOriginal)
-                    .into(holder.imageView)
 
             with(holder.itemView) {
                 tag = filmEvent
                 setOnClickListener(onClickListener)
             }
+
+            Glide.with(parentActivity)
+                    .load(filmEvent?.imageOriginal)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(holder.imageView)
         }
     }
 
