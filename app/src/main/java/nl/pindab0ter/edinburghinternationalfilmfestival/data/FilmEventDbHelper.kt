@@ -8,7 +8,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.F
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
 
 class FilmEventDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-    val logTag = FilmEventDbHelper::class.simpleName
+    private val logTag = FilmEventDbHelper::class.simpleName
 
     override fun onCreate(db: SQLiteDatabase?) {
         Log.v(logTag, "Creating database...")
@@ -40,19 +40,18 @@ class FilmEventDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_N
 
     companion object {
         const val DATABASE_NAME = "film_festival.db"
-        const val DATABASE_VERSION = 8
+        const val DATABASE_VERSION = 9
 
-        // TODO: Save images as BLOB
         val sqlCreateFilmEventTable = """
             |CREATE TABLE ${FilmEventEntry.TABLE_NAME} (
-            |   ${FilmEventEntry.COLUMN_CODE}                VARCHAR PRIMARY KEY,
-            |   ${FilmEventEntry.COLUMN_TITLE}               VARCHAR NOT NULL,
-            |   ${FilmEventEntry.COLUMN_DESCRIPTION}         VARCHAR,
-            |   ${FilmEventEntry.COLUMN_GENRE_TAGS}          VARCHAR,
-            |   ${FilmEventEntry.COLUMN_WEBSITE}             VARCHAR,
-            |   ${FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL} VARCHAR,
-            |   ${FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL}  VARCHAR,
-            |   ${FilmEventEntry.COLUMN_UPDATED}             DATE NOT NULL
+            |   ${FilmEventEntry.COLUMN_CODE}            VARCHAR PRIMARY KEY,
+            |   ${FilmEventEntry.COLUMN_TITLE}           VARCHAR NOT NULL,
+            |   ${FilmEventEntry.COLUMN_DESCRIPTION}     VARCHAR,
+            |   ${FilmEventEntry.COLUMN_GENRE_TAGS}      VARCHAR,
+            |   ${FilmEventEntry.COLUMN_WEBSITE}         VARCHAR,
+            |   ${FilmEventEntry.COLUMN_IMAGE_THUMBNAIL} VARCHAR,
+            |   ${FilmEventEntry.COLUMN_IMAGE_ORIGINAL}  VARCHAR,
+            |   ${FilmEventEntry.COLUMN_UPDATED}         DATE NOT NULL
             |);""".trimMargin()
 
         val sqlCreatePerformanceTable = """

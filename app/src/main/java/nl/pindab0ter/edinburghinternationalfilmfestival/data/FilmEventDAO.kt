@@ -2,9 +2,9 @@ package nl.pindab0ter.edinburghinternationalfilmfestival.data
 
 import android.content.ContentValues
 import android.content.Context
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.databaseStringToDate
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDatabase
 
@@ -41,8 +41,8 @@ class FilmEventDAO(context: Context) {
                     getString(getColumnIndex(FilmEventEntry.COLUMN_DESCRIPTION)),
                     getString(getColumnIndex(FilmEventEntry.COLUMN_GENRE_TAGS)),
                     getString(getColumnIndex(FilmEventEntry.COLUMN_WEBSITE)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL)),
+                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL)),
+                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL)),
                     getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))
             )
 
@@ -84,8 +84,8 @@ class FilmEventDAO(context: Context) {
                     getString(getColumnIndex(FilmEventEntry.COLUMN_DESCRIPTION)),
                     getString(getColumnIndex(FilmEventEntry.COLUMN_GENRE_TAGS)),
                     getString(getColumnIndex(FilmEventEntry.COLUMN_WEBSITE)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL)),
+                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL)),
+                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL)),
                     getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))
             )
         }
@@ -128,8 +128,8 @@ class FilmEventDAO(context: Context) {
         put(FilmEventEntry.COLUMN_DESCRIPTION, this@toContentValues.description)
         put(FilmEventEntry.COLUMN_GENRE_TAGS, this@toContentValues.genreTags?.joinToString())
         put(FilmEventEntry.COLUMN_WEBSITE, this@toContentValues.website?.toString())
-        put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, this@toContentValues.imageOriginalUrl?.toString())
-        put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL, this@toContentValues.imageThumbnailUrl?.toString())
+        put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL, this@toContentValues.imageOriginal?.toString())
+        put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL, this@toContentValues.imageThumbnail?.toString())
         put(FilmEventEntry.COLUMN_UPDATED, this@toContentValues.updated?.formatForDatabase())
     }
 

@@ -20,7 +20,6 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Updated
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Website
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1WithPerformances
-import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Code
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2ContentValues
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance1ContentValues
@@ -80,8 +79,8 @@ class DAOTest {
             assertEquals(filmEvent1GenreTags, getString(getColumnIndex(FilmEventEntry.COLUMN_GENRE_TAGS)))
             assertEquals(filmEvent1Website, getString(getColumnIndex(FilmEventEntry.COLUMN_WEBSITE)))
             assertEquals(filmEvent1Updated, getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED)))
-            assertEquals(filmEvent1ImgOrigUrl, getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL)))
-            assertEquals(filmEvent1ImgThumbUrl, getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL)))
+            assertEquals(filmEvent1ImgOrigUrl, getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL)))
+            assertEquals(filmEvent1ImgThumbUrl, getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL)))
 
             close()
         }
@@ -103,8 +102,8 @@ class DAOTest {
             assertEquals(filmEvent1GenreTags, getString(getColumnIndex(FilmEventEntry.COLUMN_GENRE_TAGS)))
             assertEquals(filmEvent1Website, getString(getColumnIndex(FilmEventEntry.COLUMN_WEBSITE)))
             assertEquals(filmEvent1Updated, getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED)))
-            assertEquals(filmEvent1ImgOrigUrl, getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL)))
-            assertEquals(filmEvent1ImgThumbUrl, getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL)))
+            assertEquals(filmEvent1ImgOrigUrl, getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL)))
+            assertEquals(filmEvent1ImgThumbUrl, getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL)))
 
             close()
         }
@@ -162,8 +161,8 @@ class DAOTest {
         assertArrayEquals(filmEvent1GenreTags.split(",").map { it.trim() }.toTypedArray(), filmEvent?.genreTags)
         assertEquals(URL(filmEvent1Website), filmEvent?.website)
         assertEquals(databaseStringToDate(filmEvent1Updated), filmEvent?.updated)
-        assertEquals(URL(filmEvent1ImgOrigUrl), filmEvent?.imageOriginalUrl)
-        assertEquals(URL(filmEvent1ImgThumbUrl), filmEvent?.imageThumbnailUrl)
+        assertEquals(URL(filmEvent1ImgOrigUrl), filmEvent?.imageOriginal)
+        assertEquals(URL(filmEvent1ImgThumbUrl), filmEvent?.imageThumbnail)
     }
 
     @Test

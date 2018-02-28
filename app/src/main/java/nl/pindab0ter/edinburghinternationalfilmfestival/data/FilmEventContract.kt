@@ -22,9 +22,7 @@ object FilmEventContract {
         const val COLUMN_GENRE_TAGS = "genre_tags"
         const val COLUMN_WEBSITE = "website"
         const val COLUMN_IMAGE_ORIGINAL = "image_orig"
-        const val COLUMN_IMAGE_ORIGINAL_URL = "image_orig_url"
         const val COLUMN_IMAGE_THUMBNAIL = "image_thumb"
-        const val COLUMN_IMAGE_THUMBNAIL_URL = "image_thumb_url"
         const val COLUMN_UPDATED = "updated"
     }
 
@@ -36,6 +34,5 @@ object FilmEventContract {
         const val COLUMN_FILM_EVENT_CODE = "film_event_code"
         const val COLUMN_START = "start"
         const val COLUMN_END = "end"
-        const val COLUMN_PRICE = "price"
     }
 }

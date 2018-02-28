@@ -1,7 +1,6 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -9,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.main_list_item.view.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_DESCRIPTION
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_IMAGE_URL
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_SHOWINGS
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.DETAIL_TITLE
 import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_WEBSITE
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.BitmapFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplay
 import java.util.*
@@ -24,7 +23,6 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
         RecyclerView.Adapter<FilmEventRecyclerViewAdapter.ViewHolder>(), Observer {
 
     private val onClickListener: View.OnClickListener
-    private val bitmapFetcher: BitmapFetcher = BitmapFetcher(parentActivity)
 
     private var unfilteredFilmEvents: List<FilmEvent>? = null
     private var filmEvents: List<FilmEvent>? = null
@@ -35,7 +33,7 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
     init {
         onClickListener = View.OnClickListener { v ->
             val filmEvent = v.tag as FilmEvent
-            val imageUrl = filmEvent.imageOriginalUrl.toString()
+            val imageUrl = filmEvent.imageOriginal.toString()
             val showings = filmEvent.performances?.map { it.start?.formatForDisplay() }?.toTypedArray()
 
             if (twoPane) {
@@ -74,11 +72,10 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
         filmEvents?.get(position).let { filmEvent ->
             holder.titleView.text = filmEvent?.title
             holder.firstShowingView.text = filmEvent?.performances?.first()?.start?.formatForDisplay()
-            if (filmEvent?.imageThumbnail != null) {
-                holder.imageView.setImageBitmap(filmEvent.imageThumbnail)
-            } else {
-                filmEvent?.addObserver(this)
-            }
+
+            Glide.with(parentActivity)
+                    .load(filmEvent?.imageOriginal)
+                    .into(holder.imageView)
 
             with(holder.itemView) {
                 tag = filmEvent

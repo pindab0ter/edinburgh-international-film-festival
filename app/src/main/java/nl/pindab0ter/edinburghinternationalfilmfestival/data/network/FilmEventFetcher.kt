@@ -1,6 +1,7 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival.data.network
 
 import android.content.Context
+import android.net.Uri
 import com.android.volley.NetworkResponse
 import com.android.volley.Request
 import com.android.volley.Response
@@ -23,7 +24,7 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
 
     fun fetch() {
         val url = buildUrl(context)
-        val filmsRequest = FilmEventRequest(url, context, listener, errorListener)
+        val filmsRequest = FilmEventRequest(url, listener, errorListener)
 
         RequestQueueHolder.getInstance(context).add(filmsRequest)
     }
@@ -37,7 +38,6 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
 
     class FilmEventRequest(
             url: URL,
-            context: Context,
             private val listener: ((filmEvents: List<FilmEvent>) -> Unit),
             errorListener: ((error: VolleyError) -> Unit)
     ) : Request<List<FilmEvent>>(Request.Method.GET, url.toString(), errorListener) {
@@ -47,11 +47,9 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
                     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                     .registerTypeAdapter(FilmEvent.Images::class.java, ImagesDeserializer())
                     .registerTypeAdapter(Date::class.java, DateDeserializer())
-                    .registerTypeAdapter(URL::class.java, URLDeserializer())
+                    .registerTypeAdapter(Uri::class.java, UriDeserializer())
                     .create()
         }
-
-        val bitmapFetcher: BitmapFetcher = BitmapFetcher(context)
 
         override fun getHeaders(): MutableMap<String, String>? = mutableMapOf("Accept" to "application/json;ver=2.0")
 
@@ -63,15 +61,6 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
             }
 
             val filmEvents = gson.fromJson<Array<FilmEvent>>(parsed, Array<FilmEvent>::class.java)
-
-            filmEvents.forEach { filmEvent ->
-                bitmapFetcher.fetch(filmEvent.imageOriginalUrl.toString()) { bitmap ->
-                    filmEvent.imageOriginal = bitmap
-                }
-                bitmapFetcher.fetch(filmEvent.imageThumbnailUrl.toString()) { bitmap ->
-                    filmEvent.imageThumbnail = bitmap
-                }
-            }
 
             return Response.success(filmEvents.asList(), HttpHeaderParser.parseCacheHeaders(response))
         }
@@ -99,11 +88,11 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
             }
         }
 
-        class URLDeserializer : JsonDeserializer<URL> {
-            override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): URL? {
+        class UriDeserializer : JsonDeserializer<Uri> {
+            override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): Uri? {
                 json?.asString?.trim('\"')?.let { urlString ->
-                    return if (urlString.startsWith("//", false)) URL("https:$urlString")
-                    else URL(urlString)
+                    return if (urlString.startsWith("//", false)) Uri.parse("https:$urlString")
+                    else Uri.parse(urlString)
                 }
                 return null
             }

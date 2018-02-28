@@ -1,7 +1,5 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Html
@@ -12,7 +10,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.BitmapFetcher
 
 /**
  * A fragment representing a single FilmEvent detail screen.
@@ -46,10 +43,10 @@ class DetailFragment : Fragment() {
 
         val rootView = inflater.inflate(R.layout.fragment_detail, container, false) as LinearLayout
 
-        BitmapFetcher(context!!).fetch(imageUrl) { bitmap: Bitmap ->
-            activity?.toolbar_layout?.background = BitmapDrawable(resources, bitmap)
-            activity?.toolbar_layout?.contentScrim = BitmapDrawable(resources, bitmap)
-        }
+//        BitmapFetcher(context!!).fetch(imageUrl) { bitmap: Bitmap ->
+//            activity?.toolbar_layout?.background = BitmapDrawable(resources, bitmap)
+//            activity?.toolbar_layout?.contentScrim = BitmapDrawable(resources, bitmap)
+//        }
 
         rootView.tv_detail_description.text = Html.fromHtml(description)
         rootView.tv_detail_showings_label.text = resources.getQuantityString(R.plurals.showings, showings.size)

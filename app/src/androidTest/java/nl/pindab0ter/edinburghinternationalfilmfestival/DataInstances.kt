@@ -25,8 +25,8 @@ object DataInstances {
         put(FilmEventEntry.COLUMN_DESCRIPTION, filmEvent1Description)
         put(FilmEventEntry.COLUMN_GENRE_TAGS, filmEvent1GenreTags)
         put(FilmEventEntry.COLUMN_WEBSITE, filmEvent1Website)
-        put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, filmEvent1ImgOrigUrl)
-        put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL, filmEvent1ImgThumbUrl)
+        put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL, filmEvent1ImgOrigUrl)
+        put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL, filmEvent1ImgThumbUrl)
         put(FilmEventEntry.COLUMN_UPDATED, filmEvent1Updated)
     }
 
@@ -80,8 +80,8 @@ object DataInstances {
         put(FilmEventEntry.COLUMN_DESCRIPTION, filmEvent2Description)
         put(FilmEventEntry.COLUMN_GENRE_TAGS, filmEvent2GenreTags)
         put(FilmEventEntry.COLUMN_WEBSITE, filmEvent2Website)
-        put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL_URL, filmEvent2ImgOrigUrl)
-        put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL_URL, filmEvent2ImgThumbUrl)
+        put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL, filmEvent2ImgOrigUrl)
+        put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL, filmEvent2ImgThumbUrl)
         put(FilmEventEntry.COLUMN_UPDATED, filmEvent2Updated)
     }
 
