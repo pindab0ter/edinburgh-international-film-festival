@@ -15,6 +15,7 @@ open class AppGlideModuleImplementation : AppGlideModule() {
         builder.setDiskCache(InternalCacheDiskCacheFactory(context))
         builder.setDefaultRequestOptions(RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .fallback(R.drawable.ic_broken_image)
                 .error(R.drawable.ic_broken_image)
         )
     }

@@ -28,10 +28,10 @@ class FilmEventDAO(context: Context) {
         }
     }
 
-    fun getAll(): List<FilmEvent>? = contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null, null).run {
+    fun getAll(): List<FilmEvent> = contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null, null).run {
         if (count == 0) {
             close()
-            return null
+            return emptyList()
         }
 
         val filmEvents = ArrayList<FilmEvent>()

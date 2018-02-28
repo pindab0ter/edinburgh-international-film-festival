@@ -20,11 +20,8 @@ import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FilmEventFetcher(private val context: Context, private val listener: (filmEvents: List<FilmEvent>) -> Unit) {
+class FilmEventFetcher(private val context: Context, private val listener: (filmEvents: List<FilmEvent>) -> Unit, private val errorListener: (volleyError: VolleyError) -> Unit) {
     private val logTag = FilmEventFetcher::class.simpleName
-    private val errorListener: (volleyError: VolleyError) -> Unit = { volleyError ->
-        Log.e(logTag, "$volleyError")
-    }
 
     fun fetch() {
         val url = buildUrl(context)

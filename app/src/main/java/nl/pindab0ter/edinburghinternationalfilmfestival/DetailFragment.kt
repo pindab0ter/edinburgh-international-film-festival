@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -42,7 +41,6 @@ class DetailFragment : Fragment() {
 
         Glide.with(context!!)
                 .load(filmEvent?.imageOriginal)
-                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(object : SimpleTarget<Drawable>() {
                     override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                         activity?.toolbar_layout?.background = resource

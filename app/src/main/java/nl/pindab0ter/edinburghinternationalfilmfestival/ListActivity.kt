@@ -5,9 +5,11 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_master.*
 import kotlinx.android.synthetic.main.film_list.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.layout.activity_master
@@ -26,8 +28,12 @@ class ListActivity : AppCompatActivity() {
     private var genres: List<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // enableDebugMode()
+        enableDebugMode()
 
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onStart() {
         setContentView(activity_master)
 
         setSupportActionBar(toolbar)
@@ -36,8 +42,8 @@ class ListActivity : AppCompatActivity() {
         adapter = FilmEventRecyclerViewAdapter(this, twoPane)
         film_list.adapter = adapter
 
-        fetchFilmEvents()
-        super.onCreate(savedInstanceState)
+        GetFilmEventsFromDatabaseTask().execute()
+        super.onStart()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -73,57 +79,84 @@ class ListActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun fetchFilmEvents(view: View) = fetchFilmEvents()
-
-    private fun fetchFilmEvents() {
+    fun fetchFilmEvents(view: View) {
         GetFilmEventsFromDatabaseTask().execute()
     }
 
     @SuppressLint("StaticFieldLeak")
-    inner class GetFilmEventsFromDatabaseTask : AsyncTask<Unit, Unit, List<FilmEvent>?>() {
-        override fun doInBackground(vararg params: Unit?): List<FilmEvent>? = FilmEventDAO(this@ListActivity).getAll()
-        override fun onPostExecute(filmEvents: List<FilmEvent>?) {
-            if (filmEvents.orEmpty().isEmpty()) {
+    inner class GetFilmEventsFromDatabaseTask : AsyncTask<Unit, Unit, List<FilmEvent>>() {
+        override fun doInBackground(vararg params: Unit?): List<FilmEvent>? {
+            return FilmEventDAO(this@ListActivity).getAll()
+        }
+
+        override fun onPostExecute(filmEvents: List<FilmEvent>) {
+            if (filmEvents.isNotEmpty()) {
+                populateList(filmEvents)
+            } else {
                 FilmEventFetcher(this@ListActivity, { fetchedFilmEvents ->
                     populateList(fetchedFilmEvents)
                     InsertFilmEventsIntoDatabaseTask().execute(fetchedFilmEvents)
+                }, { volleyError ->
+                    Log.e(logTag, "$volleyError")
+                    showRetry()
                 }).fetch()
-            } else {
-                populateList(filmEvents)
             }
         }
     }
 
     @SuppressLint("StaticFieldLeak")
     inner class InsertFilmEventsIntoDatabaseTask : AsyncTask<List<FilmEvent>, Unit, Unit>() {
-        override fun doInBackground(vararg params: List<FilmEvent>?) = FilmEventDAO(this@ListActivity).insert(params.first().orEmpty())
+        override fun doInBackground(vararg params: List<FilmEvent>?) {
+            FilmEventDAO(this@ListActivity).insert(params.first().orEmpty())
+        }
     }
 
-    fun populateList(filmEvents: List<FilmEvent>?) {
-        if (filmEvents != null) {
+    private fun populateList(filmEvents: List<FilmEvent>) {
+        if (filmEvents.isNotEmpty()) {
             adapter.swapFilmEvents(filmEvents)
             genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
+            invalidateOptionsMenu()
 
             film_list.visibility = View.VISIBLE
             failed_to_load_events.visibility = View.GONE
-        }
 
+            filmEvents.forEach { filmEvent ->
+                Glide.with(this@ListActivity)
+                        .load(filmEvent.imageThumbnail)
+                        .load(filmEvent.imageOriginal)
+                        .preload()
+            }
+        } else {
+            showRetry()
+        }
+    }
+
+    private fun showRetry() {
+        film_list.visibility = View.GONE
+        failed_to_load_events.visibility = View.VISIBLE
         invalidateOptionsMenu()
     }
 
-    private fun enableDebugMode() {
-        FilmEventDbHelper(this).apply {
-            dropAllTablesAndRecreate(writableDatabase)
-            close()
+    @SuppressLint("StaticFieldLeak")
+    private fun enableDebugMode() = object : AsyncTask<Unit, Unit, Unit>() {
+        override fun doInBackground(vararg params: Unit?) {
+
+            FilmEventDbHelper(this@ListActivity).apply {
+                deleteDatabase(FilmEventDbHelper.DATABASE_NAME)
+                close()
+            }
+
+            Glide.get(applicationContext).clearDiskCache()
+
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build())
+            StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .penaltyDeath()
+                    .build())
         }
-        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .build())
-        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .penaltyDeath()
-                .build())
-    }
+    }.execute()
 }
