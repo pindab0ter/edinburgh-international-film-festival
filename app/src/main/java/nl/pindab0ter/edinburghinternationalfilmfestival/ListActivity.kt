@@ -29,17 +29,15 @@ class ListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // enableDebugMode()
+        setContentView(activity_master)
+        setSupportActionBar(toolbar)
+        toolbar.title = title
+        adapter = FilmEventRecyclerViewAdapter(this, twoPane)
+        film_list.adapter = adapter
         super.onCreate(savedInstanceState)
     }
 
     override fun onStart() {
-        setContentView(activity_master)
-        setSupportActionBar(toolbar)
-        toolbar.title = title
-
-        adapter = FilmEventRecyclerViewAdapter(this, twoPane)
-        film_list.adapter = adapter
-
         GetFilmEventsFromDatabaseTask().execute()
         super.onStart()
     }
@@ -113,10 +111,10 @@ class ListActivity : AppCompatActivity() {
         if (filmEvents.isNotEmpty()) {
             adapter.swapFilmEvents(filmEvents)
             genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
-            invalidateOptionsMenu()
 
             film_list.visibility = View.VISIBLE
             failed_to_load_events.visibility = View.GONE
+            invalidateOptionsMenu()
 
             filmEvents.forEach { filmEvent ->
                 Glide.with(this@ListActivity)
