@@ -28,14 +28,12 @@ class ListActivity : AppCompatActivity() {
     private var genres: List<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableDebugMode()
-
+        // enableDebugMode()
         super.onCreate(savedInstanceState)
     }
 
     override fun onStart() {
         setContentView(activity_master)
-
         setSupportActionBar(toolbar)
         toolbar.title = title
 
@@ -138,25 +136,26 @@ class ListActivity : AppCompatActivity() {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private fun enableDebugMode() = object : AsyncTask<Unit, Unit, Unit>() {
-        override fun doInBackground(vararg params: Unit?) {
-
-            FilmEventDbHelper(this@ListActivity).apply {
-                deleteDatabase(FilmEventDbHelper.DATABASE_NAME)
-                close()
-            }
-
-            Glide.get(applicationContext).clearDiskCache()
-
-            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
-                    .detectAll()
-                    .penaltyLog()
-                    .build())
-            StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
-                    .detectAll()
-                    .penaltyLog()
-                    .penaltyDeath()
-                    .build())
+    private fun enableDebugMode() {
+        FilmEventDbHelper(this@ListActivity).apply {
+            deleteDatabase(FilmEventDbHelper.DATABASE_NAME)
+            close()
         }
-    }.execute()
+
+        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .build())
+        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .penaltyDeath()
+                .build())
+
+        object : AsyncTask<Unit, Unit, Unit>() {
+            override fun doInBackground(vararg params: Unit?) {
+                Glide.get(applicationContext).clearDiskCache()
+            }
+        }.execute()
+    }
 }
