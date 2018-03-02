@@ -10,9 +10,10 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.C
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_FILM_EVENTS
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_FILM_EVENT_BY_ID
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_FILM_EVENT_BY_CODE
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_PERFORMANCES
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_PERFORMANCE_BY_FILM_EVENT_CODE
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_PERFORMANCES_BY_FILM_EVENT_CODE
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_PERFORMANCES_BY_ID
 
 class FilmEventProvider : ContentProvider() {
     private lateinit var filmEventDbHelper: FilmEventDbHelper
@@ -109,16 +110,35 @@ class FilmEventProvider : ContentProvider() {
     override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor = with(filmEventDbHelper.readableDatabase) {
         when (uriMatcher.match(uri)) {
             CODE_FILM_EVENTS -> query(FilmEventEntry.TABLE_NAME, null, null, null, null, null, null)
-            CODE_FILM_EVENT_BY_CODE -> query(FilmEventEntry.TABLE_NAME, null, "${FilmEventEntry.COLUMN_CODE} = ?", Array(1) { uri.lastPathSegment }, null, null, null)
+            CODE_FILM_EVENT_BY_CODE -> query(FilmEventEntry.TABLE_NAME, null, "${FilmEventEntry.COLUMN_CODE} = ?", arrayOf(uri.lastPathSegment), null, null, null)
             CODE_PERFORMANCES -> query(PerformanceEntry.TABLE_NAME, null, null, null, null, null, null)
             CODE_PERFORMANCES_BY_FILM_EVENT_CODE -> query(PerformanceEntry.TABLE_NAME, null, "${PerformanceEntry.COLUMN_FILM_EVENT_CODE} = ?", Array(1) { uri.lastPathSegment }, null, null, null)
             else -> throw IllegalArgumentException("No match found for uri $uri")
         }
     }
 
-    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int = with(filmEventDbHelper.writableDatabase) {
+        when (uriMatcher.match(uri)) {
+            CODE_FILM_EVENT_BY_CODE -> {
+                beginTransaction()
+                val rowsAffected = update(FilmEventEntry.TABLE_NAME, values, "${FilmEventEntry.COLUMN_CODE} = ?", arrayOf(uri.lastPathSegment))
+                if (rowsAffected > 0) setTransactionSuccessful()
+                endTransaction()
+                close()
+                return rowsAffected
+            }
+            CODE_PERFORMANCES_BY_ID -> {
+                beginTransaction()
+                val rowsAffected = update(PerformanceEntry.TABLE_NAME, values, "${PerformanceEntry.COLUMN_ID} = ?", arrayOf(uri.lastPathSegment))
+                if (rowsAffected > 0) setTransactionSuccessful()
+                endTransaction()
+                close()
+                return rowsAffected
+            }
+            else -> throw IllegalArgumentException("No match found for uri $uri")
+        }
     }
+
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int = with(filmEventDbHelper.writableDatabase) {
         fun performTransaction(table: String, selection: String?, selectionArgs: Array<out String>?): Int {
@@ -149,13 +169,15 @@ class FilmEventProvider : ContentProvider() {
         const val CODE_FILM_EVENTS = 100
         const val CODE_FILM_EVENT_BY_CODE = 101
         const val CODE_PERFORMANCES = 200
-        const val CODE_PERFORMANCES_BY_FILM_EVENT_CODE = 201
+        const val CODE_PERFORMANCES_BY_ID = 201
+        const val CODE_PERFORMANCES_BY_FILM_EVENT_CODE = 202
 
         val uriMatcher = UriMatcher(UriMatcher.NO_MATCH).apply {
             addURI(CONTENT_AUTHORITY, PATH_FILM_EVENTS, CODE_FILM_EVENTS)
-            addURI(CONTENT_AUTHORITY, PATH_FILM_EVENT_BY_ID, CODE_FILM_EVENT_BY_CODE)
+            addURI(CONTENT_AUTHORITY, PATH_FILM_EVENT_BY_CODE + "/#", CODE_FILM_EVENT_BY_CODE)
             addURI(CONTENT_AUTHORITY, PATH_PERFORMANCES, CODE_PERFORMANCES)
-            addURI(CONTENT_AUTHORITY, PATH_PERFORMANCE_BY_FILM_EVENT_CODE, CODE_PERFORMANCES_BY_FILM_EVENT_CODE)
+            addURI(CONTENT_AUTHORITY, PATH_PERFORMANCES_BY_ID + "/#", CODE_PERFORMANCES_BY_ID)
+            addURI(CONTENT_AUTHORITY, PATH_PERFORMANCES_BY_FILM_EVENT_CODE + "/#", CODE_PERFORMANCES_BY_FILM_EVENT_CODE)
         }
     }
 }

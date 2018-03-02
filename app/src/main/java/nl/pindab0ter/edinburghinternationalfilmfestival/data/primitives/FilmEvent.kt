@@ -91,17 +91,25 @@ class FilmEvent() : Observable() {
 
     class Performance() {
         constructor(cv: ContentValues) : this() {
+            this.id = cv.getAsInteger(PerformanceEntry.COLUMN_ID)
             this.start = databaseStringToDate(cv.getAsString(PerformanceEntry.COLUMN_START))
             this.end = databaseStringToDate(cv.getAsString(PerformanceEntry.COLUMN_END))
+            this.scheduled = cv.getAsInteger(PerformanceEntry.COLUMN_SCHEDULED) == 1
         }
 
-        constructor(start: Date?, end: Date?) : this() {
+        constructor(id: Int?, start: Date?, end: Date?, scheduled: Boolean) : this() {
+            this.id = id
             this.start = start
             this.end = end
+            this.scheduled = scheduled
         }
 
+        constructor(start: Date?, end: Date?, scheduled: Boolean) : this(null, start, end, scheduled)
+
+        var id: Int? = null
         var start: Date? = null
         var end: Date? = null
+        var scheduled: Boolean? = null
     }
 
     var performances: Array<Performance>? = null

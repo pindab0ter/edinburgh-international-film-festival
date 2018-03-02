@@ -37,10 +37,12 @@ object DataInstances {
     //
     const val filmEvent1Performance1Start = "2015-06-19 20:35:00"
     const val filmEvent1Performance1End = "2015-06-19 22:25:00"
+    const val filmEvent1Performance1Scheduled = false
 
     val filmEvent1Performance1ContentValues = ContentValues().apply {
         put(PerformanceEntry.COLUMN_START, filmEvent1Performance1Start)
         put(PerformanceEntry.COLUMN_END, filmEvent1Performance1End)
+        put(PerformanceEntry.COLUMN_SCHEDULED, if (filmEvent1Performance1Scheduled) 1 else 0)
     }
 
     val filmEvent1Performance1 = FilmEvent.Performance(filmEvent1Performance1ContentValues)
@@ -50,10 +52,12 @@ object DataInstances {
     //
     const val filmEvent1Performance2Start = "2015-06-23 18:05:00"
     const val filmEvent1Performance2End = "2015-06-23 19:55:00"
+    const val filmEvent1Performance2Scheduled = true
 
     val filmEvent1Performance2ContentValues = ContentValues().apply {
         put(PerformanceEntry.COLUMN_START, filmEvent1Performance2Start)
         put(PerformanceEntry.COLUMN_END, filmEvent1Performance2End)
+        put(PerformanceEntry.COLUMN_SCHEDULED, if (filmEvent1Performance2Scheduled) 1 else 0)
     }
 
     val filmEvent1Performance2 = FilmEvent.Performance(filmEvent1Performance2ContentValues)
@@ -93,10 +97,12 @@ object DataInstances {
     //
     const val filmEvent2Performance1Start = "2015-06-19 18:10:00"
     const val filmEvent2Performance1End = "2015-06-19 19:43:00"
+    const val filmEvent2Performance1Scheduled = false
 
     val filmEvent2Performance1ContentValues = ContentValues().apply {
         put(PerformanceEntry.COLUMN_START, filmEvent2Performance1Start)
         put(PerformanceEntry.COLUMN_END, filmEvent2Performance1End)
+        put(PerformanceEntry.COLUMN_SCHEDULED, filmEvent2Performance2Scheduled)
     }
 
     val filmEvent2Performance1 = FilmEvent.Performance(filmEvent2Performance1ContentValues)
@@ -106,10 +112,13 @@ object DataInstances {
     //
     const val filmEvent2Performance2Start = "2015-06-21 18:10:00"
     const val filmEvent2Performance2End = "2015-06-21 19:43:00"
+    const val filmEvent2Performance2Scheduled = true
 
     val filmEvent2Performance2ContentValues = ContentValues().apply {
         put(PerformanceEntry.COLUMN_START, filmEvent2Performance2Start)
         put(PerformanceEntry.COLUMN_END, filmEvent2Performance2End)
+        put(PerformanceEntry.COLUMN_SCHEDULED, filmEvent2Performance2Scheduled)
+
     }
 
     val filmEvent2Performance2 = FilmEvent.Performance(filmEvent2Performance2ContentValues)

@@ -23,10 +23,12 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2ContentValues
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance1ContentValues
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance2ContentValues
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDbHelper
 import org.junit.After
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -56,7 +58,7 @@ class DatabaseTest {
     fun insertAndQuery() {
         // Insert filmEvent1ContentValues
         val filmEvent1Uri = contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent1ContentValues)
-        val filmEvent1PerformancesUri = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(filmEvent1Uri.lastPathSegment).build()
+        val filmEvent1PerformancesUri = PerformanceEntry.BY_FILM_EVENT_CODE_URI.buildUpon().appendPath(filmEvent1Uri.lastPathSegment).build()
 
         // Insert performances
         contentResolver.insert(filmEvent1PerformancesUri, filmEvent1Performance1ContentValues)
@@ -105,6 +107,8 @@ class DatabaseTest {
             assertEquals(2, getInt(getColumnIndex(PerformanceEntry.COLUMN_ID)))
             assertEquals(filmEvent1Performance2Start, getString(getColumnIndex(PerformanceEntry.COLUMN_START)))
             assertEquals(filmEvent1Performance2End, getString(getColumnIndex(PerformanceEntry.COLUMN_END)))
+
+            close()
         }
     }
 
@@ -115,6 +119,8 @@ class DatabaseTest {
 
         contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null).apply {
             assertEquals("Expecting to find one performance entry", 1, count)
+
+            close()
         }
     }
 
@@ -124,16 +130,20 @@ class DatabaseTest {
 
         contentResolver.query(FilmEventEntry.CONTENT_URI, null, null, null).apply {
             assertEquals("Expecting to find two film event entries", 2, count)
+
+            close()
         }
 
-        val performance1Url = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(filmEvent1Code).build()
+        val performance1Url = PerformanceEntry.BY_FILM_EVENT_CODE_URI.buildUpon().appendPath(filmEvent1Code).build()
         contentResolver.bulkInsert(performance1Url, arrayOf(filmEvent1Performance1ContentValues, filmEvent1Performance2ContentValues))
 
-        val performance2Url = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(filmEvent2Code).build()
+        val performance2Url = PerformanceEntry.BY_FILM_EVENT_CODE_URI.buildUpon().appendPath(filmEvent2Code).build()
         contentResolver.bulkInsert(performance2Url, arrayOf(filmEvent2Performance1ContentValues, filmEvent2Performance2ContentValues))
 
         contentResolver.query(PerformanceEntry.CONTENT_URI, null, null, null).apply {
             assertEquals("Expecting to find four performance entries", 4, count)
+
+            close()
         }
     }
 
@@ -141,7 +151,7 @@ class DatabaseTest {
     fun foreignKey() {
         // Insert filmEvent1ContentValues
         val filmEvent1Uri = contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent1ContentValues)
-        val filmEvent1PerformancesUri = PerformanceEntry.CONTENT_URI.buildUpon().appendPath(filmEvent1Uri.lastPathSegment).build()
+        val filmEvent1PerformancesUri = PerformanceEntry.BY_FILM_EVENT_CODE_URI.buildUpon().appendPath(filmEvent1Uri.lastPathSegment).build()
 
         // Insert performances
         contentResolver.insert(filmEvent1PerformancesUri, filmEvent1Performance1ContentValues)
@@ -152,6 +162,33 @@ class DatabaseTest {
 
         contentResolver.query(filmEvent1PerformancesUri, null, null, null).apply {
             assertEquals("Expecting to find no performance entries", 0, count)
+
+            close()
+        }
+    }
+
+    @Test
+    fun updatePerformance() {
+        val filmEvent1Uri = contentResolver.insert(FilmEventEntry.CONTENT_URI, filmEvent1ContentValues)
+        val filmEvent1PerformancesUri = PerformanceEntry.BY_FILM_EVENT_CODE_URI.buildUpon().appendPath(filmEvent1Uri.lastPathSegment).build()
+        contentResolver.bulkInsert(filmEvent1PerformancesUri, arrayOf(filmEvent1Performance1ContentValues, filmEvent1Performance2ContentValues))
+
+        val performanceUri = PerformanceEntry.BY_ID_URI.buildUpon().appendPath("1").build()
+
+        filmEvent1Performance1ContentValues.put(PerformanceEntry.COLUMN_SCHEDULED, true)
+
+        contentResolver.update(performanceUri, filmEvent1Performance1ContentValues, null, null)
+
+        contentResolver.query(filmEvent1PerformancesUri, null, null, null, null).apply {
+            moveToFirst()
+
+            Assert.assertEquals(1, getInt(getColumnIndex(FilmEventContract.PerformanceEntry.COLUMN_ID)))
+            Assert.assertEquals(filmEvent1Code, getString(getColumnIndex(FilmEventContract.PerformanceEntry.COLUMN_FILM_EVENT_CODE)))
+            Assert.assertEquals(filmEvent1Performance1Start, getString(getColumnIndex(FilmEventContract.PerformanceEntry.COLUMN_START)))
+            Assert.assertEquals(filmEvent1Performance1End, getString(getColumnIndex(FilmEventContract.PerformanceEntry.COLUMN_END)))
+            Assert.assertEquals(true, getInt(getColumnIndex(FilmEventContract.PerformanceEntry.COLUMN_SCHEDULED)) == 1)
+
+            close()
         }
     }
 }
