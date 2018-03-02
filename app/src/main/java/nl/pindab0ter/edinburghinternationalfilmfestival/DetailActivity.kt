@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.view.View
 import kotlinx.android.synthetic.main.activity_detail.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.FILM_EVENT_CODE
 import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_TAG
@@ -54,14 +55,14 @@ class DetailActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            val fragment = DetailFragment().apply {
+            val detailFragment = DetailFragment().apply {
                 arguments = Bundle().apply {
                     putString(FILM_EVENT_CODE, intent.getStringExtra(FILM_EVENT_CODE))
                 }
             }
 
             supportFragmentManager.beginTransaction()
-                    .add(R.id.detail_container, fragment)
+                    .add(R.id.detail_container, detailFragment)
                     .commit()
         }
     }

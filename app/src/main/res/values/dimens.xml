@@ -7,4 +7,5 @@
     <dimen name="list_item_height">64dp</dimen>
     <dimen name="list_item_image_size">64dp</dimen>
     <dimen name="list_item_padding">16dp</dimen>
+    <dimen name="performance_list_item_height">32dp</dimen>
 </resources>

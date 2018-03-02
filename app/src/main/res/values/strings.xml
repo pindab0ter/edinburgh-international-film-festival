@@ -28,4 +28,6 @@
     <string name="share_text_with_rating">Hi, I rated \"%1$s\" %2$s.\nFind out more here:\n%3$s</string>
     <string name="failed_to_load_events">Failed to load events</string>
     <string name="try_again">Try again</string>
+    <string name="add_to_schedule">Add</string>
+    <string name="remove_from_schedule">Added</string>
 </resources>
