@@ -11,6 +11,7 @@
                 android:checkableBehavior="single">
                 <item
                     android:id="@+id/sort_title_ascending"
+                    android:checked="true"
                     android:title="@string/sort_alphabetically_ascending" />
                 <item
                     android:id="@+id/sort_title_descending"

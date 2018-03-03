@@ -24,7 +24,7 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: MainActivity, pri
     private var unfilteredFilmEvents: List<FilmEvent>? = null
     private var filmEvents: List<FilmEvent>? = null
 
-    private var sortedBy: Int? = null
+    private var sortedBy: Int = R.id.sort_title_ascending
     private var filteredByGenre: CharSequence? = null
 
     init {
@@ -107,6 +107,7 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: MainActivity, pri
     fun swapFilmEvents(filmEvents: List<FilmEvent>) {
         this.unfilteredFilmEvents = filmEvents
         this.filmEvents = unfilteredFilmEvents
+        sortBy(sortedBy)
         notifyDataSetChanged()
     }
 
