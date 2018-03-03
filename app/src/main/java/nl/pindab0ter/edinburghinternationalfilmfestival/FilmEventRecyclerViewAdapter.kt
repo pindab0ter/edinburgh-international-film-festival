@@ -2,6 +2,7 @@ package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -44,7 +45,8 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, pri
                 val intent = Intent(view.context, DetailActivity::class.java).apply {
                     putExtra(FILM_EVENT_CODE, filmEventCode)
                 }
-                view.context.startActivity(intent)
+                val options = ActivityOptionsCompat.makeClipRevealAnimation(view, 0, 0, view.width, view.height).toBundle()
+                view.context.startActivity(intent, options)
             }
         }
     }

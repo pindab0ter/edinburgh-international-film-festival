@@ -35,19 +35,9 @@ class DetailFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        activity?.toolbar_layout?.title = filmEvent?.title
-
         val rootView = inflater.inflate(R.layout.fragment_detail, container, false)
 
         rootView.showings_list.adapter = performanceListAdapter
-
-        Glide.with(context!!)
-                .load(filmEvent?.imageOriginal)
-                .into(object : SimpleTarget<Drawable>() {
-                    override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-                        activity?.toolbar_layout?.background = resource
-                    }
-                })
 
         rootView.tv_detail_description.text = Html.fromHtml(filmEvent?.description)
         rootView.tv_detail_showings_label.text = resources.getQuantityString(R.plurals.showings, filmEvent?.performances?.size ?: 2)
