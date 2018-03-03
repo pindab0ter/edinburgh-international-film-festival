@@ -36,8 +36,6 @@ class ListActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar_main_activity))
         supportActionBar?.apply {
             setDisplayShowTitleEnabled(false)
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_menu)
         }
 
         button_toolbar_filter.setOnClickListener {
@@ -97,16 +95,18 @@ class ListActivity : AppCompatActivity() {
         else -> false
     }
 
-    fun fetchFilmEvents(view: View? = null) = GetFilmEventsFromDatabaseTask(this, { filmEvents ->
-        if (filmEvents.isNotEmpty()) populateList(filmEvents)
-        else FilmEventFetcher(this, { fetchedFilmEvents ->
-            populateList(fetchedFilmEvents)
-            InsertFilmEventsIntoDatabaseTask(this).execute(fetchedFilmEvents)
-        }, { volleyError ->
-            Log.e(logTag, "$volleyError")
-            showRetry()
-        }).fetch()
-    }).execute()!!
+    fun fetchFilmEvents(view: View? = null) {
+        GetFilmEventsFromDatabaseTask(this, { filmEvents ->
+            if (filmEvents.isNotEmpty()) populateList(filmEvents)
+            else FilmEventFetcher(this, { fetchedFilmEvents ->
+                populateList(fetchedFilmEvents)
+                InsertFilmEventsIntoDatabaseTask(this).execute(fetchedFilmEvents)
+            }, { volleyError ->
+                Log.e(logTag, "$volleyError")
+                showRetry()
+            }).fetch()
+        }).execute()!!
+    }
 
     private fun populateList(filmEvents: List<FilmEvent>) = if (filmEvents.isNotEmpty()) {
         adapter.swapFilmEvents(filmEvents)

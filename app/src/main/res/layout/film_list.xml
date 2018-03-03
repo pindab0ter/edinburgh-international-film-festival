@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    tools:context=".ListActivity">
 
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/film_list"
         android:name="nl.pindab0ter.edinburghinternationalfilmfestival.FilmListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible"
         app:layoutManager="LinearLayoutManager"
-        tools:context="nl.pindab0ter.edinburghinternationalfilmfestival.ListActivity"
         tools:listitem="@layout/main_list_item" />
 
     <LinearLayout
@@ -40,5 +41,4 @@
             android:text="@string/try_again" />
 
     </LinearLayout>
-
 </LinearLayout>
