@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Edinburgh International Film Festival</string>
+    <string name="app_name">Film Festival</string>
     <string name="content_authority">nl.pindab0ter.edinburghinternationalfilmfestival</string>
     <string name="edinburgh_festival_city_base_url" translatable="false">https://api.edinburghfestivalcity.com</string>
     <string name="edinburgh_festival_city_base_path" translatable="false">events</string>
@@ -17,7 +17,7 @@
     <string name="sort_first_performance_date_descending">First performance (descending)</string>
     <string name="sort_label">Sort</string>
     <string name="filter_label">Filter</string>
-    <string name="filter_none">No filter</string>
+    <string name="filter_none">All</string>
     <string name="description_label">Description</string>
     <string name="failed_to_load_genres">Failed to load genres</string>
     <string name="rate_and_share_title">Rate and share</string>

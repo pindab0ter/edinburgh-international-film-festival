@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/filter_group"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/filter_failed_to_load"
+            android:checkable="false"
+            android:orderInCategory="0"
+            android:title="@string/failed_to_load_genres"
+            android:visible="true" />
+        <item
+            android:id="@+id/filter_all"
+            android:checked="true"
+            android:orderInCategory="0"
+            android:title="@string/filter_none"
+            android:visible="false" />
+    </group>
+</menu>

@@ -6,6 +6,7 @@
     android:layout_height="@dimen/list_item_height"
     android:orientation="horizontal"
     android:paddingLeft="@dimen/list_item_padding"
+    android:theme="@style/AppTheme.FilmListOverlay"
     android:paddingRight="@dimen/list_item_padding">
 
     <ImageView
@@ -47,7 +48,7 @@
         android:layout_marginLeft="@dimen/text_margin"
         android:layout_marginRight="@dimen/text_margin"
         android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textAppearance="?textAppearanceListItemSmall"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/film_list_image"

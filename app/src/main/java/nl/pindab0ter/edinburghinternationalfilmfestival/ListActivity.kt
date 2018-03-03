@@ -9,10 +9,10 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.PopupMenu
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.activity_master.*
 import kotlinx.android.synthetic.main.film_list.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.R.layout.activity_master
+import kotlinx.android.synthetic.main.toolbar_activity_master.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDbHelper
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.FilmEventFetcher
@@ -26,13 +26,24 @@ class ListActivity : AppCompatActivity() {
     private val twoPane: Boolean // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
         get() = detail_container != null
     private lateinit var adapter: FilmEventRecyclerViewAdapter
+    private lateinit var popupMenu: PopupMenu
     private var genres: List<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // enableDebugMode()
-        setContentView(activity_master)
-        setSupportActionBar(toolbar)
-        toolbar.title = title
+
+        setContentView(R.layout.activity_master)
+        setSupportActionBar(findViewById(R.id.toolbar_main_activity))
+        supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_menu)
+        }
+
+        button_toolbar_filter.setOnClickListener {
+            popupMenu.show()
+        }
+
         adapter = FilmEventRecyclerViewAdapter(this, twoPane)
         film_list.adapter = adapter
         super.onCreate(savedInstanceState)
@@ -43,39 +54,47 @@ class ListActivity : AppCompatActivity() {
         super.onStart()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(menu_list_activity, menu)
-
-        if (genres == null) return true
-
-        menu?.findItem(R.id.filter_placeholder)?.isVisible = false
-        menu?.findItem(R.id.filter_none)?.isVisible = true
-
-        menu?.findItem(R.id.filter)?.subMenu?.apply {
-            genres!!.forEachIndexed { index, genre ->
-                add(R.id.filter_group, index, index, genre)
-            }
-            setGroupCheckable(R.id.filter_group, true, true)
-        }
-
+        popupMenu = createFilterMenu()
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.groupId) {
-            R.id.sort_group -> {
-                adapter.sortBy(item.itemId)
-                item.isChecked = true
-            }
-            R.id.filter_group -> {
-                if (item.itemId == R.id.filter_placeholder) return false
-                adapter.filterBy(item.title)
-                item.isChecked = true
+    private fun createFilterMenu(): PopupMenu = PopupMenu(this, findViewById(R.id.button_toolbar_filter)).apply {
+        menuInflater.inflate(R.menu.menu_filter, this@apply.menu)
+
+        with(this.menu) {
+            if (genres.orEmpty().isEmpty()) return@apply
+
+            findItem(R.id.filter_failed_to_load)?.isVisible = false
+            findItem(R.id.filter_all)?.isVisible = true
+
+            genres?.forEachIndexed { index, genre ->
+                add(R.id.filter_group, index, index, genre)
+                setGroupCheckable(R.id.filter_group, true, true)
             }
         }
-        return super.onOptionsItemSelected(item)
+
+        setOnMenuItemClickListener { item ->
+            if (item.itemId == R.id.filter_failed_to_load) return@setOnMenuItemClickListener false
+            adapter.filterBy(item.title)
+            button_toolbar_filter.text = item.title
+            item.isChecked = true
+            true
+        }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.groupId) {
+        R.id.home -> {
+            // TODO: Show navigation drawer
+            true
         }
+        R.id.sort_group -> {
+            adapter.sortBy(item.itemId)
+            item.isChecked = true
+            true
+        }
+        else -> false
     }
 
     fun fetchFilmEvents(view: View? = null) = GetFilmEventsFromDatabaseTask(this, { filmEvents ->
