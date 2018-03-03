@@ -17,7 +17,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEven
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplay
 import java.util.*
 
-class FilmEventRecyclerViewAdapter(private val parentActivity: ListActivity, private val twoPane: Boolean) : RecyclerView.Adapter<FilmEventRecyclerViewAdapter.ViewHolder>(), Observer {
+class FilmEventRecyclerViewAdapter(private val parentActivity: MainActivity, private val twoPane: Boolean) : RecyclerView.Adapter<FilmEventRecyclerViewAdapter.ViewHolder>(), Observer {
 
     private val onClickListener: View.OnClickListener
 

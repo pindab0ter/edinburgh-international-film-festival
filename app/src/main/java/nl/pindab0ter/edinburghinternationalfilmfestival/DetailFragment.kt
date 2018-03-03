@@ -1,24 +1,18 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
-import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDAO
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 
 /**
  * A fragment representing a single FilmEvent detail screen.
- * This fragment is either contained in a [ListActivity]
+ * This fragment is either contained in a [MainActivity]
  * in two-pane mode (on tablets) or a [DetailActivity]
  * on handsets.
  */

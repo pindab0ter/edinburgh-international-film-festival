@@ -9,7 +9,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="nl.pindab0ter.edinburghinternationalfilmfestival.ListActivity">
+    tools:context="nl.pindab0ter.edinburghinternationalfilmfestival.MainActivity">
 
     <!--
     This layout is a two-pane layout for the Films
@@ -33,7 +33,7 @@
             android:layout_marginRight="16dp"
             android:visibility="visible"
             app:layoutManager="LinearLayoutManager"
-            tools:context="nl.pindab0ter.edinburghinternationalfilmfestival.ListActivity"
+            tools:context="nl.pindab0ter.edinburghinternationalfilmfestival.MainActivity"
             tools:listitem="@layout/main_list_item" />
 
         <LinearLayout

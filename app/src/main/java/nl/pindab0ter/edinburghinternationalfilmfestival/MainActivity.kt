@@ -20,9 +20,9 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEven
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.GetFilmEventsFromDatabaseTask
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.InsertFilmEventsIntoDatabaseTask
 
-class ListActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
-    private val logTag = ListActivity::class.simpleName
+    private val logTag = MainActivity::class.simpleName
     private val twoPane: Boolean // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
         get() = detail_container != null
     private lateinit var adapter: FilmEventRecyclerViewAdapter
@@ -32,7 +32,7 @@ class ListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // enableDebugMode()
 
-        setContentView(R.layout.activity_master)
+        setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar_main_activity))
         supportActionBar?.apply {
             setDisplayShowTitleEnabled(false)
@@ -69,7 +69,6 @@ class ListActivity : AppCompatActivity() {
 
             genres?.forEachIndexed { index, genre ->
                 add(R.id.filter_group, index, index, genre)
-                setGroupCheckable(R.id.filter_group, true, true)
             }
         }
 
@@ -117,7 +116,7 @@ class ListActivity : AppCompatActivity() {
         invalidateOptionsMenu()
 
         filmEvents.forEach { filmEvent ->
-            Glide.with(this@ListActivity)
+            Glide.with(this@MainActivity)
                     .load(filmEvent.imageThumbnail)
                     .load(filmEvent.imageOriginal)
                     .preload()
@@ -134,7 +133,7 @@ class ListActivity : AppCompatActivity() {
 
     @SuppressLint("StaticFieldLeak")
     private fun enableDebugMode() {
-        FilmEventDbHelper(this@ListActivity).apply {
+        FilmEventDbHelper(this@MainActivity).apply {
             deleteDatabase(FilmEventDbHelper.DATABASE_NAME)
             close()
         }

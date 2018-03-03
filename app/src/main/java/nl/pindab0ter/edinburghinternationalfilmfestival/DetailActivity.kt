@@ -1,13 +1,9 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
@@ -23,7 +19,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEven
  * An activity representing a single FilmEvent detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a [ListActivity].
+ * in a [MainActivity].
  */
 class DetailActivity : AppCompatActivity() {
     private var filmEvent: FilmEvent? = null
