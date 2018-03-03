@@ -14,10 +14,11 @@ import kotlinx.android.synthetic.main.activity_master.*
 import kotlinx.android.synthetic.main.film_list.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.layout.activity_master
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDAO
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDbHelper
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.FilmEventFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.GetFilmEventsFromDatabaseTask
+import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.InsertFilmEventsIntoDatabaseTask
 
 class ListActivity : AppCompatActivity() {
 
@@ -38,7 +39,7 @@ class ListActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        GetFilmEventsFromDatabaseTask().execute()
+        fetchFilmEvents()
         super.onStart()
     }
 
@@ -74,57 +75,36 @@ class ListActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    fun fetchFilmEvents(view: View) {
-        GetFilmEventsFromDatabaseTask().execute()
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    inner class GetFilmEventsFromDatabaseTask : AsyncTask<Unit, Unit, List<FilmEvent>>() {
-        override fun doInBackground(vararg params: Unit?): List<FilmEvent>? {
-            return FilmEventDAO(this@ListActivity).getAll()
-        }
-
-        override fun onPostExecute(filmEvents: List<FilmEvent>) {
-            if (filmEvents.isNotEmpty()) {
-                populateList(filmEvents)
-            } else {
-                FilmEventFetcher(this@ListActivity, { fetchedFilmEvents ->
-                    populateList(fetchedFilmEvents)
-                    InsertFilmEventsIntoDatabaseTask().execute(fetchedFilmEvents)
-                }, { volleyError ->
-                    Log.e(logTag, "$volleyError")
-                    showRetry()
-                }).fetch()
-            }
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    inner class InsertFilmEventsIntoDatabaseTask : AsyncTask<List<FilmEvent>, Unit, Unit>() {
-        override fun doInBackground(vararg params: List<FilmEvent>?) {
-            FilmEventDAO(this@ListActivity).insert(params.first().orEmpty())
-        }
-    }
-
-    private fun populateList(filmEvents: List<FilmEvent>) {
-        if (filmEvents.isNotEmpty()) {
-            adapter.swapFilmEvents(filmEvents)
-            genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
-
-            film_list.visibility = View.VISIBLE
-            failed_to_load_events.visibility = View.GONE
-            invalidateOptionsMenu()
-
-            filmEvents.forEach { filmEvent ->
-                Glide.with(this@ListActivity)
-                        .load(filmEvent.imageThumbnail)
-                        .load(filmEvent.imageOriginal)
-                        .preload()
-            }
-        } else {
+    fun fetchFilmEvents(view: View? = null) = GetFilmEventsFromDatabaseTask(this, { filmEvents ->
+        if (filmEvents.isNotEmpty()) populateList(filmEvents)
+        else FilmEventFetcher(this, { fetchedFilmEvents ->
+            populateList(fetchedFilmEvents)
+            InsertFilmEventsIntoDatabaseTask(this).execute(fetchedFilmEvents)
+        }, { volleyError ->
+            Log.e(logTag, "$volleyError")
             showRetry()
+        }).fetch()
+    }).execute()!!
+
+    private fun populateList(filmEvents: List<FilmEvent>) = if (filmEvents.isNotEmpty()) {
+        adapter.swapFilmEvents(filmEvents)
+        genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
+
+        film_list.visibility = View.VISIBLE
+        failed_to_load_events.visibility = View.GONE
+        invalidateOptionsMenu()
+
+        filmEvents.forEach { filmEvent ->
+            Glide.with(this@ListActivity)
+                    .load(filmEvent.imageThumbnail)
+                    .load(filmEvent.imageOriginal)
+                    .preload()
         }
+    } else {
+        showRetry()
     }
 
     private fun showRetry() {
