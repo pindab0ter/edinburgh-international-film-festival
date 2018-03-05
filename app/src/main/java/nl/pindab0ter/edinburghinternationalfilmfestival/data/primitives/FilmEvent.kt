@@ -9,14 +9,14 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.databaseString
 import java.util.*
 
 class FilmEvent() : Observable() {
-    constructor(code: String?, title: String?, description: String?, genreTags: String, website: String?, imageOriginalUrl: String?, imageThumbnailUrl: String?, updated: String?) : this() {
+    constructor(code: String?, title: String?, description: String?, genreTags: String?, website: String?, imageOriginal: String?, imageThumbnail: String?, updated: String?) : this() {
         this.code = code
         this.title = title
         this.description = description
         this._genreTags = genreTags
         this.website = Uri.parse(website)
-        this.imageOriginal = Uri.parse(imageOriginalUrl)
-        this.imageThumbnail = Uri.parse(imageThumbnailUrl)
+        this.imageOriginal = Uri.parse(imageOriginal)
+        this.imageThumbnail = Uri.parse(imageThumbnail)
         this.updated = databaseStringToDate(updated)
     }
 

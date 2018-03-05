@@ -39,14 +39,14 @@ class FilmEventDAO(context: Context) {
 
         do {
             val filmEvent = FilmEvent(
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_CODE)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_DESCRIPTION)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_GENRE_TAGS)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_WEBSITE)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))
+                    code = getString(getColumnIndex(FilmEventEntry.COLUMN_CODE)),
+                    title = getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE)),
+                    description = getString(getColumnIndex(FilmEventEntry.COLUMN_DESCRIPTION)),
+                    genreTags = getString(getColumnIndex(FilmEventEntry.COLUMN_GENRE_TAGS)),
+                    website = getString(getColumnIndex(FilmEventEntry.COLUMN_WEBSITE)),
+                    imageOriginal = getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL)),
+                    imageThumbnail = getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL)),
+                    updated = getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))
             )
 
             filmEvent.performances = getPerformances(filmEvent.code!!)
@@ -69,10 +69,10 @@ class FilmEventDAO(context: Context) {
 
         do {
             performances.add(FilmEvent.Performance(
-                    getInt(getColumnIndex(PerformanceEntry.COLUMN_ID)),
-                    databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_START))),
-                    databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_END))),
-                    getInt(getColumnIndex(PerformanceEntry.COLUMN_SCHEDULED)).asBoolean()
+                    id = getInt(getColumnIndex(PerformanceEntry.COLUMN_ID)),
+                    start = databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_START))),
+                    end = databaseStringToDate(getString(getColumnIndex(PerformanceEntry.COLUMN_END))),
+                    scheduled = getInt(getColumnIndex(PerformanceEntry.COLUMN_SCHEDULED)).asBoolean()
             ))
         } while (moveToNext())
 
@@ -92,14 +92,14 @@ class FilmEventDAO(context: Context) {
 
             moveToFirst()
             filmEvent = FilmEvent(
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_CODE)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_DESCRIPTION)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_GENRE_TAGS)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_WEBSITE)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL)),
-                    getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))
+                    code = getString(getColumnIndex(FilmEventEntry.COLUMN_CODE)),
+                    title = getString(getColumnIndex(FilmEventEntry.COLUMN_TITLE)),
+                    description = getString(getColumnIndex(FilmEventEntry.COLUMN_DESCRIPTION)),
+                    genreTags = getString(getColumnIndex(FilmEventEntry.COLUMN_GENRE_TAGS)),
+                    website = getString(getColumnIndex(FilmEventEntry.COLUMN_WEBSITE)),
+                    imageOriginal = getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL)),
+                    imageThumbnail = getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL)),
+                    updated = getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))
             )
 
             close()
