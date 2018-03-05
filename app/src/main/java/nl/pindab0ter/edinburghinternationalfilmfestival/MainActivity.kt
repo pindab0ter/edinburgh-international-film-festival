@@ -1,9 +1,11 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.StrictMode
@@ -116,7 +118,6 @@ class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>> {
         invalidateOptionsMenu()
     }
 
-    @SuppressLint("StaticFieldLeak")
     private fun enableDebugMode() {
         FilmEventDbHelper(this@MainActivity).apply {
             deleteDatabase(FilmEventDbHelper.DATABASE_NAME)
@@ -133,10 +134,12 @@ class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>> {
                 .penaltyDeath()
                 .build())
 
-        object : AsyncTask<Unit, Unit, Unit>() {
+        class ClearDiskCacheTask : AsyncTask<Unit, Unit, Unit>() {
             override fun doInBackground(vararg params: Unit?) {
                 Glide.get(applicationContext).clearDiskCache()
             }
-        }.execute()
+        }
+
+        ClearDiskCacheTask().execute()
     }
 }
