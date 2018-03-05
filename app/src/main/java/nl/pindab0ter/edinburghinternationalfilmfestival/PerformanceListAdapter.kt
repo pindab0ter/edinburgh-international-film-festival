@@ -10,7 +10,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDAO
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplay
 
-class PerformanceListAdapter(context: Context, resource: Int, objects: Array<out FilmEvent.Performance>) : ArrayAdapter<FilmEvent.Performance>(context, resource, objects) {
+class PerformanceListAdapter(context: Context, resource: Int, performances: Array<out FilmEvent.Performance>) : ArrayAdapter<FilmEvent.Performance>(context, resource, performances) {
     private val filmEventDAO = FilmEventDAO(context)
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {

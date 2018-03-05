@@ -73,7 +73,7 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
             return Response.success(filmEvents.asList(), HttpHeaderParser.parseCacheHeaders(response))
         }
 
-        override fun deliverResponse(response: List<FilmEvent>) = listener.invoke(response)
+        override fun deliverResponse(response: List<FilmEvent>) = listener.invoke(response.sortedBy { it.title })
 
         class ImagesDeserializer : JsonDeserializer<FilmEvent.Images> {
             override fun deserialize(element: JsonElement, typeOfT: Type, context: JsonDeserializationContext): FilmEvent.Images {

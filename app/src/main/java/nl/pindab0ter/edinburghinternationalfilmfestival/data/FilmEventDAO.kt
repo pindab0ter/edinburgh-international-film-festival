@@ -55,7 +55,7 @@ class FilmEventDAO(context: Context) {
         } while (moveToNext())
 
         close()
-        return filmEvents
+        return filmEvents.sortedBy { it.title }
     }
 
     private fun getPerformances(code: String): Array<FilmEvent.Performance> = contentResolver.query(PerformanceEntry.BY_FILM_EVENT_CODE_URI.buildUpon().appendPath(code).build(), null, null, null, null).run {
@@ -77,7 +77,7 @@ class FilmEventDAO(context: Context) {
         } while (moveToNext())
 
         close()
-        performances.toTypedArray()
+        performances.sortedBy { it.start }.toTypedArray()
     }
 
     fun get(code: String): FilmEvent? {
