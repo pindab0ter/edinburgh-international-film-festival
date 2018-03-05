@@ -11,8 +11,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
 import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.film_list.*
-import kotlinx.android.synthetic.main.toolbar_activity_master.*
+import kotlinx.android.synthetic.main.load_failed.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDbHelper
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventViewModel
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>> {
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar_main_activity))
-        supportActionBar?.apply { setDisplayShowTitleEnabled(false) }
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         button_toolbar_filter.setOnClickListener { popupMenu.show() }
         retry_button.setOnClickListener { filmEventViewModel.filmEvents.value }
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>> {
         genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
 
         film_list.visibility = View.VISIBLE
-        failed_to_load_events.visibility = View.GONE
+        load_failed.visibility = View.GONE
         invalidateOptionsMenu()
 
         filmEvents.forEach { filmEvent ->
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>> {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(menu_list_activity, menu)
+        menuInflater.inflate(R.menu.menu_list_activity, menu)
         popupMenu = createFilterMenu()
         return super.onCreateOptionsMenu(menu)
     }
@@ -106,7 +107,7 @@ class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>> {
 
     private fun showRetry() {
         film_list.visibility = View.GONE
-        failed_to_load_events.visibility = View.VISIBLE
+        load_failed.visibility = View.VISIBLE
         invalidateOptionsMenu()
     }
 

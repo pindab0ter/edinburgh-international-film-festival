@@ -11,12 +11,6 @@
     android:showDividers="middle"
     tools:context="nl.pindab0ter.edinburghinternationalfilmfestival.MainActivity">
 
-    <!--
-    This layout is a two-pane layout for the Films
-    master/detail flow.
-    
-    -->
-
     <LinearLayout
         android:layout_width="@dimen/list_item_width"
         android:layout_height="match_parent"
@@ -36,29 +30,8 @@
             tools:context="nl.pindab0ter.edinburghinternationalfilmfestival.MainActivity"
             tools:listitem="@layout/main_list_item" />
 
-        <LinearLayout
-            android:id="@+id/failed_to_load_events"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|center_vertical"
-            android:orientation="vertical"
-            android:visibility="gone">
+        <include layout="@layout/load_failed"/>
 
-            <TextView
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/failed_to_load_events" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:id="@+id/retry_button"
-                android:text="@string/try_again" />
-
-        </LinearLayout>
     </LinearLayout>
 
     <FrameLayout
