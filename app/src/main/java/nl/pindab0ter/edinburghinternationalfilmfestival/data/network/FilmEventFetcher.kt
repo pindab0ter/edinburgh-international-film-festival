@@ -20,7 +20,7 @@ import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FilmEventFetcher(private val context: Context, private val listener: (filmEvents: List<FilmEvent>) -> Unit, private val errorListener: (volleyError: VolleyError) -> Unit) {
+class FilmEventFetcher(private val context: Context, private val listener: (filmEvents: List<FilmEvent>) -> Unit, private val errorListener: (VolleyError) -> Unit) {
     private val logTag = FilmEventFetcher::class.simpleName
 
     fun fetch() {
@@ -37,12 +37,19 @@ class FilmEventFetcher(private val context: Context, private val listener: (film
         listener.invoke(filmEvents)
     }
 
-    class FilmEventRequest(
-            url: URL,
-            private val listener: ((filmEvents: List<FilmEvent>) -> Unit),
-            errorListener: ((error: VolleyError) -> Unit)
-    ) : Request<List<FilmEvent>>(Request.Method.GET, url.toString(), errorListener) {
+    class FilmEventRequest(url: URL, private val listener: ((filmEvents: List<FilmEvent>) -> Unit), private val errorListener: (VolleyError) -> Unit
+    ) : Request<List<FilmEvent>>(
+            Request.Method.GET,
+            url.toString(),
+            Response.ErrorListener { volleyError ->
+                errorListener.invoke(volleyError)
+                Log.e(logTag, volleyError.message)
+                volleyError.printStackTrace()
+            }
+    ) {
         companion object {
+            private val logTag = FilmEventRequest::class.simpleName
+
             val gson: Gson = GsonBuilder()
                     .disableHtmlEscaping()
                     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)

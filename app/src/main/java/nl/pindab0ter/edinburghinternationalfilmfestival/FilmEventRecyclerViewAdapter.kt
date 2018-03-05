@@ -1,5 +1,6 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
@@ -15,41 +16,13 @@ import kotlinx.android.synthetic.main.main_list_item.view.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion.FILM_EVENT_CODE
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplay
-import java.util.*
 
-class FilmEventRecyclerViewAdapter(private val parentActivity: MainActivity, private val twoPane: Boolean) : RecyclerView.Adapter<FilmEventRecyclerViewAdapter.ViewHolder>(), Observer {
-
-    private val onClickListener: View.OnClickListener
-
+class FilmEventRecyclerViewAdapter(private val parentActivity: MainActivity, private val twoPane: Boolean) : RecyclerView.Adapter<FilmEventRecyclerViewAdapter.ViewHolder>(), Observer<List<FilmEvent>>, View.OnClickListener {
     private var unfilteredFilmEvents: List<FilmEvent>? = null
     private var filmEvents: List<FilmEvent>? = null
 
-    private var sortedBy: Int = R.id.sort_title_ascending
+    private var sortCriterion: Int = R.id.sort_title_ascending
     private var filteredByGenre: CharSequence? = null
-
-    init {
-        onClickListener = View.OnClickListener { view ->
-            val filmEventCode = view.tag as String
-
-            if (twoPane) {
-                val fragment = DetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(FILM_EVENT_CODE, filmEventCode)
-                    }
-                }
-                parentActivity.supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.detail_container, fragment)
-                        .commit()
-            } else {
-                val intent = Intent(view.context, DetailActivity::class.java).apply {
-                    putExtra(FILM_EVENT_CODE, filmEventCode)
-                }
-                val options = ActivityOptionsCompat.makeClipRevealAnimation(view, 0, 0, view.width, view.height).toBundle()
-                view.context.startActivity(intent, options)
-            }
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.main_list_item, parent, false)
@@ -64,7 +37,7 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: MainActivity, pri
 
             with(holder.itemView) {
                 tag = filmEvent?.code
-                setOnClickListener(onClickListener)
+                setOnClickListener(this@FilmEventRecyclerViewAdapter)
             }
 
             Glide.with(parentActivity)
@@ -78,7 +51,7 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: MainActivity, pri
         if (itemId == null) return
 
         //@formatter:off
-        filmEvents = filmEvents?.run { when (itemId) {
+        filmEvents= filmEvents?.run { when (itemId) {
             R.id.sort_title_ascending   -> sortedBy { it.title }
             R.id.sort_title_descending  -> sortedByDescending { it.title }
             R.id.sort_date_ascending    -> sortedBy { it.performances?.first()?.start }
@@ -87,7 +60,7 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: MainActivity, pri
         }}
         //@formatter:on
 
-        sortedBy = itemId
+        sortCriterion = itemId
         notifyDataSetChanged()
     }
 
@@ -100,14 +73,36 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: MainActivity, pri
         else unfilteredFilmEvents?.filter(predicate)
         filteredByGenre = genre
 
-        sortBy(sortedBy)
+        sortBy(sortCriterion)
         notifyDataSetChanged()
     }
 
-    fun swapFilmEvents(filmEvents: List<FilmEvent>) {
+    override fun onClick(view: View?) {
+        val filmEventCode = view?.tag as String
+
+        if (twoPane) {
+            val fragment = DetailFragment().apply {
+                arguments = Bundle().apply {
+                    putString(FILM_EVENT_CODE, filmEventCode)
+                }
+            }
+            parentActivity.supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.detail_container, fragment)
+                    .commit()
+        } else {
+            val intent = Intent(view.context, DetailActivity::class.java).apply {
+                putExtra(FILM_EVENT_CODE, filmEventCode)
+            }
+            val options = ActivityOptionsCompat.makeClipRevealAnimation(view, 0, 0, view.width, view.height).toBundle()
+            view.context.startActivity(intent, options)
+        }
+    }
+
+    override fun onChanged(filmEvents: List<FilmEvent>?) {
         this.unfilteredFilmEvents = filmEvents
         this.filmEvents = unfilteredFilmEvents
-        sortBy(sortedBy)
+        sortBy(sortCriterion)
         notifyDataSetChanged()
     }
 
@@ -119,9 +114,5 @@ class FilmEventRecyclerViewAdapter(private val parentActivity: MainActivity, pri
         val imageView: ImageView = view.film_list_image
         val titleView: TextView = view.film_list_title
         val firstShowingView: TextView = view.film_first_showing
-    }
-
-    override fun update(o: Observable?, arg: Any?) {
-        notifyDataSetChanged()
     }
 }

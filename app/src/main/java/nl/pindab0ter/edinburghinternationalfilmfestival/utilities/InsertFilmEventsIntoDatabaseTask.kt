@@ -1,14 +1,15 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival.utilities
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.os.AsyncTask
-import nl.pindab0ter.edinburghinternationalfilmfestival.MainActivity
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDAO
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import java.lang.ref.WeakReference
 
-@SuppressLint("StaticFieldLeak")
-class InsertFilmEventsIntoDatabaseTask(private val mainActivity: MainActivity) : AsyncTask<List<FilmEvent>, Unit, Unit>() {
+class InsertFilmEventsIntoDatabaseTask(context: Context) : AsyncTask<List<FilmEvent>, Unit, Unit>() {
+    private val context: WeakReference<Context> = WeakReference(context)
+
     override fun doInBackground(vararg params: List<FilmEvent>?) {
-        FilmEventDAO(mainActivity).insert(params.first().orEmpty())
+        context.get()?.let { FilmEventDAO(it).insert(params.first().orEmpty()) }
     }
 }

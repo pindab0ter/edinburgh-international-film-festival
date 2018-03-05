@@ -1,6 +1,9 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.StrictMode
@@ -15,41 +18,54 @@ import kotlinx.android.synthetic.main.film_list.*
 import kotlinx.android.synthetic.main.toolbar_activity_master.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDbHelper
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventViewModel
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.FilmEventFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.GetFilmEventsFromDatabaseTask
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.InsertFilmEventsIntoDatabaseTask
 
-class MainActivity : AppCompatActivity() {
-
-    private val logTag = MainActivity::class.simpleName
+class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>> {
     private val twoPane: Boolean // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
         get() = detail_container != null
+    private lateinit var filmEventViewModel: FilmEventViewModel
     private lateinit var adapter: FilmEventRecyclerViewAdapter
     private lateinit var popupMenu: PopupMenu
     private var genres: List<String>? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         // enableDebugMode()
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar_main_activity))
-        supportActionBar?.apply {
-            setDisplayShowTitleEnabled(false)
-        }
+        supportActionBar?.apply { setDisplayShowTitleEnabled(false) }
 
-        button_toolbar_filter.setOnClickListener {
-            popupMenu.show()
-        }
+        button_toolbar_filter.setOnClickListener { popupMenu.show() }
+        retry_button.setOnClickListener { filmEventViewModel.filmEvents.value }
 
         adapter = FilmEventRecyclerViewAdapter(this, twoPane)
         film_list.adapter = adapter
+
+        filmEventViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(FilmEventViewModel::class.java)
+        filmEventViewModel.filmEvents.observe(this, this)
+        filmEventViewModel.filmEvents.observe(this, adapter)
+
         super.onCreate(savedInstanceState)
     }
 
-    override fun onStart() {
-        fetchFilmEvents()
-        super.onStart()
+    override fun onChanged(filmEvents: List<FilmEvent>?) = if (filmEvents != null && filmEvents.isNotEmpty()) {
+        genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
+
+        film_list.visibility = View.VISIBLE
+        failed_to_load_events.visibility = View.GONE
+        invalidateOptionsMenu()
+
+        filmEvents.forEach { filmEvent ->
+            Glide.with(this@MainActivity)
+                    .load(filmEvent.imageThumbnail)
+                    .load(filmEvent.imageOriginal)
+                    .preload()
+        }
+    } else {
+        showRetry()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -92,37 +108,6 @@ class MainActivity : AppCompatActivity() {
             true
         }
         else -> false
-    }
-
-    fun fetchFilmEvents(view: View? = null) {
-        GetFilmEventsFromDatabaseTask(this, { filmEvents ->
-            if (filmEvents.isNotEmpty()) populateList(filmEvents)
-            else FilmEventFetcher(this, { fetchedFilmEvents ->
-                populateList(fetchedFilmEvents)
-                InsertFilmEventsIntoDatabaseTask(this).execute(fetchedFilmEvents)
-            }, { volleyError ->
-                Log.e(logTag, "$volleyError")
-                showRetry()
-            }).fetch()
-        }).execute()!!
-    }
-
-    private fun populateList(filmEvents: List<FilmEvent>) = if (filmEvents.isNotEmpty()) {
-        adapter.swapFilmEvents(filmEvents)
-        genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
-
-        film_list.visibility = View.VISIBLE
-        failed_to_load_events.visibility = View.GONE
-        invalidateOptionsMenu()
-
-        filmEvents.forEach { filmEvent ->
-            Glide.with(this@MainActivity)
-                    .load(filmEvent.imageThumbnail)
-                    .load(filmEvent.imageOriginal)
-                    .preload()
-        }
-    } else {
-        showRetry()
     }
 
     private fun showRetry() {
