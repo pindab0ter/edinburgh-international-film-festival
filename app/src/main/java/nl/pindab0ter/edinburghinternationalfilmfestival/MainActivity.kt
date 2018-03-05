@@ -1,16 +1,11 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
-import android.annotation.SuppressLint
-import android.app.Application
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
-import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,10 +16,7 @@ import kotlinx.android.synthetic.main.toolbar_activity_master.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDbHelper
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventViewModel
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.FilmEventFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
-import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.GetFilmEventsFromDatabaseTask
-import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.InsertFilmEventsIntoDatabaseTask
 
 class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>> {
     private val twoPane: Boolean // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.

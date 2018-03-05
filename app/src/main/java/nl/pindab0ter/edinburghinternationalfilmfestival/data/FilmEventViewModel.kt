@@ -3,21 +3,26 @@ package nl.pindab0ter.edinburghinternationalfilmfestival.data
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
+import android.support.v4.content.Loader
 import com.android.volley.VolleyError
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.FilmEventFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
-import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.GetFilmEventsFromDatabaseTask
+import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.FilmEventsFromDatabaseLoader
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.InsertFilmEventsIntoDatabaseTask
 
-class FilmEventViewModel(application: Application) : AndroidViewModel(application) {
+class FilmEventViewModel(application: Application) : AndroidViewModel(application), Loader.OnLoadCompleteListener<List<FilmEvent>> {
+    private val getFilmEventsFromDatabaseTask = FilmEventsFromDatabaseLoader(getApplication()).apply {
+        this.registerListener(id, this@FilmEventViewModel)
+    }
+
     val filmEvents = MutableLiveData<List<FilmEvent>>()
         get() {
-            if (field.value == null) GetFilmEventsFromDatabaseTask(getApplication(), onFilmEventsFromDb).execute()
+            if (field.value == null) getFilmEventsFromDatabaseTask.startLoading()
             return field
         }
 
-    private val onFilmEventsFromDb: (filmEvents: List<FilmEvent>) -> Unit = { filmEventsFromDb ->
-        if (filmEventsFromDb.isNotEmpty()) this.filmEvents.value = filmEventsFromDb
+    override fun onLoadComplete(loader: Loader<List<FilmEvent>>, filmEventsFromDb: List<FilmEvent>?) {
+        if (filmEventsFromDb != null && filmEventsFromDb.isNotEmpty()) this.filmEvents.value = filmEventsFromDb
         else FilmEventFetcher(getApplication(), onFilmEventsFromApi, onFilmEventsFromApiFail).fetch()
     }
 
