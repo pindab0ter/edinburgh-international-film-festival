@@ -12,8 +12,8 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment.Companion
 import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_TAG
 import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_WEBSITE
 import nl.pindab0ter.edinburghinternationalfilmfestival.RatingDialogFragment.Companion.DIALOG_TITLE
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDAO
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventDAO
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 
 /**
  * An activity representing a single FilmEvent detail screen. This

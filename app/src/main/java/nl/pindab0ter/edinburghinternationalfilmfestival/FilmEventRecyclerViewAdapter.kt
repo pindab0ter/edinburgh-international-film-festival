@@ -10,10 +10,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.main.film_event_list_item.view.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventViewModel
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventViewModel
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplay
 import java.lang.ref.WeakReference
 

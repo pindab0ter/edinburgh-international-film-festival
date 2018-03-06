@@ -11,8 +11,8 @@ import android.view.*
 import android.widget.PopupMenu
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_film_event_list.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventViewModel
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventViewModel
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 
 class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClickListener {
     private val logTag = FilmEventListFragment::class.simpleName

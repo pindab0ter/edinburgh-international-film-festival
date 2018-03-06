@@ -1,7 +1,6 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.content.ContentResolver
-import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
 import android.support.test.InstrumentationRegistry
@@ -12,7 +11,6 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1GenreTags
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1ImgOrigUrl
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1ImgThumbUrl
-import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Performance1
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Performance1ContentValues
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Performance1End
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1Performance1Scheduled
@@ -28,26 +26,20 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent1
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Code
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2ContentValues
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance1ContentValues
-import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance1End
-import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance1Start
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance2ContentValues
-import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance2End
-import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2Performance2Start
 import nl.pindab0ter.edinburghinternationalfilmfestival.DataInstances.filmEvent2WithPerformances
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDAO
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDbHelper
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.FilmEventEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.PerformanceEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventDAO
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventDbHelper
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.databaseStringToDate
-import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDatabase
 import org.junit.After
 import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import java.net.URL
 
 class DAOTest {
     private lateinit var context: Context

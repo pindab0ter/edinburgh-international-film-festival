@@ -2,8 +2,8 @@ package nl.pindab0ter.edinburghinternationalfilmfestival.utilities
 
 import android.content.Context
 import android.os.AsyncTask
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDAO
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventDAO
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 import java.lang.ref.WeakReference
 
 class InsertFilmEventsIntoDatabaseTask(context: Context) : AsyncTask<List<FilmEvent>, Unit, Unit>() {

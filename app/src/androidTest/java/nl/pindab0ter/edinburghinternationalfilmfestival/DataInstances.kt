@@ -1,9 +1,9 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.content.ContentValues
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.FilmEventEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.PerformanceEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 
 object DataInstances {
 

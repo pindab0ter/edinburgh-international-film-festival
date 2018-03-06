@@ -1,4 +1,4 @@
-package nl.pindab0ter.edinburghinternationalfilmfestival.data
+package nl.pindab0ter.edinburghinternationalfilmfestival.data.database
 
 import android.content.ContentProvider
 import android.content.ContentValues
@@ -6,14 +6,14 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 import android.util.Log
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.CONTENT_AUTHORITY
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_FILM_EVENTS
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_FILM_EVENT_BY_CODE
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_PERFORMANCES
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_PERFORMANCES_BY_FILM_EVENT_CODE
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PATH_PERFORMANCES_BY_ID
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.CONTENT_AUTHORITY
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.FilmEventEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.PerformanceEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.PATH_FILM_EVENTS
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.PATH_FILM_EVENT_BY_CODE
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.PATH_PERFORMANCES
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.PATH_PERFORMANCES_BY_FILM_EVENT_CODE
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.PATH_PERFORMANCES_BY_ID
 
 class FilmEventProvider : ContentProvider() {
     private lateinit var filmEventDbHelper: FilmEventDbHelper

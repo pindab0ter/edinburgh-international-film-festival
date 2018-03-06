@@ -1,4 +1,4 @@
-package nl.pindab0ter.edinburghinternationalfilmfestival.data
+package nl.pindab0ter.edinburghinternationalfilmfestival.data.database
 
 import android.net.Uri
 import android.provider.BaseColumns
@@ -9,9 +9,9 @@ object FilmEventContract {
     const val PATH_FILM_EVENT_BY_CODE = PATH_FILM_EVENTS
     const val PATH_PERFORMANCES = "performance"
     const val PATH_PERFORMANCES_BY_ID = PATH_PERFORMANCES
-    const val PATH_PERFORMANCES_BY_FILM_EVENT_CODE = "$PATH_FILM_EVENTS/$PATH_PERFORMANCES"
+    const val PATH_PERFORMANCES_BY_FILM_EVENT_CODE = "${PATH_FILM_EVENTS}/${PATH_PERFORMANCES}"
 
-    val BASE_CONTENT_URI = Uri.parse("content://$CONTENT_AUTHORITY")!!
+    val BASE_CONTENT_URI = Uri.parse("content://${CONTENT_AUTHORITY}")!!
 
     object FilmEventEntry : BaseColumns {
         val CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_FILM_EVENTS).build()!!

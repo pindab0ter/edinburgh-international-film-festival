@@ -9,9 +9,7 @@ import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.HttpHeaderParser
 import com.google.gson.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
-import nl.pindab0ter.edinburghinternationalfilmfestival.dummy.EDINBURGH_FILM_FESTIVAL_REPLY
-import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.RequestQueueHolder
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.buildUrl
 import java.io.UnsupportedEncodingException
 import java.lang.reflect.Type
@@ -20,8 +18,8 @@ import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FilmEventFetcher(private val context: Context, private val listener: (filmEvents: List<FilmEvent>) -> Unit, private val errorListener: (VolleyError) -> Unit) {
-    private val logTag = FilmEventFetcher::class.simpleName
+class EdinburgFestivalCityApiFetcher(private val context: Context, private val listener: (filmEvents: List<FilmEvent>) -> Unit, private val errorListener: (VolleyError) -> Unit) {
+    private val logTag = EdinburgFestivalCityApiFetcher::class.simpleName
 
     fun fetch() {
         val url = buildUrl(context)

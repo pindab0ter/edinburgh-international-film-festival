@@ -28,7 +28,7 @@
         </activity>
 
         <provider
-            android:name=".data.FilmEventProvider"
+            android:name=".data.database.FilmEventProvider"
             android:authorities="@string/content_authority"
             android:exported="false" />
     </application>

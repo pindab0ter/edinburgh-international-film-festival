@@ -1,12 +1,11 @@
-package nl.pindab0ter.edinburghinternationalfilmfestival.data
+package nl.pindab0ter.edinburghinternationalfilmfestival.data.model
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.support.v4.content.Loader
 import com.android.volley.VolleyError
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.FilmEventFetcher
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.EdinburgFestivalCityApiFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.FilmEventsFromDatabaseLoader
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.InsertFilmEventsIntoDatabaseTask
 
@@ -23,7 +22,7 @@ class FilmEventViewModel(application: Application) : AndroidViewModel(applicatio
 
     override fun onLoadComplete(loader: Loader<List<FilmEvent>>, filmEventsFromDb: List<FilmEvent>?) {
         if (filmEventsFromDb != null && filmEventsFromDb.isNotEmpty()) this.filmEvents.value = filmEventsFromDb
-        else FilmEventFetcher(getApplication(), onFilmEventsFromApi, onFilmEventsFromApiFail).fetch()
+        else EdinburgFestivalCityApiFetcher(getApplication(), onFilmEventsFromApi, onFilmEventsFromApiFail).fetch()
     }
 
     private val onFilmEventsFromApi: (filmEvents: List<FilmEvent>) -> Unit = { filmEventsFromApi ->

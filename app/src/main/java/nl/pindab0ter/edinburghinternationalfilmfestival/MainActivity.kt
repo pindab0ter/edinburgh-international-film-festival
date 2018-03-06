@@ -1,7 +1,6 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.lifecycle.ViewModelStoreOwner
 import android.os.AsyncTask
@@ -11,9 +10,9 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDbHelper
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventViewModel
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventDbHelper
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventViewModel
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 
 class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>>, ViewModelStoreOwner {
     override fun onCreate(savedInstanceState: Bundle?) {

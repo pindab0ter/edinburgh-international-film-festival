@@ -1,10 +1,10 @@
-package nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives
+package nl.pindab0ter.edinburghinternationalfilmfestival.data.model
 
 import android.content.ContentValues
 import android.net.Uri
 import com.google.gson.annotations.SerializedName
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.FilmEventEntry
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventContract.PerformanceEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.FilmEventEntry
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventContract.PerformanceEntry
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.databaseStringToDate
 import java.util.*
 

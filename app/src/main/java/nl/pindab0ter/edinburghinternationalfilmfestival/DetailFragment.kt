@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_detail.view.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDAO
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventDAO
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 
 /**
  * A fragment representing a single FilmEvent detail screen.
