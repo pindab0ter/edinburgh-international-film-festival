@@ -6,7 +6,7 @@
     android:layout_height="@dimen/list_item_height"
     android:orientation="horizontal"
     android:paddingLeft="@dimen/list_item_padding"
-    android:theme="@style/AppTheme.FilmEventListOverlay"
+    android:theme="@style/AppTheme.Overlay.FilmEventList"
     android:paddingRight="@dimen/list_item_padding">
 
     <ImageView

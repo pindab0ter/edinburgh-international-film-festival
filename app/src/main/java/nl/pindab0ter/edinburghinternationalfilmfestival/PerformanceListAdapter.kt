@@ -1,6 +1,7 @@
 package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,36 +18,20 @@ class PerformanceListAdapter(context: Context, resource: Int, performances: Arra
         val performance = getItem(position)
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.performance_list_item, parent, false)
 
-        view.performance_list_item_date.text = performance.start?.formatForDisplay()
+        view.tv_performance_date.text = performance.start?.formatForDisplay()
 
-        view.performance_list_item_button_add.apply {
+        view.tb_schedule_performance.apply {
             tag = position
-            visibility = if (performance.scheduled == false) View.VISIBLE else View.GONE
+            isChecked = performance.scheduled ?: false
 
             setOnClickListener { view ->
                 val clickedPerformance = getItem(view.tag as Int)
-                clickedPerformance.scheduled = true
+                clickedPerformance.scheduled = this.isChecked
+
+//                setBackgroundColor(resources.getColor(if (isChecked) R.color.colorAccent else R.color.transparent, resources.newTheme()))
+
+
                 filmEventDAO.update(clickedPerformance)
-
-                (view.parent as View).apply {
-                    performance_list_item_button_add.visibility = View.GONE
-                    performance_list_item_button_remove.visibility = View.VISIBLE
-                }
-            }
-        }
-
-        view.performance_list_item_button_remove.apply {
-            tag = position
-            visibility = if (performance.scheduled == true) View.VISIBLE else View.GONE
-            setOnClickListener { view ->
-                val clickedPerformance = getItem(view.tag as Int)
-                clickedPerformance.scheduled = false
-                filmEventDAO.update(clickedPerformance)
-
-                (view.parent as View).apply {
-                    performance_list_item_button_add.visibility = View.VISIBLE
-                    performance_list_item_button_remove.visibility = View.GONE
-                }
             }
         }
         return view

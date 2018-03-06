@@ -6,9 +6,17 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.ColouredActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.Overlay.ColouredActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.FilmEventListOverlay" parent="ThemeOverlay.AppCompat.Light">
+    <style name="AppTheme.Button" parent="Base.Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/toggle_button</item>
+        <item name="android:drawableLeft">@drawable/plus_minus</item>
+        <item name="android:drawableTint">@color/toggle_button_text</item>
+        <item name="android:textColor">@color/toggle_button_text</item>
+    </style>
+
+
+    <style name="AppTheme.Overlay.FilmEventList" parent="ThemeOverlay.AppCompat.Light">
         <item name="textAppearanceListItem">@style/TextAppearance.AppCompat.Subhead</item>
         <item name="textAppearanceListItemSmall">@style/TextAppearance.AppCompat.Small</item>
     </style>
