@@ -19,7 +19,7 @@
         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/film_list"
+            android:id="@+id/rv_film_events"
             android:name="nl.pindab0ter.edinburghinternationalfilmfestival.FilmListFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -28,9 +28,7 @@
             android:visibility="visible"
             app:layoutManager="LinearLayoutManager"
             tools:context="nl.pindab0ter.edinburghinternationalfilmfestival.MainActivity"
-            tools:listitem="@layout/main_list_item" />
-
-        <include layout="@layout/load_failed"/>
+            tools:listitem="@layout/film_event_list_item" />
 
     </LinearLayout>
 

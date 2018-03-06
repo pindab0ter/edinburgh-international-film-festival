@@ -2,56 +2,39 @@ package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.ViewModelStoreOwner
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import android.widget.PopupMenu
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.film_list.*
-import kotlinx.android.synthetic.main.load_failed.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.R.menu.menu_list_activity
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventDbHelper
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.FilmEventViewModel
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.primitives.FilmEvent
 
-class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>> {
-    private val twoPane: Boolean // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
-        get() = detail_container != null
-    private lateinit var filmEventViewModel: FilmEventViewModel
-    private lateinit var adapter: FilmEventRecyclerViewAdapter
-    private lateinit var popupMenu: PopupMenu
-    private var genres: List<String>? = null
+class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>>, ViewModelStoreOwner {
     override fun onCreate(savedInstanceState: Bundle?) {
-        // enableDebugMode()
+        super.onCreate(savedInstanceState)
+//        enableDebugMode()
 
         setContentView(R.layout.activity_main)
+
+        ViewModelProviders.of(this).get(FilmEventViewModel::class.java).filmEvents.observe(this, this)
+
+        if (fragment_container != null && savedInstanceState == null) {
+            supportFragmentManager.beginTransaction().add(R.id.fragment_container, FilmEventListFragment()).commit()
+        }
+
         setSupportActionBar(findViewById(R.id.toolbar_main_activity))
         supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        button_toolbar_filter.setOnClickListener { popupMenu.show() }
-        retry_button.setOnClickListener { filmEventViewModel.filmEvents.value }
-
-        adapter = FilmEventRecyclerViewAdapter(this, twoPane)
-        film_list.adapter = adapter
-
-        filmEventViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(FilmEventViewModel::class.java)
-        filmEventViewModel.filmEvents.observe(this, this)
-        filmEventViewModel.filmEvents.observe(this, adapter)
-
-        super.onCreate(savedInstanceState)
     }
 
     override fun onChanged(filmEvents: List<FilmEvent>?) = if (filmEvents != null && filmEvents.isNotEmpty()) {
-        genres = filmEvents.mapNotNull { it.genreTags?.asIterable() }.flatten().distinct().sorted()
-
-        film_list.visibility = View.VISIBLE
+        fragment_container.visibility = View.VISIBLE
         load_failed.visibility = View.GONE
-        invalidateOptionsMenu()
 
         filmEvents.forEach { filmEvent ->
             Glide.with(this@MainActivity)
@@ -60,55 +43,8 @@ class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>> {
                     .preload()
         }
     } else {
-        showRetry()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_list_activity, menu)
-        popupMenu = createFilterMenu()
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    private fun createFilterMenu(): PopupMenu = PopupMenu(this, findViewById(R.id.button_toolbar_filter)).apply {
-        menuInflater.inflate(R.menu.menu_filter, this@apply.menu)
-
-        with(this.menu) {
-            if (genres.orEmpty().isEmpty()) return@apply
-
-            findItem(R.id.filter_failed_to_load)?.isVisible = false
-            findItem(R.id.filter_all)?.isVisible = true
-
-            genres?.forEachIndexed { index, genre ->
-                add(R.id.filter_group, index, index, genre)
-            }
-        }
-
-        setOnMenuItemClickListener { item ->
-            if (item.itemId == R.id.filter_failed_to_load) return@setOnMenuItemClickListener false
-            adapter.filterBy(item.title)
-            button_toolbar_filter.text = item.title
-            item.isChecked = true
-            true
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.groupId) {
-        R.id.home -> {
-            // TODO: Show navigation drawer
-            true
-        }
-        R.id.sort_group -> {
-            adapter.sortBy(item.itemId)
-            item.isChecked = true
-            true
-        }
-        else -> false
-    }
-
-    private fun showRetry() {
-        film_list.visibility = View.GONE
+        fragment_container.visibility = View.GONE
         load_failed.visibility = View.VISIBLE
-        invalidateOptionsMenu()
     }
 
     private fun enableDebugMode() {
