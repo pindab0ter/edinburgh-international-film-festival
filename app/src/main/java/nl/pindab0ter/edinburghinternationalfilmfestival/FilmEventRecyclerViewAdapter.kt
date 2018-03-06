@@ -50,8 +50,7 @@ class FilmEventRecyclerViewAdapter(fragment: Fragment, private val onClickListen
 
             fragment.get()?.let {
                 Glide.with(it)
-                        .load(filmEvent?.imageOriginal)
-                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .load(filmEvent?.imageThumbnail)
                         .into(holder.imageView)
             }
         }

@@ -39,6 +39,10 @@ class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>>, ViewModelSt
         filmEvents.forEach { filmEvent ->
             Glide.with(this@MainActivity)
                     .load(filmEvent.imageThumbnail)
+                    .preload()
+
+            Glide.with(this@MainActivity)
+                    .downloadOnly()
                     .load(filmEvent.imageOriginal)
                     .preload()
         }
