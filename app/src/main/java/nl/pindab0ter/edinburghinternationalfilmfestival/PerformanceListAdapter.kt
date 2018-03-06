@@ -2,6 +2,7 @@ package nl.pindab0ter.edinburghinternationalfilmfestival
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.drawable.TransitionDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,9 +28,6 @@ class PerformanceListAdapter(context: Context, resource: Int, performances: Arra
             setOnClickListener { view ->
                 val clickedPerformance = getItem(view.tag as Int)
                 clickedPerformance.scheduled = this.isChecked
-
-//                setBackgroundColor(resources.getColor(if (isChecked) R.color.colorAccent else R.color.transparent, resources.newTheme()))
-
 
                 filmEventDAO.update(clickedPerformance)
             }

@@ -9,12 +9,12 @@
     <style name="AppTheme.Overlay.ColouredActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.Button" parent="Base.Widget.AppCompat.Button.Colored">
-        <item name="android:background">@drawable/toggle_button</item>
-        <item name="android:drawableLeft">@drawable/plus_minus</item>
-        <item name="android:drawableTint">@color/toggle_button_text</item>
-        <item name="android:textColor">@color/toggle_button_text</item>
+        <item name="android:background">@drawable/dr_toggle_button</item>
+        <item name="android:drawableLeft">@drawable/asl_pathmorph_plusminus</item>
+        <item name="android:drawableTint">@color/sl_toggle_button_foreground</item>
+        <item name="android:textColor">@color/sl_toggle_button_foreground</item>
+        <item name="android:stateListAnimator">@animator/scale</item>
     </style>
-
 
     <style name="AppTheme.Overlay.FilmEventList" parent="ThemeOverlay.AppCompat.Light">
         <item name="textAppearanceListItem">@style/TextAppearance.AppCompat.Subhead</item>
