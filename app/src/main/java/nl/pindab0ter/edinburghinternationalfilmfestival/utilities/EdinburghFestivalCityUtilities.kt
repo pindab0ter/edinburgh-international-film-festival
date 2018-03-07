@@ -50,7 +50,10 @@ private fun generateSignatureNew(cryptoAlgorithm: String, unsignedQuery: String,
 
 
 private val dateFormatForDatabase = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-fun Date.formatForDisplay(): String = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(this)
+private val dateFormatForDisplayShort = SimpleDateFormat("MM-dd-yyyy HH:mm", Locale.getDefault())
+private val dateFormatForDisplayLong = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
+fun Date.formatForDisplayLong(): String = dateFormatForDisplayLong.format(this).capitalize()
+fun Date.formatForDisplayShort(): String = dateFormatForDisplayShort.format(this).capitalize()
 fun Date.formatForDatabase(): String = dateFormatForDatabase.format(this)
 fun databaseStringToDate(string: String?): Date? = dateFormatForDatabase.parse(string)
 

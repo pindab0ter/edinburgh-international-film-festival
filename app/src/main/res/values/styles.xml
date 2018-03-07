@@ -4,6 +4,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="cardViewStyle">@style/AppTheme.CardView</item>
     </style>
 
     <style name="AppTheme.Overlay.ColouredActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -16,9 +17,28 @@
         <item name="android:stateListAnimator">@animator/scale</item>
     </style>
 
+    <style name="AppTheme.CardView" parent="CardView">
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
     <style name="AppTheme.Overlay.FilmEventList" parent="ThemeOverlay.AppCompat.Light">
         <item name="textAppearanceListItem">@style/TextAppearance.AppCompat.Subhead</item>
         <item name="textAppearanceListItemSmall">@style/TextAppearance.AppCompat.Small</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.ListHeader" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.ListSubhead" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Detail" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">10sp</item>
     </style>
 
 </resources>

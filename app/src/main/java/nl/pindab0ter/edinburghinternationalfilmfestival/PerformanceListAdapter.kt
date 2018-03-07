@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.list_item_performance.view.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventDAO
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
-import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplay
+import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplayShort
 
 class PerformanceListAdapter(context: Context, resource: Int, performances: Array<out FilmEvent.Performance>) : ArrayAdapter<FilmEvent.Performance>(context, resource, performances) {
     private val filmEventDAO = FilmEventDAO(context)
@@ -17,7 +17,7 @@ class PerformanceListAdapter(context: Context, resource: Int, performances: Arra
         val performance = getItem(position)
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.list_item_performance, parent, false)
 
-        view.tv_performance_date.text = performance.start?.formatForDisplay()
+        view.tv_performance_date.text = performance.start?.formatForDisplayShort()
 
         view.tb_schedule_performance.apply {
             tag = position

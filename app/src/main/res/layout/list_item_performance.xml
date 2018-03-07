@@ -10,12 +10,12 @@
         android:id="@+id/tv_performance_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textAppearance="@style/AppTheme.TextAppearance.ListHeader"
         android:textIsSelectable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Tue Jan 19 16:05:00" />
+        tools:text="19-01-15 16:05" />
 
     <ToggleButton
         android:id="@+id/tb_schedule_performance"

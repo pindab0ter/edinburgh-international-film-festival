@@ -29,4 +29,7 @@
     <string name="try_again">Try again</string>
     <string name="add_to_schedule">Add</string>
     <string name="remove_from_schedule">Added</string>
+    <string name="film_description_placeholder">Go inside teenager Riley\'s head and meet her emotions: Joy, Sadness, Fear, Anger and Disgust. Riley is struggling to adjust after being uprooted to a new life in San Francisco. When Sadness accidentally gets herself and Joy lost inside the depths of Riley\'s mind, an emotional rollercoaster ensues. Can Joy and Sadness find their way back and restore order to Riley\'s emotional state? This latest film from the animation genius of Disney•Pixar will charm and delight audiences of all ages.</string>
+    <string name="film_location_placeholder">Inside Out</string>
+    <string name="film_date_long_placeholder">Wo, 28 jan. 2015 13:55</string>
 </resources>
