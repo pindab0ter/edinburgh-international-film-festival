@@ -25,7 +25,8 @@
             android:layout_marginRight="16dp"
             android:visibility="visible"
             app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/list_item_film_event" />
+            tools:listitem="@layout/list_item_schedule" />
+
     </LinearLayout>
 
     <FrameLayout

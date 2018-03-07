@@ -24,7 +24,7 @@
         android:listSelector="@color/transparent"
         android:orientation="vertical"
         android:scrollbars="none"
-        tools:listitem="@layout/performance_list_item" />
+        tools:listitem="@layout/list_item_performance" />
 
     <TextView
         android:layout_width="match_parent"

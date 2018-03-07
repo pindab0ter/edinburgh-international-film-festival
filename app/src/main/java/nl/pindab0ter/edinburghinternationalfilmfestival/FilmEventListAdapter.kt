@@ -10,13 +10,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.film_event_list_item.view.*
+import kotlinx.android.synthetic.main.list_item_film_event.view.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventViewModel
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplay
 import java.lang.ref.WeakReference
 
-class FilmEventRecyclerViewAdapter(fragment: Fragment, private val onClickListener: View.OnClickListener) : RecyclerView.Adapter<FilmEventRecyclerViewAdapter.ViewHolder>(), Observer<List<FilmEvent>> {
+class FilmEventListAdapter(fragment: Fragment, private val onClickListener: View.OnClickListener) : RecyclerView.Adapter<FilmEventListAdapter.ViewHolder>(), Observer<List<FilmEvent>> {
     private var fragment: WeakReference<Fragment> = WeakReference(fragment)
     private var unfilteredFilmEvents: List<FilmEvent>? = null
 
@@ -27,20 +27,20 @@ class FilmEventRecyclerViewAdapter(fragment: Fragment, private val onClickListen
 
     init {
         ViewModelProviders.of(fragment.activity!!).get(FilmEventViewModel::class.java).filmEvents.apply {
-            observe(fragment, this@FilmEventRecyclerViewAdapter)
+            observe(fragment, this@FilmEventListAdapter)
             filmEvents = value
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.film_event_list_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_film_event, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         filmEvents?.get(position).let { filmEvent ->
-            holder.titleView.text = filmEvent?.title
-            holder.firstShowingView.text = filmEvent?.performances?.first()?.start?.formatForDisplay()
+            holder.title.text = filmEvent?.title
+            holder.firstShowing.text = filmEvent?.performances?.first()?.start?.formatForDisplay()
 
             with(holder.itemView) {
                 tag = filmEvent?.code
@@ -50,7 +50,7 @@ class FilmEventRecyclerViewAdapter(fragment: Fragment, private val onClickListen
             fragment.get()?.let {
                 Glide.with(it)
                         .load(filmEvent?.imageThumbnail)
-                        .into(holder.imageView)
+                        .into(holder.image)
             }
         }
     }
@@ -92,13 +92,12 @@ class FilmEventRecyclerViewAdapter(fragment: Fragment, private val onClickListen
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int {
-        return filmEvents?.count() ?: 0
-    }
+    override fun getItemCount(): Int = filmEvents?.count() ?: 0
+
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imageView: ImageView = view.film_list_image
-        val titleView: TextView = view.film_list_title
-        val firstShowingView: TextView = view.film_first_showing
+        val image: ImageView = view.iv_film_event_list_image
+        val title: TextView = view.tv_film_event_list_item_title
+        val firstShowing: TextView = view.tv_film_event_list_first_showing
     }
 }

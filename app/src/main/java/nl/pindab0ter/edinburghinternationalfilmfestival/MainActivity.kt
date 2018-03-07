@@ -24,7 +24,8 @@ class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>>, ViewModelSt
         ViewModelProviders.of(this).get(FilmEventViewModel::class.java).filmEvents.observe(this, this)
 
         if (fragment_container != null && savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().add(R.id.fragment_container, FilmEventListFragment()).commit()
+            supportFragmentManager.beginTransaction().add(R.id.fragment_container, ScheduleFragment()).commit()
+//            supportFragmentManager.beginTransaction().add(R.id.fragment_container, FilmEventListFragment()).commit()
         }
 
         setSupportActionBar(findViewById(R.id.toolbar_main_activity))

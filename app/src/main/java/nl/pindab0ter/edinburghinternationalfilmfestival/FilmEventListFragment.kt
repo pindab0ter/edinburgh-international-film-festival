@@ -17,7 +17,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClickListener {
     private val logTag = FilmEventListFragment::class.simpleName
 
-    private lateinit var adapter: FilmEventRecyclerViewAdapter
+    private lateinit var adapter: FilmEventListAdapter
     private lateinit var popupMenu: PopupMenu
     private var genres: List<String>? = null
 
@@ -25,10 +25,9 @@ class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClic
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = FilmEventRecyclerViewAdapter(this, this)
+        adapter = FilmEventListAdapter(this, this)
         setHasOptionsMenu(true)
     }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_film_event_list, container, false)

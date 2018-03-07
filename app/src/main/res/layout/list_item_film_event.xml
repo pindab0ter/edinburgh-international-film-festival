@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/list_item_padding">
 
     <ImageView
-        android:id="@+id/film_list_image"
+        android:id="@+id/iv_film_event_list_image"
         android:layout_width="@dimen/list_item_image_size"
         android:layout_height="@dimen/list_item_image_size"
         android:contentDescription="@string/film_image_description"
@@ -23,7 +23,7 @@
         app:srcCompat="@color/transparent" />
 
     <TextView
-        android:id="@+id/film_list_title"
+        android:id="@+id/tv_film_event_list_item_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/text_margin"
@@ -33,15 +33,15 @@
         android:textAllCaps="false"
         android:textAppearance="?textAppearanceListItem"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@id/film_first_showing"
-        app:layout_constraintLeft_toRightOf="@id/film_list_image"
+        app:layout_constraintBottom_toTopOf="@id/tv_film_event_list_first_showing"
+        app:layout_constraintLeft_toRightOf="@id/iv_film_event_list_image"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_default="spread"
         tools:text="Film" />
 
     <TextView
-        android:id="@+id/film_first_showing"
+        android:id="@+id/tv_film_event_list_first_showing"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -51,9 +51,9 @@
         android:textAppearance="?textAppearanceListItemSmall"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/film_list_image"
+        app:layout_constraintLeft_toRightOf="@+id/iv_film_event_list_image"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/film_list_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_film_event_list_item_title"
         app:layout_constraintWidth_default="spread"
         tools:text="Tue Jan 19 16:05:00" />
 </android.support.constraint.ConstraintLayout>
