@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +15,13 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventView
 
 class ScheduleAdapter(fragment: Fragment) : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(), Observer<List<FilmEvent>> {
 
+    private val logTag = ScheduleAdapter::class.simpleName
+
+    private var performances: List<FilmEvent.Performance>? = null
     private var filmEvents: List<FilmEvent>? = null
         set(value) {
             field = value?.filter { it.performances?.any { it.scheduled ?: false } ?: false }
+            performances = field?.flatMap { it.performances?.asIterable()!! }?.filter { it.scheduled == true }
         }
 
     init {
@@ -31,13 +36,14 @@ class ScheduleAdapter(fragment: Fragment) : RecyclerView.Adapter<ScheduleAdapter
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = filmEvents?.count() ?: 0
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        filmEvents?.get(position).let { filmEvent ->
-            holder.title.text = filmEvent?.title
-        }
+        val performance = performances?.get(position)
+        val filmEvent: FilmEvent? = filmEvents?.find { it?.performances?.contains(performance) ?: false }
+
+        holder.title.text = "${filmEvent?.title} ${performance?.start}"
     }
+
+    override fun getItemCount(): Int = performances?.count() ?: 0
 
     override fun onChanged(filmEvents: List<FilmEvent>?) {
         this.filmEvents = filmEvents
