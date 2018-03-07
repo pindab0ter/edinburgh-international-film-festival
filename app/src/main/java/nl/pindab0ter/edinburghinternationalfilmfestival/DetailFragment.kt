@@ -35,6 +35,8 @@ class DetailFragment : Fragment() {
 
         rootView.tv_detail_description.text = Html.fromHtml(filmEvent?.description)
         rootView.tv_detail_showings_label.text = resources.getQuantityString(R.plurals.showings, filmEvent?.performances?.size ?: 2)
+        rootView.tv_detail_venue_name.text = filmEvent?.venueName
+        rootView.tv_detail_venue_address.text = filmEvent?.venueAddress
 
         return rootView
     }

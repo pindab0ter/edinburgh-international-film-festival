@@ -25,6 +25,8 @@ object FilmEventContract {
         const val COLUMN_WEBSITE = "website"
         const val COLUMN_IMAGE_ORIGINAL = "image_orig"
         const val COLUMN_IMAGE_THUMBNAIL = "image_thumb"
+        const val COLUMN_VENUE_NAME = "venue_title"
+        const val COLUMN_VENUE_ADDRESS = "venue_address"
         const val COLUMN_UPDATED = "updated"
     }
 

@@ -31,7 +31,7 @@
         android:ellipsize="end"
         android:includeFontPadding="false"
         android:maxLines="1"
-        tools:text="@string/film_location_placeholder" />
+        tools:text="@string/film_title_placeholder" />
 
     <TextView
         android:id="@+id/tv_film_event_list_description"

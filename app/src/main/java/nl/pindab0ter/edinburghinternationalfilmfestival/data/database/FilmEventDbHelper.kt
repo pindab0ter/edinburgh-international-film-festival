@@ -40,7 +40,7 @@ class FilmEventDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_N
 
     companion object {
         const val DATABASE_NAME = "film_festival.db"
-        const val DATABASE_VERSION = 11
+        const val DATABASE_VERSION = 12
 
         val sqlCreateFilmEventTable = """
             |CREATE TABLE ${FilmEventEntry.TABLE_NAME} (
@@ -51,6 +51,8 @@ class FilmEventDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_N
             |   ${FilmEventEntry.COLUMN_WEBSITE}         VARCHAR,
             |   ${FilmEventEntry.COLUMN_IMAGE_THUMBNAIL} VARCHAR,
             |   ${FilmEventEntry.COLUMN_IMAGE_ORIGINAL}  VARCHAR,
+            |   ${FilmEventEntry.COLUMN_VENUE_NAME}      VARCHAR,
+            |   ${FilmEventEntry.COLUMN_VENUE_ADDRESS}   VARCHAR,
             |   ${FilmEventEntry.COLUMN_UPDATED}         DATE NOT NULL
             |);""".trimMargin()
 

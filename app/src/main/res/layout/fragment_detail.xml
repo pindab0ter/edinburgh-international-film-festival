@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/text_margin">
 
     <TextView
         android:id="@+id/tv_detail_showings_label"
@@ -24,6 +25,7 @@
         android:listSelector="@color/transparent"
         android:orientation="vertical"
         android:scrollbars="none"
+        tools:layout_height="150dp"
         tools:listitem="@layout/list_item_performance" />
 
     <TextView
@@ -35,17 +37,48 @@
         android:text="@string/description_label"
         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <TextView
         android:id="@+id/tv_detail_description"
-        style="@style/TextAppearance.AppCompat.Medium"
+        style="@style/TextAppearance.AppCompat.Body1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:lineSpacingMultiplier="1.1"
         android:textIsSelectable="true"
-        tools:context="nl.pindab0ter.edinburghinternationalfilmfestival.DetailFragment" />
+        tools:maxLines="6"
+        tools:text="@string/film_description_placeholder" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/venue_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+    <TextView
+        android:id="@+id/tv_detail_venue_name"
+        style="@style/TextAppearance.AppCompat.Subhead"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:textIsSelectable="true"
+        tools:text="@string/film_venue_name_placeholder" />
+
+    <TextView
+        android:id="@+id/tv_detail_venue_address"
+        style="@style/TextAppearance.AppCompat.Small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:textIsSelectable="true"
+        tools:text="@string/film_venue_address_placeholder" />
 
 </LinearLayout>

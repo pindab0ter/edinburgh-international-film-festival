@@ -45,6 +45,8 @@ class FilmEventDAO(context: Context) {
                     website = getString(getColumnIndex(FilmEventEntry.COLUMN_WEBSITE)),
                     imageOriginal = getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL)),
                     imageThumbnail = getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL)),
+                    venueName = getString(getColumnIndex(FilmEventEntry.COLUMN_VENUE_NAME)),
+                    venueAddress = getString(getColumnIndex(FilmEventEntry.COLUMN_VENUE_ADDRESS)),
                     updated = getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))
             )
 
@@ -98,6 +100,8 @@ class FilmEventDAO(context: Context) {
                     website = getString(getColumnIndex(FilmEventEntry.COLUMN_WEBSITE)),
                     imageOriginal = getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_ORIGINAL)),
                     imageThumbnail = getString(getColumnIndex(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL)),
+                    venueName = getString(getColumnIndex(FilmEventEntry.COLUMN_VENUE_NAME)),
+                    venueAddress = getString(getColumnIndex(FilmEventEntry.COLUMN_VENUE_ADDRESS)),
                     updated = getString(getColumnIndex(FilmEventEntry.COLUMN_UPDATED))
             )
 
@@ -139,6 +143,8 @@ class FilmEventDAO(context: Context) {
         put(FilmEventEntry.COLUMN_WEBSITE, this@toContentValues.website?.toString())
         put(FilmEventEntry.COLUMN_IMAGE_ORIGINAL, this@toContentValues.imageOriginal?.toString())
         put(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL, this@toContentValues.imageThumbnail?.toString())
+        put(FilmEventEntry.COLUMN_VENUE_NAME, this@toContentValues.venueName)
+        put(FilmEventEntry.COLUMN_VENUE_ADDRESS, this@toContentValues.venueAddress)
         put(FilmEventEntry.COLUMN_UPDATED, this@toContentValues.updated?.formatForDatabase())
     }
 

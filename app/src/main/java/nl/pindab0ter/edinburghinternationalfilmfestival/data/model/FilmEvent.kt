@@ -9,7 +9,7 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.databaseString
 import java.util.*
 
 class FilmEvent() : Observable() {
-    constructor(code: String?, title: String?, description: String?, genreTags: String?, website: String?, imageOriginal: String?, imageThumbnail: String?, updated: String?) : this() {
+    constructor(code: String?, title: String?, description: String?, genreTags: String?, website: String?, imageOriginal: String?, imageThumbnail: String?, venueName: String?, venueAddress: String?, updated: String?) : this() {
         this.code = code
         this.title = title
         this.description = description
@@ -17,6 +17,8 @@ class FilmEvent() : Observable() {
         this.website = Uri.parse(website)
         this.imageOriginal = Uri.parse(imageOriginal)
         this.imageThumbnail = Uri.parse(imageThumbnail)
+        this.venueName = venueName
+        this.venueAddress = venueAddress
         this.updated = databaseStringToDate(updated)
     }
 
@@ -26,6 +28,8 @@ class FilmEvent() : Observable() {
         this.description = cv.getAsString(FilmEventEntry.COLUMN_DESCRIPTION)
         this._genreTags = cv.getAsString(FilmEventEntry.COLUMN_GENRE_TAGS)
         this.website = Uri.parse(cv.getAsString(FilmEventEntry.COLUMN_WEBSITE))
+        this.venueName = cv.getAsString(FilmEventEntry.COLUMN_VENUE_NAME)
+        this.venueAddress = cv.getAsString(FilmEventEntry.COLUMN_VENUE_ADDRESS)
         this.imageOriginal = Uri.parse(cv.getAsString(FilmEventEntry.COLUMN_IMAGE_ORIGINAL))
         this.imageThumbnail = Uri.parse(cv.getAsString(FilmEventEntry.COLUMN_IMAGE_THUMBNAIL))
         this.updated = databaseStringToDate(cv.getAsString(FilmEventEntry.COLUMN_UPDATED))
@@ -57,6 +61,18 @@ class FilmEvent() : Observable() {
         get() = _images?.versions?.thumb100?.url
         set(value) {
             _images?.versions?.thumb100?.url = value
+        }
+
+    var venueName: String?
+        get() = this._venue?.name
+        set(value) {
+            _venue?.name = value
+        }
+
+    var venueAddress: String?
+        get() = this._venue?.address
+        set(value) {
+            _venue?.address = value
         }
 
     open class Images {
@@ -114,7 +130,16 @@ class FilmEvent() : Observable() {
 
     var performances: Array<Performance>? = null
 
+    class Venue {
+        var name: String? = null
+        var address: String? = null
+    }
+
+    @SerializedName("venue")
+    private var _venue: Venue? = null
+
     init {
         _images = Images()
+        _venue = Venue()
     }
 }

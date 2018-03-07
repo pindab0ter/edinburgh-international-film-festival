@@ -25,8 +25,12 @@ class ScheduleAdapter(fragment: Fragment) : RecyclerView.Adapter<ScheduleAdapter
     private var performances: List<FilmEvent.Performance>? = null
     private var filmEvents: List<FilmEvent>? = null
         set(value) {
-            field = value?.filter { it.performances?.any { it.scheduled ?: false } ?: false }
-            performances = field?.flatMap { it.performances?.asIterable()!! }?.filter { it.scheduled == true }
+            field = value
+                    ?.filter { it.performances?.any { it.scheduled ?: false } ?: false }
+            performances = field
+                    ?.flatMap { it.performances?.asIterable()!! }
+                    ?.filter { it.scheduled == true }
+                    ?.sortedBy { it.start }
         }
 
     init {
@@ -47,6 +51,8 @@ class ScheduleAdapter(fragment: Fragment) : RecyclerView.Adapter<ScheduleAdapter
 
         holder.title.text = filmEvent?.title
         holder.date.text = performance?.start?.formatForDisplayLong()
+        holder.venueName.text = filmEvent?.venueName
+        holder.venueAddress.text = filmEvent?.venueAddress
 
         fragment.get()?.let {
             Glide.with(it)
@@ -67,5 +73,7 @@ class ScheduleAdapter(fragment: Fragment) : RecyclerView.Adapter<ScheduleAdapter
         val image: ImageView = view.iv_schedule_image
         val date: TextView = view.tv_schedule_date
         val title: TextView = view.tv_schedule_title
+        val venueName: TextView = view.tv_venue_name
+        val venueAddress: TextView = view.tv_venue_address
     }
 }
