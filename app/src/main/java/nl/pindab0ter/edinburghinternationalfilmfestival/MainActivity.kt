@@ -3,7 +3,6 @@ package nl.pindab0ter.edinburghinternationalfilmfestival
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.lifecycle.ViewModelStoreOwner
-import android.os.AsyncTask
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.design.widget.BottomNavigationView
@@ -15,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.database.FilmEventDbHelper
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventViewModel
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>>, ViewModelStoreOwner, BottomNavigationView.OnNavigationItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,12 +90,8 @@ class MainActivity : AppCompatActivity(), Observer<List<FilmEvent>>, ViewModelSt
                 .penaltyDeath()
                 .build())
 
-        class ClearDiskCacheTask : AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg params: Unit?) {
-                Glide.get(applicationContext).clearDiskCache()
-            }
+        thread {
+            Glide.get(applicationContext).clearDiskCache()
         }
-
-        ClearDiskCacheTask().execute()
     }
 }

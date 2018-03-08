@@ -17,6 +17,7 @@ import java.net.URL
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.thread
 
 class EdinburgFestivalCityApiFetcher(private val context: Context, private val listener: (filmEvents: List<FilmEvent>) -> Unit, private val errorListener: (VolleyError) -> Unit) {
     private val logTag = EdinburgFestivalCityApiFetcher::class.simpleName
@@ -25,7 +26,9 @@ class EdinburgFestivalCityApiFetcher(private val context: Context, private val l
         val url = buildUrl(context)
         val filmsRequest = FilmEventRequest(url, listener, errorListener)
 
-        RequestQueueHolder.getInstance(context).add(filmsRequest)
+        thread {
+            RequestQueueHolder.getInstance(context).add(filmsRequest)
+        }
     }
 
     fun fetchOffline() {

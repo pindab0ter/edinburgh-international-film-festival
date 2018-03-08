@@ -7,7 +7,7 @@ import android.support.v4.content.Loader
 import com.android.volley.VolleyError
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.network.EdinburgFestivalCityApiFetcher
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.FilmEventsFromDatabaseLoader
-import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.InsertFilmEventsIntoDatabaseTask
+import kotlin.concurrent.thread
 
 class FilmEventViewModel(application: Application) : AndroidViewModel(application), Loader.OnLoadCompleteListener<List<FilmEvent>> {
     private val getFilmEventsFromDatabaseTask = FilmEventsFromDatabaseLoader(getApplication()).apply {
@@ -32,7 +32,9 @@ class FilmEventViewModel(application: Application) : AndroidViewModel(applicatio
     private val onFilmEventsFromApi: (filmEvents: List<FilmEvent>) -> Unit = { filmEventsFromApi ->
         if (filmEventsFromApi.isNotEmpty()) {
             this.filmEvents.value = filmEventsFromApi
-            InsertFilmEventsIntoDatabaseTask(getApplication()).execute(filmEventsFromApi)
+            thread {
+                FilmEventDAO(getApplication()).insert(filmEventsFromApi)
+            }
         } else filmEvents.value = null
     }
 
