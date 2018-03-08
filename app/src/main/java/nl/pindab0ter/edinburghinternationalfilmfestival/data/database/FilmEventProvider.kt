@@ -82,7 +82,6 @@ class FilmEventProvider : ContentProvider() {
                 if (rowsInserted > 0) setTransactionSuccessful()
                 Log.v(logTag, "Inserted $rowsInserted into ${FilmEventEntry.TABLE_NAME}")
                 endTransaction()
-                close()
                 rowsInserted
             }
             CODE_PERFORMANCES_BY_FILM_EVENT_CODE -> {
@@ -100,7 +99,6 @@ class FilmEventProvider : ContentProvider() {
                 if (rowsInserted > 0) setTransactionSuccessful()
                 Log.v(logTag, "Inserted $rowsInserted into ${PerformanceEntry.TABLE_NAME}")
                 endTransaction()
-                close()
                 rowsInserted
             }
             else -> throw IllegalArgumentException("No match found for uri $uri")
@@ -124,7 +122,6 @@ class FilmEventProvider : ContentProvider() {
                 val rowsAffected = update(FilmEventEntry.TABLE_NAME, values, "${FilmEventEntry.COLUMN_CODE} = ?", arrayOf(uri.lastPathSegment))
                 if (rowsAffected > 0) setTransactionSuccessful()
                 endTransaction()
-                close()
                 return rowsAffected
             }
             CODE_PERFORMANCES_BY_ID -> {
@@ -132,7 +129,6 @@ class FilmEventProvider : ContentProvider() {
                 val rowsAffected = update(PerformanceEntry.TABLE_NAME, values, "${PerformanceEntry.COLUMN_ID} = ?", arrayOf(uri.lastPathSegment))
                 if (rowsAffected > 0) setTransactionSuccessful()
                 endTransaction()
-                close()
                 return rowsAffected
             }
             else -> throw IllegalArgumentException("No match found for uri $uri")
@@ -146,7 +142,6 @@ class FilmEventProvider : ContentProvider() {
             val deleted = delete(table, selection, selectionArgs)
             setTransactionSuccessful()
             endTransaction()
-            close()
             Log.v(logTag, "Deleted $deleted rows")
             return deleted
         }

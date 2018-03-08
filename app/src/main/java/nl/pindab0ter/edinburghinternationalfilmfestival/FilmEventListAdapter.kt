@@ -34,6 +34,7 @@ class FilmEventListAdapter(fragment: Fragment, private val onClickListener: View
             filmEvents = value
         }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_film_event, parent, false)
         return ViewHolder(view)
@@ -61,7 +62,7 @@ class FilmEventListAdapter(fragment: Fragment, private val onClickListener: View
         if (itemId == null) return
 
         //@formatter:off
-        filmEvents= filmEvents?.run { when (itemId) {
+        filmEvents = filmEvents?.run { when (itemId) {
             R.id.sort_title_ascending   -> sortedBy { it.title }
             R.id.sort_title_descending  -> sortedByDescending { it.title }
             R.id.sort_date_ascending    -> sortedBy { it.performances?.first()?.start }

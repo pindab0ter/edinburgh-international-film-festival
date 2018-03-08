@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,10 +18,11 @@ import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventView
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplayLong
 import java.lang.ref.WeakReference
 
-class ScheduleAdapter(fragment: Fragment) : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(), Observer<List<FilmEvent>> {
-    private var fragment: WeakReference<Fragment> = WeakReference(fragment)
-
+class ScheduleAdapter(fragment: Fragment, private val onClickListener: View.OnClickListener) : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(), Observer<List<FilmEvent>> {
     private val logTag = ScheduleAdapter::class.simpleName
+
+    private var fragment: WeakReference<Fragment> = WeakReference(fragment)
+    private val filmEventViewModel: FilmEventViewModel = ViewModelProviders.of(fragment.activity!!).get(FilmEventViewModel::class.java)
 
     private var performances: List<FilmEvent.Performance>? = null
     private var filmEvents: List<FilmEvent>? = null
@@ -31,19 +33,20 @@ class ScheduleAdapter(fragment: Fragment) : RecyclerView.Adapter<ScheduleAdapter
                     ?.flatMap { it.performances?.asIterable()!! }
                     ?.filter { it.scheduled == true }
                     ?.sortedBy { it.start }
+
+            notifyDataSetChanged()
         }
 
     init {
-        ViewModelProviders.of(fragment.activity!!).get(FilmEventViewModel::class.java).filmEvents.apply {
-            observe(fragment, this@ScheduleAdapter)
-            filmEvents = value
-        }
+        filmEventViewModel.filmEvents.observe(fragment, this@ScheduleAdapter)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_schedule, parent, false)
         return ViewHolder(view)
     }
+
+    fun update() = filmEventViewModel.refresh()
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val performance = performances?.get(position)
@@ -53,6 +56,11 @@ class ScheduleAdapter(fragment: Fragment) : RecyclerView.Adapter<ScheduleAdapter
         holder.date.text = performance?.start?.formatForDisplayLong()
         holder.venueName.text = filmEvent?.venueName
         holder.venueAddress.text = filmEvent?.venueAddress
+
+        with(holder.itemView) {
+            tag = filmEvent?.code
+            setOnClickListener(onClickListener)
+        }
 
         fragment.get()?.let {
             Glide.with(it)
@@ -66,7 +74,6 @@ class ScheduleAdapter(fragment: Fragment) : RecyclerView.Adapter<ScheduleAdapter
 
     override fun onChanged(filmEvents: List<FilmEvent>?) {
         this.filmEvents = filmEvents
-        notifyDataSetChanged()
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

@@ -20,6 +20,10 @@ class FilmEventViewModel(application: Application) : AndroidViewModel(applicatio
             return field
         }
 
+    fun refresh() {
+        getFilmEventsFromDatabaseTask.forceLoad()
+    }
+
     override fun onLoadComplete(loader: Loader<List<FilmEvent>>, filmEventsFromDb: List<FilmEvent>?) {
         if (filmEventsFromDb != null && filmEventsFromDb.isNotEmpty()) this.filmEvents.value = filmEventsFromDb
         else EdinburgFestivalCityApiFetcher(getApplication(), onFilmEventsFromApi, onFilmEventsFromApiFail).fetch()

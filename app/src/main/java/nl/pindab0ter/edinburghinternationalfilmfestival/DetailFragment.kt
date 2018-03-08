@@ -25,7 +25,7 @@ class DetailFragment : Fragment() {
         val code = arguments!!.getString(FILM_EVENT_CODE)
 
         filmEvent = FilmEventDAO(context!!).get(code)
-        performanceListAdapter = PerformanceListAdapter(context!!, R.layout.list_item_performance, filmEvent?.performances.orEmpty())
+        performanceListAdapter = PerformanceListAdapter(activity!!, R.layout.list_item_performance, filmEvent?.performances.orEmpty())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
