@@ -35,4 +35,6 @@
     <string name="film_venue_name_placeholder">Cineworld</string>
     <string name="film_venue_address_placeholder">130/3 Dundee Street, Edinburgh</string>
     <string name="venue_label">Venue</string>
+    <string name="nav_overview">Overview</string>
+    <string name="nav_schedule">Schedule</string>
 </resources>

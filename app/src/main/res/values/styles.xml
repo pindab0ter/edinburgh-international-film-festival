@@ -21,6 +21,14 @@
         <item name="cardUseCompatPadding">true</item>
     </style>
 
+    <style name="AppTheme.BottomNavigationView">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="itemIconTint">@color/bottom_nav_bar_text_color</item>
+        <item name="itemTextColor">@color/bottom_nav_bar_text_color</item>
+        <item name="android:paddingStart">32dp</item>
+        <item name="android:paddingEnd">32dp</item>
+    </style>
+
     <style name="AppTheme.Overlay.FilmEventList" parent="ThemeOverlay.AppCompat.Light">
         <item name="textAppearanceListItem">@style/TextAppearance.AppCompat.Subhead</item>
         <item name="textAppearanceListItemSmall">@style/TextAppearance.AppCompat.Small</item>
