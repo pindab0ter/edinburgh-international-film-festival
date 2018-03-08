@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
@@ -14,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_film_event_list.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventViewModel
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 
-class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClickListener {
+class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClickListener, BottomNavigationView.OnNavigationItemReselectedListener {
     private val logTag = FilmEventListFragment::class.simpleName
 
     private lateinit var adapter: FilmEventListAdapter
@@ -26,6 +27,7 @@ class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClic
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = FilmEventListAdapter(this, this)
+        activity?.bottom_nav_bar?.setOnNavigationItemReselectedListener(this)
         setHasOptionsMenu(true)
     }
 
@@ -108,5 +110,9 @@ class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClic
         }
 
         return super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onNavigationItemReselected(item: MenuItem) {
+        rv_film_events.smoothScrollToPosition(rv_film_events.top)
     }
 }
