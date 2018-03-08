@@ -19,8 +19,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
 
-class EdinburgFestivalCityApiFetcher(private val context: Context, private val listener: (filmEvents: List<FilmEvent>) -> Unit, private val errorListener: (VolleyError) -> Unit) {
-    private val logTag = EdinburgFestivalCityApiFetcher::class.simpleName
+class EdinburghFestivalCityApiFetcher(private val context: Context, private val listener: (filmEvents: List<FilmEvent>) -> Unit, private val errorListener: (VolleyError) -> Unit) {
+    private val logTag = EdinburghFestivalCityApiFetcher::class.simpleName
 
     fun fetch() {
         val url = buildUrl(context)
