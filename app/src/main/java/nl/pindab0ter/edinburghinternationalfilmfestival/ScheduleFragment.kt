@@ -22,6 +22,16 @@ class ScheduleFragment: Fragment(), BottomNavigationView.OnNavigationItemReselec
         activity?.bottom_nav_bar?.setOnNavigationItemReselectedListener(this)
     }
 
+    override fun onStart() {
+        activity?.tv_appbar_title_schedule?.visibility = View.VISIBLE
+        super.onStart()
+    }
+
+    override fun onStop() {
+        activity?.tv_appbar_title_schedule?.visibility = View.GONE
+        super.onStop()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_schedule, container, false)
         view.findViewById<RecyclerView>(R.id.rv_schedule).adapter = adapter

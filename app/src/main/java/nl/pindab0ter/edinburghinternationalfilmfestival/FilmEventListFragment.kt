@@ -3,8 +3,10 @@ package nl.pindab0ter.edinburghinternationalfilmfestival
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.transition.TransitionManager
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
@@ -38,8 +40,14 @@ class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClic
     }
 
     override fun onStart() {
+        activity?.button_toolbar_filter?.visibility = View.VISIBLE
         ViewModelProviders.of(activity!!).get(FilmEventViewModel::class.java).filmEvents.observe(this, this)
         super.onStart()
+    }
+
+    override fun onStop() {
+        activity?.button_toolbar_filter?.visibility = View.GONE
+        super.onStop()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.groupId) {

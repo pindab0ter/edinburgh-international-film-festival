@@ -19,6 +19,7 @@
             android:id="@+id/toolbar_main_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:elevation="4dp"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -29,7 +30,19 @@
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_arrow_drop_down"
                 android:text="@string/filter_none"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_appbar_title_schedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="@dimen/text_margin"
+                android:paddingStart="@dimen/text_margin"
+                android:text="@string/schedule"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textSize="22sp"
+                android:visibility="visible" />
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
