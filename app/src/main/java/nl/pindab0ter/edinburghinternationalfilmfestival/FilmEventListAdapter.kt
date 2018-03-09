@@ -9,24 +9,29 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.list_item_film_event.view.*
+import nl.pindab0ter.edinburghinternationalfilmfestival.R.id.detail_container
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventViewModel
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 import java.lang.ref.WeakReference
 
 class FilmEventListAdapter(fragment: Fragment, private val onClickListener: View.OnClickListener) : RecyclerView.Adapter<FilmEventListAdapter.ViewHolder>(), Observer<List<FilmEvent>> {
     private val logTag = FilmEventListAdapter::class.simpleName
+
     private var fragment: WeakReference<Fragment> = WeakReference(fragment)
+    private val twoPane: Boolean get() = fragment.get()?.view?.findViewById<FrameLayout>(detail_container) != null
 
     private var unfilteredFilmEvents: List<FilmEvent>? = null
-    private var filmEvents: List<FilmEvent>? = null
 
+    private var filmEvents: List<FilmEvent>? = null
     private var sortCriterion: Int = R.id.sort_title_ascending
 
     private var filteredByGenre: CharSequence? = null
+    private var selectedPosition = -1
 
     init {
         ViewModelProviders.of(fragment.activity!!).get(FilmEventViewModel::class.java).filmEvents.apply {
@@ -47,7 +52,18 @@ class FilmEventListAdapter(fragment: Fragment, private val onClickListener: View
 
             with(holder.itemView) {
                 tag = filmEvent?.code
-                setOnClickListener(onClickListener)
+
+                if (position == selectedPosition && twoPane) {
+                    setBackgroundColor(resources.getColor(R.color.colorPrimaryTransparent, resources.newTheme()))
+                }
+
+                setOnClickListener { view ->
+                    onClickListener.onClick(view)
+                    if (holder.adapterPosition != RecyclerView.NO_POSITION && holder.adapterPosition != selectedPosition) {
+                        selectedPosition = holder.adapterPosition
+                        notifyDataSetChanged()
+                    }
+                }
             }
 
             fragment.get()?.let {
@@ -56,6 +72,13 @@ class FilmEventListAdapter(fragment: Fragment, private val onClickListener: View
                         .into(holder.image)
             }
         }
+    }
+
+    override fun onChanged(filmEvents: List<FilmEvent>?) {
+        this.unfilteredFilmEvents = filmEvents
+        this.filmEvents = unfilteredFilmEvents
+        sortBy(sortCriterion)
+        notifyDataSetChanged()
     }
 
     fun sortBy(itemId: Int?) {
@@ -88,15 +111,7 @@ class FilmEventListAdapter(fragment: Fragment, private val onClickListener: View
         notifyDataSetChanged()
     }
 
-    override fun onChanged(filmEvents: List<FilmEvent>?) {
-        this.unfilteredFilmEvents = filmEvents
-        this.filmEvents = unfilteredFilmEvents
-        sortBy(sortCriterion)
-        notifyDataSetChanged()
-    }
-
     override fun getItemCount(): Int = filmEvents?.count() ?: 0
-
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val image: ImageView = view.iv_film_event_list_image

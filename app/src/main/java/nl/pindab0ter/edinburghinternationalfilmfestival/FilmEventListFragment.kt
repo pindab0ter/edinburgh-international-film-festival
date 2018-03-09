@@ -3,19 +3,18 @@ package nl.pindab0ter.edinburghinternationalfilmfestival
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.transition.TransitionManager
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.*
 import android.widget.PopupMenu
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_film_event_list.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventViewModel
+import kotlinx.android.synthetic.main.fragment_film_event_list.view.*
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventViewModel
 
 class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClickListener, BottomNavigationView.OnNavigationItemReselectedListener {
     private val logTag = FilmEventListFragment::class.simpleName
@@ -35,7 +34,7 @@ class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClic
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_film_event_list, container, false)
-        view.findViewById<RecyclerView>(R.id.rv_film_events)?.adapter = adapter
+        view.rv_film_events?.adapter = adapter
         return view
     }
 
@@ -71,6 +70,7 @@ class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClic
         val filmEventCode = view?.tag as String
 
         if (twoPane) {
+            view.isSelected = true
             val fragment = DetailFragment().apply {
                 arguments = Bundle().apply {
                     putString(DetailFragment.FILM_EVENT_CODE, filmEventCode)
