@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.*
 import android.widget.PopupMenu
 import kotlinx.android.synthetic.main.activity_main.*
@@ -70,7 +69,6 @@ class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClic
         val filmEventCode = view?.tag as String
 
         if (twoPane) {
-            view.isSelected = true
             val fragment = DetailFragment().apply {
                 arguments = Bundle().apply {
                     putString(DetailFragment.FILM_EVENT_CODE, filmEventCode)

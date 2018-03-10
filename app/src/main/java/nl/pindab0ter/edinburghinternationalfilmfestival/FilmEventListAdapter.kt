@@ -22,10 +22,10 @@ import java.lang.ref.WeakReference
 class FilmEventListAdapter(fragment: Fragment, private val onClickListener: View.OnClickListener) : RecyclerView.Adapter<FilmEventListAdapter.ViewHolder>(), Observer<List<FilmEvent>> {
     private val logTag = FilmEventListAdapter::class.simpleName
 
+    private val twoPane: Boolean get() = fragment.get()?.view?.findViewById<FrameLayout>(R.id.detail_container) != null
     private var fragment: WeakReference<Fragment> = WeakReference(fragment)
-    private val twoPane: Boolean get() = fragment.get()?.view?.findViewById<FrameLayout>(detail_container) != null
-
     private var unfilteredFilmEvents: List<FilmEvent>? = null
+    private val filmEventViewModel: FilmEventViewModel = ViewModelProviders.of(fragment.activity!!).get(FilmEventViewModel::class.java)
 
     private var filmEvents: List<FilmEvent>? = null
     private var sortCriterion: Int = R.id.sort_title_ascending
@@ -34,10 +34,7 @@ class FilmEventListAdapter(fragment: Fragment, private val onClickListener: View
     private var selectedPosition = -1
 
     init {
-        ViewModelProviders.of(fragment.activity!!).get(FilmEventViewModel::class.java).filmEvents.apply {
-            observe(fragment, this@FilmEventListAdapter)
-            filmEvents = value
-        }
+        filmEventViewModel.filmEvents.observe(fragment, this@FilmEventListAdapter)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -13,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_schedule.*
+import kotlinx.android.synthetic.main.fragment_schedule.view.*
 
 class ScheduleFragment : Fragment(), BottomNavigationView.OnNavigationItemReselectedListener, View.OnClickListener {
     private val logTag = ScheduleFragment::class.simpleName
@@ -29,7 +29,7 @@ class ScheduleFragment : Fragment(), BottomNavigationView.OnNavigationItemResele
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_schedule, container, false)
-        view.findViewById<RecyclerView>(R.id.rv_schedule).adapter = adapter
+        view.rv_schedule.adapter = adapter
         return view
     }
 

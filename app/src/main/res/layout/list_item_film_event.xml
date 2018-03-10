@@ -26,18 +26,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:paddingTop="4dp"
         android:layout_toEndOf="@id/iv_film_event_list_image"
         android:ellipsize="end"
         android:includeFontPadding="false"
         android:maxLines="1"
+        android:paddingTop="4dp"
         tools:text="@string/film_title_placeholder" />
 
     <TextView
         android:id="@+id/tv_film_event_list_description"
         style="@style/AppTheme.TextAppearance.Detail"
         android:layout_width="wrap_content"
-        android:paddingTop="2dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/tv_film_event_list_item_title"
@@ -46,5 +45,7 @@
         android:includeFontPadding="false"
         android:lineSpacingMultiplier="0.95"
         android:maxLines="3"
+        android:paddingTop="2dp"
         tools:text="@string/film_description_placeholder" />
+
 </RelativeLayout>
