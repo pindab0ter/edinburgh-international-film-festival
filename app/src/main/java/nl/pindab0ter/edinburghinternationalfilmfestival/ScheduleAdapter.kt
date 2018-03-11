@@ -8,11 +8,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.list_item_schedule.view.*
+import nl.pindab0ter.edinburghinternationalfilmfestival.R.id.detail_container
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventViewModel
 import nl.pindab0ter.edinburghinternationalfilmfestival.utilities.formatForDisplayLong
@@ -21,15 +23,17 @@ import java.lang.ref.WeakReference
 class ScheduleAdapter(fragment: Fragment, private val onClickListener: View.OnClickListener) : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(), Observer<List<FilmEvent>> {
     private val logTag = ScheduleAdapter::class.simpleName
 
+    private val twoPane: Boolean get() = fragment.get()?.view?.findViewById<FrameLayout>(R.id.detail_container) != null
     private var fragment: WeakReference<Fragment> = WeakReference(fragment)
     private val filmEventViewModel: FilmEventViewModel = ViewModelProviders.of(fragment.activity!!).get(FilmEventViewModel::class.java)
+    private var selectedPosition = RecyclerView.NO_POSITION
 
     private var performances: List<FilmEvent.Performance>? = null
     private var filmEvents: List<FilmEvent>? = null
         set(value) {
             field = value
                     ?.filter { it.performances?.any { it.scheduled ?: false } ?: false }
-            performances = field
+            performances = value
                     ?.flatMap { it.performances?.asIterable()!! }
                     ?.filter { it.scheduled == true }
                     ?.sortedBy { it.start }
@@ -50,22 +54,36 @@ class ScheduleAdapter(fragment: Fragment, private val onClickListener: View.OnCl
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val performance = performances?.get(position)
-        val filmEvent: FilmEvent? = filmEvents?.find { it.performances?.contains(performance) ?: false }
+        val filmEvent = filmEvents?.find { it.performances?.contains(performance) ?: false }
 
-        holder.title.text = filmEvent?.title
-        holder.date.text = performance?.start?.formatForDisplayLong()
-        holder.venueName.text = filmEvent?.venueName
-        holder.venueAddress.text = filmEvent?.venueAddress
+        with(holder) {
+            title.text = filmEvent?.title
+            date.text = performance?.start?.formatForDisplayLong()
+            venueName.text = filmEvent?.venueName
+            venueAddress.text = filmEvent?.venueAddress
+        }
 
         with(holder.itemView) {
             tag = filmEvent?.code
-            setOnClickListener(onClickListener)
+
+            if (position == selectedPosition && twoPane) {
+                setBackgroundColor(resources.getColor(R.color.colorPrimaryTransparent, resources.newTheme()))
+            } else {
+                setBackgroundColor(resources.getColor(android.R.color.white, resources.newTheme()))
+            }
+
+            setOnClickListener { view ->
+                onClickListener.onClick(view)
+                if (holder.adapterPosition != RecyclerView.NO_POSITION && holder.adapterPosition != selectedPosition) {
+                    selectedPosition = holder.adapterPosition
+                    notifyDataSetChanged()
+                }
+            }
         }
 
         fragment.get()?.let {
             Glide.with(it)
                     .load(filmEvent?.imageOriginal)
-                    .apply(RequestOptions().centerCrop())
                     .into(holder.image)
         }
     }

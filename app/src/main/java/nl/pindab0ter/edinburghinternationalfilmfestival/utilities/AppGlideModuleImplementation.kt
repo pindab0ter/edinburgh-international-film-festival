@@ -14,6 +14,7 @@ open class AppGlideModuleImplementation : AppGlideModule() {
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         builder.setDiskCache(InternalCacheDiskCacheFactory(context))
         builder.setDefaultRequestOptions(RequestOptions()
+                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
                 .fallback(R.drawable.ic_broken_image)
                 .error(R.drawable.ic_broken_image)

@@ -9,7 +9,7 @@
     android:showDividers="middle">
 
     <LinearLayout
-        android:layout_width="@dimen/list_item_width"
+        android:layout_width="360dp"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 

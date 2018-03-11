@@ -21,6 +21,7 @@ class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClic
     private lateinit var adapter: FilmEventListAdapter
     private lateinit var popupMenu: PopupMenu
     private var genres: List<String>? = null
+    private var firstRun = true
 
     private val twoPane: Boolean get() = detail_container != null
 
@@ -41,6 +42,12 @@ class FilmEventListFragment : Fragment(), Observer<List<FilmEvent>>, View.OnClic
         activity?.button_toolbar_filter?.visibility = View.VISIBLE
         ViewModelProviders.of(activity!!).get(FilmEventViewModel::class.java).filmEvents.observe(this, this)
         super.onStart()
+    }
+
+    override fun onResume() {
+        if (!firstRun) adapter.update()
+        else firstRun = false
+        super.onResume()
     }
 
     override fun onStop() {

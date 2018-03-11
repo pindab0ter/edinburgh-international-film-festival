@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +13,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.list_item_film_event.view.*
-import nl.pindab0ter.edinburghinternationalfilmfestival.R.id.detail_container
-import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventViewModel
 import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEvent
+import nl.pindab0ter.edinburghinternationalfilmfestival.data.model.FilmEventViewModel
 import java.lang.ref.WeakReference
 
 class FilmEventListAdapter(fragment: Fragment, private val onClickListener: View.OnClickListener) : RecyclerView.Adapter<FilmEventListAdapter.ViewHolder>(), Observer<List<FilmEvent>> {
@@ -31,7 +29,7 @@ class FilmEventListAdapter(fragment: Fragment, private val onClickListener: View
     private var sortCriterion: Int = R.id.sort_title_ascending
 
     private var filteredByGenre: CharSequence? = null
-    private var selectedPosition = -1
+    private var selectedPosition = RecyclerView.NO_POSITION
 
     init {
         filmEventViewModel.filmEvents.observe(fragment, this@FilmEventListAdapter)
@@ -43,31 +41,35 @@ class FilmEventListAdapter(fragment: Fragment, private val onClickListener: View
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        filmEvents?.get(position).let { filmEvent ->
-            holder.title.text = filmEvent?.title
-            holder.description.text = Html.fromHtml(filmEvent?.description)
+        val filmEvent = filmEvents?.get(position)
 
-            with(holder.itemView) {
-                tag = filmEvent?.code
+        with(holder) {
+            title.text = filmEvent?.title
+            description.text = Html.fromHtml(filmEvent?.description)
+        }
 
-                if (position == selectedPosition && twoPane) {
-                    setBackgroundColor(resources.getColor(R.color.colorPrimaryTransparent, resources.newTheme()))
-                }
+        with(holder.itemView) {
+            tag = filmEvent?.code
 
-                setOnClickListener { view ->
-                    onClickListener.onClick(view)
-                    if (holder.adapterPosition != RecyclerView.NO_POSITION && holder.adapterPosition != selectedPosition) {
-                        selectedPosition = holder.adapterPosition
-                        notifyDataSetChanged()
-                    }
-                }
+            if (position == selectedPosition && twoPane) {
+                setBackgroundColor(resources.getColor(R.color.colorPrimaryTransparent, resources.newTheme()))
+            } else {
+                setBackgroundColor(resources.getColor(android.R.color.white, resources.newTheme()))
             }
 
-            fragment.get()?.let {
-                Glide.with(it)
-                        .load(filmEvent?.imageThumbnail)
-                        .into(holder.image)
+            setOnClickListener { view ->
+                onClickListener.onClick(view)
+                if (holder.adapterPosition != RecyclerView.NO_POSITION && holder.adapterPosition != selectedPosition) {
+                    selectedPosition = holder.adapterPosition
+                    notifyDataSetChanged()
+                }
             }
+        }
+
+        fragment.get()?.let {
+            Glide.with(it)
+                    .load(filmEvent?.imageThumbnail)
+                    .into(holder.image)
         }
     }
 
@@ -77,6 +79,8 @@ class FilmEventListAdapter(fragment: Fragment, private val onClickListener: View
         sortBy(sortCriterion)
         notifyDataSetChanged()
     }
+
+    fun update() = filmEventViewModel.refresh()
 
     fun sortBy(itemId: Int?) {
         if (itemId == null) return
